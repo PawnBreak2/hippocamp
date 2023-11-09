@@ -1,7 +1,7 @@
 import 'package:hippocamp/clients/appstate_client.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:hippocamp/models/repositories/app_state_repository.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppStateNotifier extends Notifier<AppState> {
   @override
@@ -23,6 +23,12 @@ class AppStateNotifier extends Notifier<AppState> {
       },
     );
     return attachments;
+  }
+
+  void clearAllData() {
+    //goes back to initializing an empty repository
+
+    state = AppState();
   }
 }
 

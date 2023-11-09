@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AppState {
   List<AttachmentType> get attachmentTypes =>
       throw _privateConstructorUsedError;
+  List<Categories> get categories => throw _privateConstructorUsedError;
+  List<Domains> get domains => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
@@ -29,7 +31,10 @@ abstract class $AppStateCopyWith<$Res> {
   factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
       _$AppStateCopyWithImpl<$Res, AppState>;
   @useResult
-  $Res call({List<AttachmentType> attachmentTypes});
+  $Res call(
+      {List<AttachmentType> attachmentTypes,
+      List<Categories> categories,
+      List<Domains> domains});
 }
 
 /// @nodoc
@@ -46,12 +51,22 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @override
   $Res call({
     Object? attachmentTypes = null,
+    Object? categories = null,
+    Object? domains = null,
   }) {
     return _then(_value.copyWith(
       attachmentTypes: null == attachmentTypes
           ? _value.attachmentTypes
           : attachmentTypes // ignore: cast_nullable_to_non_nullable
               as List<AttachmentType>,
+      categories: null == categories
+          ? _value.categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<Categories>,
+      domains: null == domains
+          ? _value.domains
+          : domains // ignore: cast_nullable_to_non_nullable
+              as List<Domains>,
     ) as $Val);
   }
 }
@@ -64,7 +79,10 @@ abstract class _$$AppStateImplCopyWith<$Res>
       __$$AppStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<AttachmentType> attachmentTypes});
+  $Res call(
+      {List<AttachmentType> attachmentTypes,
+      List<Categories> categories,
+      List<Domains> domains});
 }
 
 /// @nodoc
@@ -79,12 +97,22 @@ class __$$AppStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? attachmentTypes = null,
+    Object? categories = null,
+    Object? domains = null,
   }) {
     return _then(_$AppStateImpl(
       attachmentTypes: null == attachmentTypes
           ? _value._attachmentTypes
           : attachmentTypes // ignore: cast_nullable_to_non_nullable
               as List<AttachmentType>,
+      categories: null == categories
+          ? _value._categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<Categories>,
+      domains: null == domains
+          ? _value._domains
+          : domains // ignore: cast_nullable_to_non_nullable
+              as List<Domains>,
     ));
   }
 }
@@ -92,8 +120,13 @@ class __$$AppStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
-  const _$AppStateImpl({final List<AttachmentType> attachmentTypes = const []})
-      : _attachmentTypes = attachmentTypes;
+  const _$AppStateImpl(
+      {final List<AttachmentType> attachmentTypes = const [],
+      final List<Categories> categories = const [],
+      final List<Domains> domains = const []})
+      : _attachmentTypes = attachmentTypes,
+        _categories = categories,
+        _domains = domains;
 
   final List<AttachmentType> _attachmentTypes;
   @override
@@ -104,9 +137,27 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
     return EqualUnmodifiableListView(_attachmentTypes);
   }
 
+  final List<Categories> _categories;
+  @override
+  @JsonKey()
+  List<Categories> get categories {
+    if (_categories is EqualUnmodifiableListView) return _categories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_categories);
+  }
+
+  final List<Domains> _domains;
+  @override
+  @JsonKey()
+  List<Domains> get domains {
+    if (_domains is EqualUnmodifiableListView) return _domains;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_domains);
+  }
+
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppState(attachmentTypes: $attachmentTypes)';
+    return 'AppState(attachmentTypes: $attachmentTypes, categories: $categories, domains: $domains)';
   }
 
   @override
@@ -114,7 +165,9 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'AppState'))
-      ..add(DiagnosticsProperty('attachmentTypes', attachmentTypes));
+      ..add(DiagnosticsProperty('attachmentTypes', attachmentTypes))
+      ..add(DiagnosticsProperty('categories', categories))
+      ..add(DiagnosticsProperty('domains', domains));
   }
 
   @override
@@ -123,12 +176,18 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
         (other.runtimeType == runtimeType &&
             other is _$AppStateImpl &&
             const DeepCollectionEquality()
-                .equals(other._attachmentTypes, _attachmentTypes));
+                .equals(other._attachmentTypes, _attachmentTypes) &&
+            const DeepCollectionEquality()
+                .equals(other._categories, _categories) &&
+            const DeepCollectionEquality().equals(other._domains, _domains));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_attachmentTypes));
+      runtimeType,
+      const DeepCollectionEquality().hash(_attachmentTypes),
+      const DeepCollectionEquality().hash(_categories),
+      const DeepCollectionEquality().hash(_domains));
 
   @JsonKey(ignore: true)
   @override
@@ -138,11 +197,17 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
 }
 
 abstract class _AppState implements AppState {
-  const factory _AppState({final List<AttachmentType> attachmentTypes}) =
-      _$AppStateImpl;
+  const factory _AppState(
+      {final List<AttachmentType> attachmentTypes,
+      final List<Categories> categories,
+      final List<Domains> domains}) = _$AppStateImpl;
 
   @override
   List<AttachmentType> get attachmentTypes;
+  @override
+  List<Categories> get categories;
+  @override
+  List<Domains> get domains;
   @override
   @JsonKey(ignore: true)
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>

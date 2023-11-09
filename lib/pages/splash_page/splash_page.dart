@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/user_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -17,6 +18,7 @@ class SplashPage extends ConsumerStatefulWidget {
 class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   void initState() {
+    setUserProfile();
     getAllPosts();
     getAttachmentTypesAndPrecache();
     super.initState();
@@ -25,6 +27,11 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   void getAllPosts() async {
     var posts = ref.read(postListProvider.notifier);
     await posts.getPosts(past: true);
+  }
+
+  void setUserProfile() async {
+    var userProvider = ref.read(userNotifierProvider.notifier);
+    await userProvider.setUserProfile();
   }
 
   void getAttachmentTypesAndPrecache() async {
@@ -37,7 +44,6 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       final SvgNetworkLoader loader = SvgNetworkLoader(element.iconUrl);
       await svg.cache
           .putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
-      print(svg.cache.count);
     }
   }
 

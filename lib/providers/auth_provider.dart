@@ -1,12 +1,14 @@
 import 'dart:async';
 
-import 'package:hippocamp/clients/mock_client.dart';
+import 'package:hippocamp/clients/auth_client.dart';
 import 'package:hippocamp/constants/storage_keys.dart';
+import 'package:hippocamp/providers/app_state_provider.dart';
+import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/user_provider.dart';
+import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/storage/local_storage.dart';
 import 'package:hippocamp/storage/secure_storage.dart';
-import 'package:riverpod/riverpod.dart';
-
-import '../clients/auth_client.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthNotifier extends AsyncNotifier<AsyncValue> {
   @override
@@ -39,6 +41,7 @@ class AuthNotifier extends AsyncNotifier<AsyncValue> {
         await SecureStorage.write(StorageKeys.token, resp.token);
         await SecureStorage.write(StorageKeys.refreshToken, resp.refreshToken);
         await LocalStorage.writeString(StorageKeys.isLogged, "true");
+
         return const AsyncValue.data(true);
       } else {
         // FAILED LOGIN
@@ -52,6 +55,30 @@ class AuthNotifier extends AsyncNotifier<AsyncValue> {
   }
 
   void reset() {}
+
+  Future<String?> changePassword({
+    required String oldPass,
+    required String newPass,
+    required String confirmNewPass,
+  }) async {
+    final resp = await _authClient.updatePassword(
+      oldPassword: oldPass,
+      password: newPass,
+      confirmPassword: confirmNewPass,
+    );
+
+    return resp.fold((l) => l.message, (r) => null);
+  }
+
+  Future<void> logout() async {
+    await LocalStorage.deleteAll();
+    await SecureStorage.deleteAll();
+
+    ref.read(userNotifierProvider.notifier).clearAllData();
+    ref.read(postListProvider.notifier).clearAllData();
+    ref.read(appStateProvider.notifier).clearAllData();
+    ref.read(walletsNotifierProvider.notifier).clearAllData();
+  }
 }
 
 final authProvider = AsyncNotifierProvider<AuthNotifier, AsyncValue>(() {

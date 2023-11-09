@@ -1,45 +1,42 @@
-class UserProfileModel {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String phoneNumber;
-  final String invitationCode;
-  final String countryCode;
-  final List<String> languages;
+import 'package:hippocamp/models/posts-creation/attachment_types.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart';
+part 'profile_response_model.freezed.dart';
 
-  const UserProfileModel({
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.phoneNumber,
-    required this.invitationCode,
-    required this.countryCode,
-    required this.languages,
-  });
+@freezed
+class UserProfileModel with _$UserProfileModel {
+  const factory UserProfileModel({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String phoneNumber,
+    required String invitationCode,
+    required String countryCode,
+    required List<String> languages,
+  }) = _UserProfileModel;
 
-  static UserProfileModel fromMap(Map map) {
+  factory UserProfileModel.fromMap(Map<String, dynamic> map) {
     return UserProfileModel(
-      firstName: map["firstName"] ?? "",
-      lastName: map["lastName"] ?? "",
-      email: map["email"] ?? "",
-      phoneNumber: map["phoneNumber"] ?? "",
-      invitationCode: map["invitationCode"] ?? "",
-      countryCode: map["countryCode"] ?? "",
-      languages: ((map["languages"] ?? [""]) as List)
-          .map((e) => e.toString())
-          .toList(),
+      firstName: map['firstName'] as String? ?? '',
+      lastName: map['lastName'] as String? ?? '',
+      email: map['email'] as String? ?? '',
+      phoneNumber: map['phoneNumber'] as String? ?? '',
+      invitationCode: map['invitationCode'] as String? ?? '',
+      countryCode: map['countryCode'] as String? ?? '',
+      languages: (map['languages'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
     );
   }
 
-  static UserProfileModel emptyUser() {
-    return UserProfileModel(
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      invitationCode: "",
-      countryCode: "",
-      languages: [],
-    );
-  }
+  factory UserProfileModel.emptyUser() => const UserProfileModel(
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        invitationCode: '',
+        countryCode: '',
+        languages: [],
+      );
 }

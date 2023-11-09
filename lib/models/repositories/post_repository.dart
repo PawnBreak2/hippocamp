@@ -10,6 +10,6 @@ class PostsRepository with _$PostsRepository {
   const factory PostsRepository({
     @Default([]) List<Post> allPosts,
     @Default([]) List<Post> selectedPosts,
-    @Default([]) List<Post> filteredPosts,
+    @Default({}) Map<String, List<Post>> filteredPosts,
   }) = _PostsRepository;
 }

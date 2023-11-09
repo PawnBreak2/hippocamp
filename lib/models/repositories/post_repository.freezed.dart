@@ -18,7 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$PostsRepository {
   List<Post> get allPosts => throw _privateConstructorUsedError;
   List<Post> get selectedPosts => throw _privateConstructorUsedError;
-  List<Post> get filteredPosts => throw _privateConstructorUsedError;
+  Map<String, List<Post>> get filteredPosts =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PostsRepositoryCopyWith<PostsRepository> get copyWith =>
@@ -34,7 +35,7 @@ abstract class $PostsRepositoryCopyWith<$Res> {
   $Res call(
       {List<Post> allPosts,
       List<Post> selectedPosts,
-      List<Post> filteredPosts});
+      Map<String, List<Post>> filteredPosts});
 }
 
 /// @nodoc
@@ -66,7 +67,7 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
       filteredPosts: null == filteredPosts
           ? _value.filteredPosts
           : filteredPosts // ignore: cast_nullable_to_non_nullable
-              as List<Post>,
+              as Map<String, List<Post>>,
     ) as $Val);
   }
 }
@@ -82,7 +83,7 @@ abstract class _$$PostsRepositoryImplCopyWith<$Res>
   $Res call(
       {List<Post> allPosts,
       List<Post> selectedPosts,
-      List<Post> filteredPosts});
+      Map<String, List<Post>> filteredPosts});
 }
 
 /// @nodoc
@@ -112,7 +113,7 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
       filteredPosts: null == filteredPosts
           ? _value._filteredPosts
           : filteredPosts // ignore: cast_nullable_to_non_nullable
-              as List<Post>,
+              as Map<String, List<Post>>,
     ));
   }
 }
@@ -125,7 +126,7 @@ class _$PostsRepositoryImpl
   const _$PostsRepositoryImpl(
       {final List<Post> allPosts = const [],
       final List<Post> selectedPosts = const [],
-      final List<Post> filteredPosts = const []})
+      final Map<String, List<Post>> filteredPosts = const {}})
       : _allPosts = allPosts,
         _selectedPosts = selectedPosts,
         _filteredPosts = filteredPosts;
@@ -148,13 +149,13 @@ class _$PostsRepositoryImpl
     return EqualUnmodifiableListView(_selectedPosts);
   }
 
-  final List<Post> _filteredPosts;
+  final Map<String, List<Post>> _filteredPosts;
   @override
   @JsonKey()
-  List<Post> get filteredPosts {
-    if (_filteredPosts is EqualUnmodifiableListView) return _filteredPosts;
+  Map<String, List<Post>> get filteredPosts {
+    if (_filteredPosts is EqualUnmodifiableMapView) return _filteredPosts;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_filteredPosts);
+    return EqualUnmodifiableMapView(_filteredPosts);
   }
 
   @override
@@ -203,14 +204,14 @@ abstract class _PostsRepository implements PostsRepository {
   const factory _PostsRepository(
       {final List<Post> allPosts,
       final List<Post> selectedPosts,
-      final List<Post> filteredPosts}) = _$PostsRepositoryImpl;
+      final Map<String, List<Post>> filteredPosts}) = _$PostsRepositoryImpl;
 
   @override
   List<Post> get allPosts;
   @override
   List<Post> get selectedPosts;
   @override
-  List<Post> get filteredPosts;
+  Map<String, List<Post>> get filteredPosts;
   @override
   @JsonKey(ignore: true)
   _$$PostsRepositoryImplCopyWith<_$PostsRepositoryImpl> get copyWith =>
