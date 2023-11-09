@@ -1,17 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hippocamp/constants/storage_keys.dart';
 
 class SecureStorage {
-  final _storage = FlutterSecureStorage();
+  static const storage = FlutterSecureStorage();
 
-  Future<void> storeToken(String token) async {
-    await _storage.write(key: 'auth_token', value: token);
+  static Future<void> write(StorageKeys key, String value) async {
+    await storage.write(key: describeEnum(key), value: value);
   }
 
-  Future<String?> getToken() async {
-    return await _storage.read(key: 'auth_token');
+  static Future<String?> read(StorageKeys key) async {
+    return await storage.read(key: describeEnum(key));
   }
 
-  Future<void> deleteToken() async {
-    await _storage.delete(key: 'auth_token');
+  static Future<void> delete(StorageKeys key) async {
+    await storage.delete(key: describeEnum(key));
+  }
+
+  static Future<void> deleteAll() async {
+    await storage.deleteAll();
   }
 }
