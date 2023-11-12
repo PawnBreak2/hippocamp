@@ -152,6 +152,22 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
   }
 
+  int getTotalNumberOfDays(
+      Map<int, Map<int, Map<String, List<Post>>>> postsByDate) {
+    int dayCount = 0;
+
+    // Iterate over each year
+    postsByDate.forEach((year, months) {
+      // Iterate over each month in the year
+      months.forEach((month, days) {
+        // Add the number of days in this month
+        dayCount += days.length;
+      });
+    });
+
+    return dayCount;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -198,18 +214,23 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
               physics: ClampingScrollPhysics(),
-              itemCount: posts.entries.length,
+              itemCount: getTotalNumberOfDays(posts),
               padding: EdgeInsets.only(bottom: 80),
               itemBuilder: (_, i) {
-                final p = posts.entries.toList()[i];
-                final nextP = i < posts.entries.length - 1
+                print('post entries');
+                print(posts.entries.length);
+                final year = posts.entries.toList()[i];
+                final nextYear = i < posts.entries.length - 1
                     ? posts.entries.toList()[i + 1]
-                    : p;
+                    : year;
 
-                final currentDateP = p.key.dateFromString;
-                final nextDateP = nextP.key.dateFromString;
+                print(year.toString());
 
                 return Column(
+                  children: [],
+                );
+
+                /*return Column(
                   children: [
                     if (i == 0)
                       // Month divider
@@ -296,7 +317,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         ),
                       ),
                   ],
-                );
+                );*/
               },
             ),
       floatingActionButton: _showCenterButton

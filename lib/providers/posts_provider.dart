@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/clients/posts_client.dart';
+import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/body/create_post.dart';
 import 'package:hippocamp/models/repositories/post_repository.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
@@ -51,7 +52,35 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
-  Future<void> getPosts({bool past = true}) async {zz
+  Map<int, Map<int, Map<String, List<Post>>>> organizePosts(List<Post> posts) {
+    Map<int, Map<int, Map<String, List<Post>>>> postsByDate = {};
+
+    for (var post in posts) {
+      DateTime postDate =
+          post.dateTimeFromString; // Assuming this returns a DateTime object
+      int year = postDate.year;
+      int month = postDate.month;
+      String day = postDate.day.toString();
+
+      if (!postsByDate.containsKey(year)) {
+        postsByDate[year] = {};
+      }
+      if (!postsByDate[year]!.containsKey(month)) {
+        postsByDate[year]![month] = {};
+      }
+      if (!postsByDate[year]![month]!.containsKey(day)) {
+        postsByDate[year]![month]![day] = [];
+      }
+
+      postsByDate[year]![month]![day]!.add(post);
+    }
+
+    // For debugging
+    print(postsByDate);
+    return postsByDate;
+  }
+
+  Future<void> getPosts({bool past = true}) async {
     DateTime datePagination =
         DateTime(DateTime.now().year, DateTime.now().month);
     final resp = await _postsClient.getPosts(
@@ -91,7 +120,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
         // iterate each post in allPosts and map them by date
         ref.read(appStateProvider.notifier).resetValueToScrollToday();
 
-        for (Post post in state.allPosts) {
+/*        for (Post post in state.allPosts) {
           // For each post i, the code looks up or creates a list of posts for its specific date. If there are no posts yet for i.date in state.postsMappedByDate, it initializes an empty list ([]
           final postsPerDate = state.postsMappedByDate[post.date] ?? [];
           //The current post i is added to the list postsPerDate, which contains all posts for a particular date.
@@ -99,11 +128,11 @@ class PostListNotifier extends Notifier<PostsRepository> {
           //The list of posts for a specific date is sorted. The sorting is based on timePost in descending order, meaning the newest posts come first.
           postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
           //The list of posts for a specific date is added to the postsFiltered map, which contains all posts for all dates.
-          state = state.copyWith(postsMappedByDate: {
-            ...state.postsMappedByDate,
-            post.date: postsPerDate
-          });
+          List postPerMonth = postsPerDate.map((e) {
+            return e;
+          }).toList();*/
 
+        for (Post post in state.allPosts) {
           //used to iterate until you find the date of today to scroll to
           bool gotTodayScrollValue = false;
           gotTodayScrollValue =
@@ -111,9 +140,13 @@ class PostListNotifier extends Notifier<PostsRepository> {
                     post,
                     gotTodayScrollValue,
                   );
-
-          //This line appears to be calculating a scroll position index. It's calling a function calculateIndexOfTodayInPosts, likely to determine the position of today's posts in a scrollable list, updating getTodayScrollValue accordingly.
         }
+
+        Map<int, Map<int, Map<String, List<Post>>>> postsByDate =
+            organizePosts(state.allPosts);
+
+        state = state.copyWith(
+            postsMappedByDate: {...state.postsMappedByDate, ...postsByDate});
       },
     );
   }
@@ -163,21 +196,21 @@ class PostListNotifier extends Notifier<PostsRepository> {
         // bool used to reiterate until it finds the date of today to scroll to
         bool gotTodayScrollValue = false;
         ref.read(appStateProvider.notifier).resetValueToScrollToday();
-        for (var i in state.allPosts) {
-          final postsPerDate = state.postsMappedByDate[i.date] ?? [];
-          postsPerDate.add(i);
-          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state = state.copyWith(postsMappedByDate: {
-            ...state.postsMappedByDate,
-            i.date: postsPerDate
-          });
-          inspect(state.postsMappedByDate);
+        for (Post post in state.allPosts) {
+          //used to iterate until you find the date of today to scroll to
+          bool gotTodayScrollValue = false;
           gotTodayScrollValue =
               ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
-                    i,
+                    post,
                     gotTodayScrollValue,
                   );
         }
+
+        Map<int, Map<int, Map<String, List<Post>>>> postsByDate =
+            organizePosts(state.allPosts);
+
+        state = state.copyWith(
+            postsMappedByDate: {...state.postsMappedByDate, ...postsByDate});
       },
     );
   }
@@ -231,10 +264,14 @@ class PostListNotifier extends Notifier<PostsRepository> {
         endList = r.end;
 
         for (var i in state.allPosts) {
-          final postsPerDate = state.postsMappedByDate[i.date] ?? [];
+          final List<Post> postsPerDate =
+              state.postsMappedByDate[i.date.dateFromString.year]
+                      ?[i.date.dateFromString.month]?[i.date] ??
+                  [];
           postsPerDate.add(i);
           postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state.postsMappedByDate[i.date] = postsPerDate;
+          state.postsMappedByDate[i.date.dateFromString.year]
+              ?[i.date.dateFromString.month]?[i.date] = postsPerDate;
         }
       },
     );

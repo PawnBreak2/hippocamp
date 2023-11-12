@@ -20,7 +20,7 @@ mixin _$PostsRepository {
   List<Post> get allPosts => throw _privateConstructorUsedError;
   List<Post> get selectedPosts =>
       throw _privateConstructorUsedError; // this is a list of posts grouped by date
-  Map<String, List<Post>> get postsMappedByDate =>
+  Map<int, Map<int, Map<String, List<Post>>>> get postsMappedByDate =>
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -37,7 +37,7 @@ abstract class $PostsRepositoryCopyWith<$Res> {
   $Res call(
       {List<Post> allPosts,
       List<Post> selectedPosts,
-      Map<String, List<Post>> postsMappedByDate});
+      Map<int, Map<int, Map<String, List<Post>>>> postsMappedByDate});
 }
 
 /// @nodoc
@@ -69,7 +69,7 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
       postsMappedByDate: null == postsMappedByDate
           ? _value.postsMappedByDate
           : postsMappedByDate // ignore: cast_nullable_to_non_nullable
-              as Map<String, List<Post>>,
+              as Map<int, Map<int, Map<String, List<Post>>>>,
     ) as $Val);
   }
 }
@@ -85,7 +85,7 @@ abstract class _$$PostsRepositoryImplCopyWith<$Res>
   $Res call(
       {List<Post> allPosts,
       List<Post> selectedPosts,
-      Map<String, List<Post>> postsMappedByDate});
+      Map<int, Map<int, Map<String, List<Post>>>> postsMappedByDate});
 }
 
 /// @nodoc
@@ -115,7 +115,7 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
       postsMappedByDate: null == postsMappedByDate
           ? _value._postsMappedByDate
           : postsMappedByDate // ignore: cast_nullable_to_non_nullable
-              as Map<String, List<Post>>,
+              as Map<int, Map<int, Map<String, List<Post>>>>,
     ));
   }
 }
@@ -128,7 +128,8 @@ class _$PostsRepositoryImpl
   const _$PostsRepositoryImpl(
       {final List<Post> allPosts = const [],
       final List<Post> selectedPosts = const [],
-      final Map<String, List<Post>> postsMappedByDate = const {}})
+      final Map<int, Map<int, Map<String, List<Post>>>> postsMappedByDate =
+          const {}})
       : _allPosts = allPosts,
         _selectedPosts = selectedPosts,
         _postsMappedByDate = postsMappedByDate;
@@ -154,11 +155,11 @@ class _$PostsRepositoryImpl
   }
 
 // this is a list of posts grouped by date
-  final Map<String, List<Post>> _postsMappedByDate;
+  final Map<int, Map<int, Map<String, List<Post>>>> _postsMappedByDate;
 // this is a list of posts grouped by date
   @override
   @JsonKey()
-  Map<String, List<Post>> get postsMappedByDate {
+  Map<int, Map<int, Map<String, List<Post>>>> get postsMappedByDate {
     if (_postsMappedByDate is EqualUnmodifiableMapView)
       return _postsMappedByDate;
     // ignore: implicit_dynamic_type
@@ -211,14 +212,15 @@ abstract class _PostsRepository implements PostsRepository {
   const factory _PostsRepository(
       {final List<Post> allPosts,
       final List<Post> selectedPosts,
-      final Map<String, List<Post>> postsMappedByDate}) = _$PostsRepositoryImpl;
+      final Map<int, Map<int, Map<String, List<Post>>>>
+          postsMappedByDate}) = _$PostsRepositoryImpl;
 
   @override // this is a list of all posts
   List<Post> get allPosts;
   @override
   List<Post> get selectedPosts;
   @override // this is a list of posts grouped by date
-  Map<String, List<Post>> get postsMappedByDate;
+  Map<int, Map<int, Map<String, List<Post>>>> get postsMappedByDate;
   @override
   @JsonKey(ignore: true)
   _$$PostsRepositoryImplCopyWith<_$PostsRepositoryImpl> get copyWith =>
