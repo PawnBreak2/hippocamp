@@ -13,15 +13,17 @@ class CustomColors {
 
   static const Color primaryGrey = Color.fromRGBO(95, 94, 95, 1);
 
+  static const Color primaryLightGreen = Color.fromRGBO(241, 245, 223, 1);
+
   static const Color white243 = Color.fromRGBO(243, 243, 243, 1);
 
   static const Color grey121 = Color.fromRGBO(121, 121, 121, 1);
 
+  static const Color darkGrey = Color.fromARGB(255, 100, 100, 100);
+
   static const Color grey66 = Color.fromRGBO(66, 66, 66, 1);
 
   static final Color activeItem = Colors.blue.withOpacity(.5);
-
-  static const Color primaryLightGreen = Color.fromRGBO(241, 245, 223, 1);
 
   static const Color pinkWhite = Color.fromRGBO(239, 230, 222, 1);
 

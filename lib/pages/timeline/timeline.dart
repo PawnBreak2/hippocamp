@@ -9,6 +9,7 @@ import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/components/time_event_item.dart';
+import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
@@ -161,6 +162,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final appStateProviderState = ref.watch(appStateProvider);
     final postsProviderNotifier = ref.read(postListProvider.notifier);
     final posts = postsProviderState.postsMappedByDate;
+    print('value to scroll to');
+    print(ref.read(appStateProvider).valueToScrollToToday);
     inspect(posts);
     if (_isLoading)
       return Scaffold(
@@ -185,19 +188,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                   isToday: true,
                 ),
                 // Text
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(241, 245, 223, 1),
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    "In questa pagina puoi inserire i tuoi eventi passati / futuri e annotare tutte le cose che ti succedono e che ritieni rilevanti. Clicca nel pulsante in basso a destra (+) per inserire un nuovo post.",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
+                NoPostsInTimelineSection(),
               ],
             )
           : ScrollablePositionedList.builder(

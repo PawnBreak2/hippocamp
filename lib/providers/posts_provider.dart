@@ -76,7 +76,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
         // filters all the posts that are already in the state repository using the unique key
 
         List<Post> newPostsFilteredFromDuplicate = body.posts;
-        newPostsFilteredFromDuplicate.sort((a, b) => b.date.compareTo(a.date));
 
         newPostsFilteredFromDuplicate.removeWhere((Post element) =>
             state.allPosts.any((Post post) => element.key == post.key));
@@ -84,7 +83,8 @@ class PostListNotifier extends Notifier<PostsRepository> {
         // adds them to the allPosts property in state
 
         state = state.copyWith(
-            allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]);
+            allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
+              ..sort((a, b) => b.date.compareTo(a.date)));
 
         List<Map<String, Post>> postsToAddToPostsMappedByDate = [];
 
@@ -149,7 +149,8 @@ class PostListNotifier extends Notifier<PostsRepository> {
 
         newPostsFilteredFromDuplicate.sort((a, b) => b.date.compareTo(a.date));
         state = state.copyWith(
-            allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]);
+            allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
+              ..sort((a, b) => b.date.compareTo(a.date)));
         state = state.copyWith(
           postsMappedByDate: {},
         );
@@ -167,7 +168,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
             ...state.postsMappedByDate,
             i.date: postsPerDate
           });
-          print("postsMappedByDate");
           inspect(state.postsMappedByDate);
 
           // bool used to reiterate until it finds the date of today to scroll to
