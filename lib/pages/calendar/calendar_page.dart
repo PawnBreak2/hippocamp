@@ -1,26 +1,25 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hippocamp/helpers/extensions/int_extensions.dart';
+import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:ippocapp/helpers/extensions/int_extensions.dart';
-import 'package:ippocapp/helpers/extensions/string_extensions.dart';
-import 'package:ippocapp/models/responses/posts_response_model.dart';
-import 'package:ippocapp/providers/posts_provider.dart';
-import 'package:ippocapp/style/styles/colors.dart';
-import 'package:ippocapp/style/widgets/componentns/time_event_item.dart';
-import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
+import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocamp/widgets/components/time_event_item.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
-class CalendarPage extends StatefulWidget {
+class CalendarPage extends ConsumerStatefulWidget {
   final ScrollController scrollController;
   const CalendarPage({
     required this.scrollController,
   });
 
   @override
-  State<CalendarPage> createState() => _CalendarPageState();
+  ConsumerState<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _CalendarPageState extends ConsumerState<CalendarPage> {
   bool _loading = true;
 
   final EventController _eventController = EventController();
@@ -37,9 +36,9 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Future<void> addCalendarPosts() async {
-    final posts = context.read<PostsProvider>();
+    final postsProviderNotifier = ref.read(postListProvider.notifier);
 
-    final resp = await posts.getCalendarPosts(
+    final resp = await postsProviderNotifier.getCalendarPosts(
       date:
           "${_dateTimeSelected.year}-${_dateTimeSelected.month.toString().padLeft(2, "0")}",
     );

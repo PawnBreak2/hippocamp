@@ -36,8 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_riverpod: ^2.3.7
-  flutter_secure_storage: ^8.1.0
-  http: ^0.13.6
+  flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.9
   flash: ^3.0.5+2
   intl: ^0.18.1
@@ -50,6 +49,18 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   dartz: ^0.10.1
   freezed_annotation: ^2.4.1
+  scrollable_positioned_list: ^0.3.8
+  camera: ^0.10.5+5
+  device_info_plus: ^9.1.0
+  file_picker: ^6.1.1
+  flutter_speed_dial: ^7.0.0
+  drag_and_drop_lists: ^0.3.3
+  flutter_slidable: ^3.0.1
+  image_picker: ^1.0.4
+  carousel_slider: ^4.2.1
+  url_launcher: ^6.2.1
+  quill_html_editor: ^2.2.7
+  calendar_view: ^1.0.4
 
 dev_dependencies:
   flutter_test:

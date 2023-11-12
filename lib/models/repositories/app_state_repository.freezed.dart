@@ -20,6 +20,8 @@ mixin _$AppState {
       throw _privateConstructorUsedError;
   List<Categories> get categories => throw _privateConstructorUsedError;
   List<Domains> get domains => throw _privateConstructorUsedError;
+  List<PartnerModel> get businessPartners => throw _privateConstructorUsedError;
+  int get valueToScrollToToday => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
@@ -34,7 +36,9 @@ abstract class $AppStateCopyWith<$Res> {
   $Res call(
       {List<AttachmentType> attachmentTypes,
       List<Categories> categories,
-      List<Domains> domains});
+      List<Domains> domains,
+      List<PartnerModel> businessPartners,
+      int valueToScrollToToday});
 }
 
 /// @nodoc
@@ -53,6 +57,8 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? attachmentTypes = null,
     Object? categories = null,
     Object? domains = null,
+    Object? businessPartners = null,
+    Object? valueToScrollToToday = null,
   }) {
     return _then(_value.copyWith(
       attachmentTypes: null == attachmentTypes
@@ -67,6 +73,14 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.domains
           : domains // ignore: cast_nullable_to_non_nullable
               as List<Domains>,
+      businessPartners: null == businessPartners
+          ? _value.businessPartners
+          : businessPartners // ignore: cast_nullable_to_non_nullable
+              as List<PartnerModel>,
+      valueToScrollToToday: null == valueToScrollToToday
+          ? _value.valueToScrollToToday
+          : valueToScrollToToday // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -82,7 +96,9 @@ abstract class _$$AppStateImplCopyWith<$Res>
   $Res call(
       {List<AttachmentType> attachmentTypes,
       List<Categories> categories,
-      List<Domains> domains});
+      List<Domains> domains,
+      List<PartnerModel> businessPartners,
+      int valueToScrollToToday});
 }
 
 /// @nodoc
@@ -99,6 +115,8 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? attachmentTypes = null,
     Object? categories = null,
     Object? domains = null,
+    Object? businessPartners = null,
+    Object? valueToScrollToToday = null,
   }) {
     return _then(_$AppStateImpl(
       attachmentTypes: null == attachmentTypes
@@ -113,6 +131,14 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value._domains
           : domains // ignore: cast_nullable_to_non_nullable
               as List<Domains>,
+      businessPartners: null == businessPartners
+          ? _value._businessPartners
+          : businessPartners // ignore: cast_nullable_to_non_nullable
+              as List<PartnerModel>,
+      valueToScrollToToday: null == valueToScrollToToday
+          ? _value.valueToScrollToToday
+          : valueToScrollToToday // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -123,10 +149,13 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
   const _$AppStateImpl(
       {final List<AttachmentType> attachmentTypes = const [],
       final List<Categories> categories = const [],
-      final List<Domains> domains = const []})
+      final List<Domains> domains = const [],
+      final List<PartnerModel> businessPartners = const [],
+      this.valueToScrollToToday = 0})
       : _attachmentTypes = attachmentTypes,
         _categories = categories,
-        _domains = domains;
+        _domains = domains,
+        _businessPartners = businessPartners;
 
   final List<AttachmentType> _attachmentTypes;
   @override
@@ -155,9 +184,23 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
     return EqualUnmodifiableListView(_domains);
   }
 
+  final List<PartnerModel> _businessPartners;
+  @override
+  @JsonKey()
+  List<PartnerModel> get businessPartners {
+    if (_businessPartners is EqualUnmodifiableListView)
+      return _businessPartners;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_businessPartners);
+  }
+
+  @override
+  @JsonKey()
+  final int valueToScrollToToday;
+
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppState(attachmentTypes: $attachmentTypes, categories: $categories, domains: $domains)';
+    return 'AppState(attachmentTypes: $attachmentTypes, categories: $categories, domains: $domains, businessPartners: $businessPartners, valueToScrollToToday: $valueToScrollToToday)';
   }
 
   @override
@@ -167,7 +210,9 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       ..add(DiagnosticsProperty('type', 'AppState'))
       ..add(DiagnosticsProperty('attachmentTypes', attachmentTypes))
       ..add(DiagnosticsProperty('categories', categories))
-      ..add(DiagnosticsProperty('domains', domains));
+      ..add(DiagnosticsProperty('domains', domains))
+      ..add(DiagnosticsProperty('businessPartners', businessPartners))
+      ..add(DiagnosticsProperty('valueToScrollToToday', valueToScrollToToday));
   }
 
   @override
@@ -179,7 +224,11 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
                 .equals(other._attachmentTypes, _attachmentTypes) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
-            const DeepCollectionEquality().equals(other._domains, _domains));
+            const DeepCollectionEquality().equals(other._domains, _domains) &&
+            const DeepCollectionEquality()
+                .equals(other._businessPartners, _businessPartners) &&
+            (identical(other.valueToScrollToToday, valueToScrollToToday) ||
+                other.valueToScrollToToday == valueToScrollToToday));
   }
 
   @override
@@ -187,7 +236,9 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       runtimeType,
       const DeepCollectionEquality().hash(_attachmentTypes),
       const DeepCollectionEquality().hash(_categories),
-      const DeepCollectionEquality().hash(_domains));
+      const DeepCollectionEquality().hash(_domains),
+      const DeepCollectionEquality().hash(_businessPartners),
+      valueToScrollToToday);
 
   @JsonKey(ignore: true)
   @override
@@ -200,7 +251,9 @@ abstract class _AppState implements AppState {
   const factory _AppState(
       {final List<AttachmentType> attachmentTypes,
       final List<Categories> categories,
-      final List<Domains> domains}) = _$AppStateImpl;
+      final List<Domains> domains,
+      final List<PartnerModel> businessPartners,
+      final int valueToScrollToToday}) = _$AppStateImpl;
 
   @override
   List<AttachmentType> get attachmentTypes;
@@ -208,6 +261,10 @@ abstract class _AppState implements AppState {
   List<Categories> get categories;
   @override
   List<Domains> get domains;
+  @override
+  List<PartnerModel> get businessPartners;
+  @override
+  int get valueToScrollToToday;
   @override
   @JsonKey(ignore: true)
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>

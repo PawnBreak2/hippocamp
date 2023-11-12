@@ -1,6 +1,8 @@
-/*
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hippocamp/constants/common.dart';
 import 'package:hippocamp/models/wallets/wallet_model.dart';
+import 'package:hippocamp/providers/wallets_provider.dart';
 
 class FinanceMovementModel {
   final bool inOrOut;
@@ -52,7 +54,7 @@ class FinanceMovementModel {
 
   static FinanceMovementModel notStandardMovement(
     String id,
-    BuildContext context,
+    WidgetRef ref,
   ) {
     TypeWallets to;
 
@@ -65,15 +67,15 @@ class FinanceMovementModel {
     else
       to = TypeWallets.contante;
 
-    final walletsProvider = context.read<WalletsProvider>();
+    final walletsProviderNotifier = ref.read(walletsProvider.notifier);
 
     return FinanceMovementModel(
       typeNotStandard: id,
-      typeWalletFROM: walletsProvider.getWalletById(TypeWallets.contoBanca),
-      typeWalletTO: walletsProvider.getWalletById(to),
+      typeWalletFROM:
+          walletsProviderNotifier.getWalletById(TypeWallets.contoBanca),
+      typeWalletTO: walletsProviderNotifier.getWalletById(to),
       value: "",
       valueEntered: id == "Compravaluta" ? "" : null,
     );
   }
 }
-*/

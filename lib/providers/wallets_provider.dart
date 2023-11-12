@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:hippocamp/clients/wallets_client.dart';
+import 'package:hippocamp/constants/common.dart';
 import 'package:hippocamp/models/repositories/wallets_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/wallets/wallet_model.dart';
@@ -125,13 +126,7 @@ class WalletsProvider extends Notifier<WalletsRepository> {
   }
 }
 
-enum TypeWallets {
-  contante,
-  contoBanca,
-  cartaDiCredito,
-}
-
-final walletsNotifierProvider =
+final walletsProvider =
     NotifierProvider<WalletsProvider, WalletsRepository>(() {
   return WalletsProvider();
 });

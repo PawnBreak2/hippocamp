@@ -3,10 +3,10 @@ class Domains {
   final String key;
   final String backgroundColorHex;
   final String localizedName;
-  final String iconURL;
+  final String iconUrl;
 
   const Domains({
-    required this.iconURL,
+    required this.iconUrl,
     required this.key,
     required this.localizedName,
     required this.backgroundColorHex,
@@ -17,7 +17,7 @@ class Domains {
     return Domains(
       position: json["position"] ?? 0,
       key: json["key"] ?? "",
-      iconURL: json["iconUrl"] ?? "",
+      iconUrl: json["iconUrl"] ?? "",
       localizedName: json["name"] ?? "",
       backgroundColorHex: json["backgroundColorHex"] ?? "",
     );

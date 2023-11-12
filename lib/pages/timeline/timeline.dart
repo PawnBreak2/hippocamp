@@ -1,29 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:ippocapp/helpers/extensions/int_extensions.dart';
-import 'package:ippocapp/helpers/extensions/string_extensions.dart';
-import 'package:ippocapp/providers/posts_provider.dart';
-import 'package:ippocapp/providers/wallets_provider.dart';
-import 'package:ippocapp/style/styles/colors.dart';
-import 'package:ippocapp/style/widgets/componentns/time_event_item.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hippocamp/helpers/extensions/int_extensions.dart';
+import 'package:hippocamp/helpers/extensions/string_extensions.dart';
+import 'package:hippocamp/providers/app_state_provider.dart';
+import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/wallets_provider.dart';
+import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocamp/widgets/components/time_event_item.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class TimelinePage extends StatefulWidget {
+class TimelinePage extends ConsumerStatefulWidget {
   final bool isSearching;
   const TimelinePage({required this.isSearching});
 
   @override
-  State<TimelinePage> createState() => _TimelinePageState();
+  ConsumerState<TimelinePage> createState() => _TimelinePageState();
 }
 
-class _TimelinePageState extends State<TimelinePage> {
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
-
+class _TimelinePageState extends ConsumerState<TimelinePage> {
   bool _isLoading = true;
   bool _getNewPosts = false;
   bool _showCenterButton = false;
+  late ItemScrollController itemScrollController;
+  late ItemPositionsListener itemPositionsListener;
 
   Widget _timeDivider({
     required DateTime date,
@@ -69,19 +70,57 @@ class _TimelinePageState extends State<TimelinePage> {
     );
   }
 
-  void checkScrolling() async {
-    final postsProvider = context.read<PostsProvider>();
+  @override
+  void initState() {
+    itemScrollController = ItemScrollController();
+    itemPositionsListener = ItemPositionsListener.create();
+    super.initState();
+    _init().whenComplete(() async {
+      print('value to scroll to');
+      print(ref.read(appStateProvider).valueToScrollToToday);
+      await Future.delayed(Duration(milliseconds: 5000));
 
+      final appStateProviderState = ref.read(appStateProvider);
+      final postsProviderNotifier = ref.read(postListProvider.notifier);
+      itemScrollController.scrollTo(
+        index: appStateProviderState.valueToScrollToToday,
+        duration: Duration(milliseconds: 1),
+      );
+
+      itemPositionsListener.itemPositions.addListener(checkScrolling);
+    });
+  }
+
+  Future<void> _init() async {
+    final postsProviderState = ref.read(postListProvider);
+    final postsProviderNotifier = ref.read(postListProvider.notifier);
+    final appStateProviderNotifier = ref.read(appStateProvider.notifier);
+    final walletsProviderNotifier = ref.read(walletsProvider.notifier);
+    if (postsProviderState.allPosts.isEmpty) {
+      await postsProviderNotifier.getPosts();
+      await appStateProviderNotifier.getAttachmentTypes();
+      await walletsProviderNotifier.getWallets();
+
+      _isLoading = false;
+      setState(() {});
+    } else
+      _isLoading = false;
+  }
+
+  void checkScrolling() async {
+    final postsProviderNotifier = ref.read(postListProvider.notifier);
+    final postsProviderState = ref.read(postListProvider);
+    final appStateProviderState = ref.read(appStateProvider);
     final nearTheStart =
         itemPositionsListener.itemPositions.value.first.index < 3;
 
     final nearTheEnd = itemPositionsListener.itemPositions.value.last.index ==
-        (postsProvider.postsFiltered.length - 1);
+        (postsProviderState.postsMappedByDate.length - 1);
 
     final listIndexesVisible =
         itemPositionsListener.itemPositions.value.map((e) => e.index);
-    final showScrollToToday =
-        !listIndexesVisible.contains(postsProvider.valueToScrollToBeToday);
+    final showScrollToToday = !listIndexesVisible
+        .contains(appStateProviderState.valueToScrollToToday);
 
     if (showScrollToToday && !_showCenterButton) {
       _showCenterButton = true;
@@ -93,51 +132,21 @@ class _TimelinePageState extends State<TimelinePage> {
 
     if (widget.isSearching) return;
 
-    if (nearTheStart && !postsProvider.endFutureList) {
+    if (nearTheStart && !postsProviderNotifier.endFutureList) {
       if (_getNewPosts) return;
 
       _getNewPosts = true;
-      await postsProvider.getNewPosts(past: false);
+      await postsProviderNotifier.getNewPosts(past: false);
       _getNewPosts = false;
     }
 
-    if (nearTheEnd && !postsProvider.endList) {
+    if (nearTheEnd && !postsProviderNotifier.endList) {
       if (_getNewPosts) return;
 
       _getNewPosts = true;
-      await postsProvider.getNewPosts(past: true);
+      await postsProviderNotifier.getNewPosts(past: true);
       _getNewPosts = false;
     }
-  }
-
-  Future<void> _init() async {
-    final postsProvider = context.read<PostsProvider>();
-    final walletsProvider = context.read<WalletsProvider>();
-    if (postsProvider.posts.isEmpty) {
-      await postsProvider.getPosts();
-      await postsProvider.getAttachmentTypes();
-      await walletsProvider.getWallets();
-
-      _isLoading = false;
-      setState(() {});
-    } else
-      _isLoading = false;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init().whenComplete(() async {
-      await Future.delayed(Duration(milliseconds: 100));
-
-      final postsProvider = context.read<PostsProvider>();
-      itemScrollController.scrollTo(
-        index: postsProvider.valueToScrollToBeToday,
-        duration: Duration(milliseconds: 1),
-      );
-
-      itemPositionsListener.itemPositions.addListener(checkScrolling);
-    });
   }
 
   @override
@@ -148,9 +157,11 @@ class _TimelinePageState extends State<TimelinePage> {
 
   @override
   Widget build(BuildContext context) {
-    final postsProvider = context.watch<PostsProvider>();
-    final posts = postsProvider.postsFiltered;
-
+    final postsProviderState = ref.watch(postListProvider);
+    final appStateProviderState = ref.watch(appStateProvider);
+    final postsProviderNotifier = ref.read(postListProvider.notifier);
+    final posts = postsProviderState.postsMappedByDate;
+    inspect(posts);
     if (_isLoading)
       return Scaffold(
         backgroundColor: Color.fromRGBO(227, 218, 210, 1),
@@ -224,7 +235,7 @@ class _TimelinePageState extends State<TimelinePage> {
                           ],
                         ),
                       ),
-                    if (i == postsProvider.valueToScrollToBeToday)
+                    if (i == appStateProviderState.valueToScrollToToday)
                       // Date divider
                       _timeDivider(
                         date: DateTime.now(),
@@ -243,26 +254,28 @@ class _TimelinePageState extends State<TimelinePage> {
                     for (var j in posts[p.key]!)
                       TimeEventItem(
                         post: j,
-                        isSelectedItem: postsProvider.postIsSelected(j),
-                        showSelectionCircle: postsProvider.isSelectingPosts,
-                        onTap: postsProvider.isSelectingPosts
+                        isSelectedItem: postsProviderNotifier.postIsSelected(j),
+                        showSelectionCircle:
+                            postsProviderNotifier.isSelectingPosts,
+                        onTap: postsProviderNotifier.isSelectingPosts
                             ? () {
-                                if (postsProvider.isSelectingPosts)
-                                  postsProvider.addOrRemoveSelectedPost(
+                                if (postsProviderNotifier.isSelectingPosts)
+                                  postsProviderNotifier.addOrRemoveSelectedPost(
                                       post: j);
                               }
                             : null,
                         onLongPress: () {
-                          if (postsProvider.isSelectingPosts) {
-                            postsProvider.isSelectingPosts = false;
-                            postsProvider.addOrRemoveSelectedPost();
+                          if (postsProviderNotifier.isSelectingPosts) {
+                            postsProviderNotifier.isSelectingPosts = false;
+                            postsProviderNotifier.addOrRemoveSelectedPost();
                             setState(() {});
 
                             return;
                           }
 
-                          postsProvider.isSelectingPosts = true;
-                          postsProvider.addOrRemoveSelectedPost(post: j);
+                          postsProviderNotifier.isSelectingPosts = true;
+                          postsProviderNotifier.addOrRemoveSelectedPost(
+                              post: j);
                           setState(() {});
                         },
                       ),
@@ -313,7 +326,7 @@ class _TimelinePageState extends State<TimelinePage> {
               child: InkWell(
                 onTap: () {
                   itemScrollController.scrollTo(
-                    index: postsProvider.valueToScrollToBeToday,
+                    index: appStateProviderState.valueToScrollToToday,
                     duration: Duration(milliseconds: 1),
                   );
                 },

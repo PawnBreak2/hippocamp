@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:hippocamp/constants/storage_keys.dart';
+import 'package:hippocamp/pages/home/home_page.dart';
 import 'package:hippocamp/pages/login/login_page.dart';
 import 'package:hippocamp/pages/splash_page/splash_page.dart';
 import 'package:hippocamp/storage/local_storage.dart';
@@ -28,6 +29,11 @@ class NavigationConfiguration {
         path: '/splash-screen',
         name: 'splash-page',
         builder: (context, state) => const SplashPage(),
+      ),
+      GoRoute(
+        path: '/home-page',
+        name: 'home-page',
+        builder: (context, state) => const HomePage(),
       ),
     ],
   );

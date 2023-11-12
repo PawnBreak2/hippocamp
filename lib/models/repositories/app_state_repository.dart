@@ -1,6 +1,7 @@
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hippocamp/models/posts-creation/partner_model.dart';
 import 'package:hippocamp/models/responses/categories_response_model.dart';
 import 'package:hippocamp/models/responses/domains_response_model.dart';
 part 'app_state_repository.freezed.dart';
@@ -11,5 +12,7 @@ class AppState with _$AppState {
     @Default([]) List<AttachmentType> attachmentTypes,
     @Default([]) List<Categories> categories,
     @Default([]) List<Domains> domains,
+    @Default([]) List<PartnerModel> businessPartners,
+    @Default(0) int valueToScrollToToday,
   }) = _AppState;
 }

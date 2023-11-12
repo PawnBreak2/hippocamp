@@ -8,8 +8,10 @@ part 'post_repository.freezed.dart';
 @freezed
 class PostsRepository with _$PostsRepository {
   const factory PostsRepository({
+    // this is a list of all posts
     @Default([]) List<Post> allPosts,
     @Default([]) List<Post> selectedPosts,
-    @Default({}) Map<String, List<Post>> filteredPosts,
+    // this is a list of posts grouped by date
+    @Default({}) Map<String, List<Post>> postsMappedByDate,
   }) = _PostsRepository;
 }

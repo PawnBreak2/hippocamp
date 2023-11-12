@@ -6,6 +6,7 @@ import 'package:hippocamp/clients/posts_client.dart';
 import 'package:hippocamp/models/body/create_post.dart';
 import 'package:hippocamp/models/repositories/post_repository.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
+import 'package:hippocamp/providers/app_state_provider.dart';
 
 class PostListNotifier extends Notifier<PostsRepository> {
   @override
@@ -23,7 +24,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
   // Used in timeline for getting new posts when scrolling down
   bool endList = false;
   bool endFutureList = false;
-  int valueToScrollToBeToday = 0;
 
   // Used in timeline when user is selecting multiple posts
   bool _isSelectingPosts = false;
@@ -69,11 +69,15 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
 
     resp.fold(
-      (l) => null,
-      (r) async {
+      (error) => null,
+      (body) async {
+        /// TODO: ottimizzare e vedere se è necessario tenere allPosts nello stato
+
         // filters all the posts that are already in the state repository using the unique key
 
-        List<Post> newPostsFilteredFromDuplicate = r.posts;
+        List<Post> newPostsFilteredFromDuplicate = body.posts;
+        newPostsFilteredFromDuplicate.sort((a, b) => b.date.compareTo(a.date));
+
         newPostsFilteredFromDuplicate.removeWhere((Post element) =>
             state.allPosts.any((Post post) => element.key == post.key));
 
@@ -81,6 +85,35 @@ class PostListNotifier extends Notifier<PostsRepository> {
 
         state = state.copyWith(
             allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]);
+
+        List<Map<String, Post>> postsToAddToPostsMappedByDate = [];
+
+        // iterate each post in allPosts and map them by date
+
+        for (Post post in state.allPosts) {
+          // For each post i, the code looks up or creates a list of posts for its specific date. If there are no posts yet for i.date in state.postsMappedByDate, it initializes an empty list ([]
+          final postsPerDate = state.postsMappedByDate[post.date] ?? [];
+          //The current post i is added to the list postsPerDate, which contains all posts for a particular date.
+          postsPerDate.add(post);
+          //The list of posts for a specific date is sorted. The sorting is based on timePost in descending order, meaning the newest posts come first.
+          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
+          //The list of posts for a specific date is added to the postsFiltered map, which contains all posts for all dates.
+          state = state.copyWith(postsMappedByDate: {
+            ...state.postsMappedByDate,
+            post.date: postsPerDate
+          });
+
+          //used to iterate until you find the date of today to scroll to
+          bool gotTodayScrollValue = false;
+
+          gotTodayScrollValue =
+              ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
+                    post,
+                    gotTodayScrollValue,
+                  );
+
+          //This line appears to be calculating a scroll position index. It's calling a function calculateIndexOfTodayInPosts, likely to determine the position of today's posts in a scrollable list, updating getTodayScrollValue accordingly.
+        }
       },
     );
   }
@@ -108,9 +141,9 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
 
     resp.fold(
-      (l) => null,
-      (r) {
-        List<Post> newPostsFilteredFromDuplicate = r.posts;
+      (error) => null,
+      (body) {
+        List<Post> newPostsFilteredFromDuplicate = body.posts;
         newPostsFilteredFromDuplicate.removeWhere((Post element) =>
             state.allPosts.any((Post post) => element.key == post.key));
 
@@ -118,42 +151,36 @@ class PostListNotifier extends Notifier<PostsRepository> {
         state = state.copyWith(
             allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]);
         state = state.copyWith(
-          filteredPosts: {},
+          postsMappedByDate: {},
         );
 
         if (past)
-          endList = r.end;
+          endList = body.end;
         else
-          endFutureList = r.end;
-
-        bool getTodayScrollValue = false;
-        valueToScrollToBeToday = 0;
+          endFutureList = body.end;
 
         for (var i in state.allPosts) {
-          final postsPerDate = state.filteredPosts[i.date] ?? [];
+          final postsPerDate = state.postsMappedByDate[i.date] ?? [];
           postsPerDate.add(i);
           postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state = state.copyWith(filteredPosts: {i.date: postsPerDate});
+          state = state.copyWith(postsMappedByDate: {
+            ...state.postsMappedByDate,
+            i.date: postsPerDate
+          });
+          print("postsMappedByDate");
+          inspect(state.postsMappedByDate);
 
-          getTodayScrollValue = calculateIndexOfTodayInPosts(
-            i,
-            getTodayScrollValue,
-          );
+          // bool used to reiterate until it finds the date of today to scroll to
+          bool gotTodayScrollValue = false;
+
+          gotTodayScrollValue =
+              ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
+                    i,
+                    gotTodayScrollValue,
+                  );
         }
       },
     );
-  }
-
-  bool calculateIndexOfTodayInPosts(Post p, bool continueSearching) {
-    final datePost = DateUtils.dateOnly(DateTime.parse(p.date));
-    final today = DateUtils.dateOnly(DateTime.now());
-    final isTodayOrLess =
-        datePost.compareTo(today) == 0 || datePost.compareTo(today) == -1;
-
-    if (isTodayOrLess && !continueSearching)
-      return true;
-    else if (!continueSearching) valueToScrollToBeToday += 1;
-    return false;
   }
 
   ///TODO: chiedere spiegazioni a Lorenzo
@@ -195,7 +222,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
       (r) {
         state = state.copyWith(
           allPosts: [],
-          filteredPosts: {},
+          postsMappedByDate: {},
         );
 
         state = state.copyWith(
@@ -205,10 +232,10 @@ class PostListNotifier extends Notifier<PostsRepository> {
         endList = r.end;
 
         for (var i in state.allPosts) {
-          final postsPerDate = state.filteredPosts[i.date] ?? [];
+          final postsPerDate = state.postsMappedByDate[i.date] ?? [];
           postsPerDate.add(i);
           postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state.filteredPosts[i.date] = postsPerDate;
+          state.postsMappedByDate[i.date] = postsPerDate;
         }
       },
     );
@@ -260,7 +287,9 @@ class PostListNotifier extends Notifier<PostsRepository> {
     required List<String> postKeys,
     bool defaultDate = true,
   }) async {
-    for (var i in postKeys) await _postsClient.duplicatePosts(postKey: i);
+    for (var i in postKeys) {
+      await _postsClient.duplicatePosts(postKey: i);
+    }
 
     _isSelectingPosts = false;
     state = state.copyWith(selectedPosts: []);
@@ -274,12 +303,19 @@ class PostListNotifier extends Notifier<PostsRepository> {
   void clearAllData() {
     datePagination = DateTime.now();
     endList = false;
-    valueToScrollToBeToday = 0;
-
     //goes back to initializing an empty repository
 
     state = const PostsRepository();
   }
+
+  // CALENDAR REGION
+  Future<List<Post>?> getCalendarPosts({String date = "2023-07"}) async {
+    final resp = await _postsClient.getCalendarPosts(date: date);
+
+    return resp.fold((l) => null, (r) => r.posts);
+  }
+
+  // HELPERS
 }
 
 final postListProvider = NotifierProvider<PostListNotifier, PostsRepository>(

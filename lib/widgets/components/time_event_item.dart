@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:ippocapp/helpers/extensions/string_extensions.dart';
-//import 'package:ippocapp/home/pages/posts-creation/post_creation_page.dart';
-//import 'package:ippocapp/models/responses/posts_response_model.dart';
-//import 'package:ippocapp/style/styles/colors.dart';
-//import 'package:ippocapp/style/widgets/componentns/partner_box.dart';
+import 'package:hippocamp/helpers/extensions/string_extensions.dart';
+import 'package:hippocamp/models/responses/posts_response_model.dart';
+import 'package:hippocamp/pages/posts-creation/post_creation_page.dart';
+import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocamp/widgets/components/partner_box.dart';
 
-/*
 class TimeEventItem extends StatelessWidget {
   final Post post;
   final bool isLastOne;
@@ -258,4 +257,3 @@ class TimeEventItem extends StatelessWidget {
     );
   }
 }
- */

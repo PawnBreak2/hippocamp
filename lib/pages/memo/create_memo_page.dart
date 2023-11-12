@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ippocapp/style/styles/colors.dart';
+import 'package:hippocamp/styles/colors.dart';
 import 'package:quill_html_editor/quill_html_editor.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CreateMemoPage extends StatefulWidget {
   const CreateMemoPage({super.key});

@@ -77,7 +77,7 @@ class AuthNotifier extends AsyncNotifier<AsyncValue> {
     ref.read(userNotifierProvider.notifier).clearAllData();
     ref.read(postListProvider.notifier).clearAllData();
     ref.read(appStateProvider.notifier).clearAllData();
-    ref.read(walletsNotifierProvider.notifier).clearAllData();
+    ref.read(walletsProvider.notifier).clearAllData();
   }
 }
 
