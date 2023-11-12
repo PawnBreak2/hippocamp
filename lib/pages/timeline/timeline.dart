@@ -10,8 +10,8 @@ import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/components/time_event_item.dart';
+import 'package:hippocamp/widgets/components/timeline/month_divider.dart';
 import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart';
-import 'package:hippocamp/widgets/components/timeline/time_divider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
@@ -79,7 +79,9 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     itemPositionsListener = ItemPositionsListener.create();
     super.initState();
     _init().whenComplete(() async {
-      await Future.delayed(Duration(milliseconds: 100));
+      print('value to scroll to');
+      print(ref.read(appStateProvider).valueToScrollToToday);
+      await Future.delayed(Duration(milliseconds: 5000));
 
       final appStateProviderState = ref.read(appStateProvider);
       final postsProviderNotifier = ref.read(postListProvider.notifier);
@@ -161,19 +163,13 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsProviderState = ref.watch(postListProvider);
     final appStateProviderState = ref.watch(appStateProvider);
     final postsProviderNotifier = ref.read(postListProvider.notifier);
-    final Map<String, List<Post>> posts = postsProviderState.postsMappedByDate;
+    final posts = postsProviderState.postsMappedByDate;
     print('value to scroll to');
     print(ref.read(appStateProvider).valueToScrollToToday);
-    //inspect(posts);
-    final listIndexesVisible =
-        itemPositionsListener.itemPositions.value.map((e) => e.index);
-    print(listIndexesVisible);
-
-    /// TODO: ottimizzare
-
+    inspect(posts);
     if (_isLoading)
       return Scaffold(
-        backgroundColor: CustomColors.pinkWhiteDeep,
+        backgroundColor: Color.fromRGBO(227, 218, 210, 1),
         body: Center(
           child: CircularProgressIndicator(
             color: Colors.white,
@@ -182,13 +178,17 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       );
 
     return Scaffold(
-      backgroundColor:
-          posts.entries.isEmpty ? CustomColors.pinkWhiteDeep : Colors.white,
+      backgroundColor: posts.entries.isEmpty
+          ? Color.fromRGBO(227, 218, 210, 1)
+          : Colors.white,
       body: posts.isEmpty
           ? Column(
               children: [
                 // Date divider
-                TimelineTimeDivider(date: DateTime.now(), isToday: true),
+                _timeDivider(
+                  date: DateTime.now(),
+                  isToday: true,
+                ),
                 // Text
                 NoPostsInTimelineSection(),
               ],
@@ -201,33 +201,19 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               itemCount: posts.entries.length,
               padding: EdgeInsets.only(bottom: 80),
               itemBuilder: (_, i) {
-                /*    The variable p is assigned to the current entry in the posts.entries list for the given index i. Each entry in this list is a key-value pair, where the key is a string representing a date and the value is a list of posts (List<Post>) for that date.
-                 The p variable is used within the itemBuilder to:
-                 Display dividers (month, year, date) based on the date of the current entry.
-                 Render the posts for the current date.
-                 Determine if the layout needs to include a divider for a change in year or month when compared to the next post entry (using nextP).*/
-
-                final postsForCurrentDate = posts.entries.toList()[i];
-
-                /*   nextP is assigned to the next entry in posts.entries if the current index i is not the last one. If i is the last index, nextP is set to the same value as p.
-                This is used to check if there is a change in the year or month between the current post entry (p) and the next post entry (nextP). If there is a change, this indicates the need  to insert a year or month divider in the layout.
-                The conditional assignment of nextP ensures that even for the last post entry, there's a valid nextP to compare against, avoiding an index out of range error.
-                */
-
-                final postsForNextDate = i < posts.entries.length - 1
+                final p = posts.entries.toList()[i];
+                final nextP = i < posts.entries.length - 1
                     ? posts.entries.toList()[i + 1]
-                    : postsForCurrentDate;
+                    : p;
 
-                final currentDateP = postsForCurrentDate.key.dateFromString;
-                final nextDateP = postsForNextDate.key.dateFromString;
+                final currentDateP = p.key.dateFromString;
+                final nextDateP = nextP.key.dateFromString;
 
                 return Column(
                   children: [
                     if (i == 0)
                       // Month divider
-                      MonthDivider(
-                          currentDateP: currentDateP,
-                          postsForCurrentDate: postsForCurrentDate),
+                      MonthDivider(currentDateP: currentDateP, p: p),
                     if (i == appStateProviderState.valueToScrollToToday)
                       // Date divider
                       _timeDivider(
@@ -235,16 +221,16 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         isToday: true,
                       ),
 
-                    if (postsForCurrentDate.key.dateFromString !=
+                    if (p.key.dateFromString !=
                         "${DateTime.now()}".dateFromString)
                       // Date divider
                       _timeDivider(
-                        date: postsForCurrentDate.key.dateFromString,
+                        date: p.key.dateFromString,
                         isToday: false,
                       ),
 
                     // Posts per date
-                    for (var j in posts[postsForCurrentDate.key]!)
+                    for (var j in posts[p.key]!)
                       TimeEventItem(
                         post: j,
                         isSelectedItem: postsProviderNotifier.postIsSelected(j),
@@ -301,7 +287,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         child: Row(
                           children: [
                             Text(
-                              "${nextDateP.month.monthFromInt} ${postsForNextDate.key.dateFromString.year}",
+                              "${nextDateP.month.monthFromInt} ${nextP.key.dateFromString.year}",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
@@ -345,33 +331,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               ),
             )
           : null,
-    );
-  }
-}
-
-class MonthDivider extends StatelessWidget {
-  const MonthDivider({
-    super.key,
-    required this.currentDateP,
-    required this.postsForCurrentDate,
-  });
-
-  final DateTime currentDateP;
-  final MapEntry<String, List<Post>> postsForCurrentDate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[200],
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Row(
-        children: [
-          Text(
-            "${currentDateP.month.monthFromInt} ${postsForCurrentDate.key.dateFromString.year}",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -51,7 +51,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
-  Future<void> getPosts({bool past = true}) async {
+  Future<void> getPosts({bool past = true}) async {zz
     DateTime datePagination =
         DateTime(DateTime.now().year, DateTime.now().month);
     final resp = await _postsClient.getPosts(
@@ -89,6 +89,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
         List<Map<String, Post>> postsToAddToPostsMappedByDate = [];
 
         // iterate each post in allPosts and map them by date
+        ref.read(appStateProvider.notifier).resetValueToScrollToday();
 
         for (Post post in state.allPosts) {
           // For each post i, the code looks up or creates a list of posts for its specific date. If there are no posts yet for i.date in state.postsMappedByDate, it initializes an empty list ([]
@@ -105,7 +106,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
 
           //used to iterate until you find the date of today to scroll to
           bool gotTodayScrollValue = false;
-
           gotTodayScrollValue =
               ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
                     post,
