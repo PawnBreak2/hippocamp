@@ -152,22 +152,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
   }
 
-  int getTotalNumberOfDays(
-      Map<int, Map<int, Map<String, List<Post>>>> postsByDate) {
-    int dayCount = 0;
-
-    // Iterate over each year
-    postsByDate.forEach((year, months) {
-      // Iterate over each month in the year
-      months.forEach((month, days) {
-        // Add the number of days in this month
-        dayCount += days.length;
-      });
-    });
-
-    return dayCount;
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -179,10 +163,11 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsProviderState = ref.watch(postListProvider);
     final appStateProviderState = ref.watch(appStateProvider);
     final postsProviderNotifier = ref.read(postListProvider.notifier);
-    final posts = postsProviderState.postsMappedByDate;
+    final postsMappedByDate = postsProviderState.postsMappedByDate;
+    final postsMappedByYearAndMonth =
+        postsProviderState.postsMappedByYearAndMonth;
     print('value to scroll to');
     print(ref.read(appStateProvider).valueToScrollToToday);
-    inspect(posts);
     if (_isLoading)
       return Scaffold(
         backgroundColor: Color.fromRGBO(227, 218, 210, 1),
@@ -194,10 +179,10 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       );
 
     return Scaffold(
-      backgroundColor: posts.entries.isEmpty
+      backgroundColor: postsMappedByDate.entries.isEmpty
           ? Color.fromRGBO(227, 218, 210, 1)
           : Colors.white,
-      body: posts.isEmpty
+      body: postsMappedByDate.isEmpty
           ? Column(
               children: [
                 // Date divider
@@ -214,20 +199,47 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
               physics: ClampingScrollPhysics(),
-              itemCount: getTotalNumberOfDays(posts),
+              itemCount: postsMappedByDate.entries.length,
               padding: EdgeInsets.only(bottom: 80),
               itemBuilder: (_, i) {
-                for(y)
+                /*    The variable p is assigned to the current entry in the posts.entries list for the given index i. Each entry in this list is a key-value pair, where the key is a string representing a date and the value is a list of posts (List<Post>) for that date.
+                 The p variable is used within the itemBuilder to:
+                 Display dividers (month, year, date) based on the date of the current entry.
+                 Render the posts for the current date.
+                 Determine if the layout needs to include a divider for a change in year or month when compared to the next post entry (using nextP).*/
 
+                final postsForCurrentDate =
+                    postsMappedByDate.entries.toList()[i];
+
+                /*   nextP is assigned to the next entry in posts.entries if the current index i is not the last one. If i is the last index, nextP is set to the same value as p.
+                This is used to check if there is a change in the year or month between the current post entry (p) and the next post entry (nextP). If there is a change, this indicates the need  to insert a year or month divider in the layout.
+                The conditional assignment of nextP ensures that even for the last post entry, there's a valid nextP to compare against, avoiding an index out of range error.
+                */
+
+                final postsForNextDate =
+                    i < postsMappedByDate.entries.length - 1
+                        ? postsMappedByDate.entries.toList()[i + 1]
+                        : postsForCurrentDate;
+
+                final currentDateP = postsForCurrentDate.key.dateFromString;
+                final nextDateP = postsForNextDate.key.dateFromString;
+                print('current key');
+                print(postsForCurrentDate.value[0].key);
+                print('repo key');
+
+                print(postsMappedByYearAndMonth[currentDateP.year]![
+                        currentDateP.month]![0]
+                    .key);
                 return Column(
-                  children: [],
-                );
-
-                /*return Column(
                   children: [
-                    if (i == 0)
+                    if (postsForCurrentDate.value[0].key ==
+                        postsMappedByYearAndMonth[currentDateP.year]![
+                                currentDateP.month]![0]
+                            .key)
                       // Month divider
-                      MonthDivider(currentDateP: currentDateP, p: p),
+                      MonthDivider(
+                          currentDateP: currentDateP,
+                          postsForCurrentDate: postsForCurrentDate),
                     if (i == appStateProviderState.valueToScrollToToday)
                       // Date divider
                       _timeDivider(
@@ -235,16 +247,16 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         isToday: true,
                       ),
 
-                    if (p.key.dateFromString !=
+                    if (postsForCurrentDate.key.dateFromString !=
                         "${DateTime.now()}".dateFromString)
                       // Date divider
                       _timeDivider(
-                        date: p.key.dateFromString,
+                        date: postsForCurrentDate.key.dateFromString,
                         isToday: false,
                       ),
 
                     // Posts per date
-                    for (var j in posts[p.key]!)
+                    for (var j in postsMappedByDate[postsForCurrentDate.key]!)
                       TimeEventItem(
                         post: j,
                         isSelectedItem: postsProviderNotifier.postIsSelected(j),
@@ -301,7 +313,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         child: Row(
                           children: [
                             Text(
-                              "${nextDateP.month.monthFromInt} ${nextP.key.dateFromString.year}",
+                              "${nextDateP.month.monthFromInt} ${postsForNextDate.key.dateFromString.year}",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
@@ -310,7 +322,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         ),
                       ),
                   ],
-                );*/
+                );
               },
             ),
       floatingActionButton: _showCenterButton

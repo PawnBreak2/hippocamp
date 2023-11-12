@@ -52,31 +52,29 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
-  Map<int, Map<int, Map<String, List<Post>>>> organizePosts(List<Post> posts) {
-    Map<int, Map<int, Map<String, List<Post>>>> postsByDate = {};
+  Map<int, Map<int, List<Post>>> organizePostsByYearAndMonth(List<Post> posts) {
+    Map<int, Map<int, List<Post>>> postsByDate = {};
 
     for (var post in posts) {
       DateTime postDate =
           post.dateTimeFromString; // Assuming this returns a DateTime object
       int year = postDate.year;
       int month = postDate.month;
-      String day = postDate.day.toString();
 
       if (!postsByDate.containsKey(year)) {
         postsByDate[year] = {};
       }
       if (!postsByDate[year]!.containsKey(month)) {
-        postsByDate[year]![month] = {};
-      }
-      if (!postsByDate[year]![month]!.containsKey(day)) {
-        postsByDate[year]![month]![day] = [];
+        postsByDate[year]![month] = [];
       }
 
-      postsByDate[year]![month]![day]!.add(post);
+      postsByDate[year]![month]!.add(post);
+
+      // Sorting the posts in descending order by dateTime
+      postsByDate[year]![month]!
+          .sort((a, b) => b.dateTimeFromString.compareTo(a.dateTimeFromString));
     }
 
-    // For debugging
-    print(postsByDate);
     return postsByDate;
   }
 
@@ -133,6 +131,15 @@ class PostListNotifier extends Notifier<PostsRepository> {
           }).toList();*/
 
         for (Post post in state.allPosts) {
+          // maps posts by date & puts them into the post repository
+          final postsPerDate = state.postsMappedByDate[post.date] ?? [];
+          postsPerDate.add(post);
+          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
+          state = state.copyWith(postsMappedByDate: {
+            ...state.postsMappedByDate,
+            post.date: postsPerDate
+          });
+
           //used to iterate until you find the date of today to scroll to
           bool gotTodayScrollValue = false;
           gotTodayScrollValue =
@@ -142,11 +149,13 @@ class PostListNotifier extends Notifier<PostsRepository> {
                   );
         }
 
-        Map<int, Map<int, Map<String, List<Post>>>> postsByDate =
-            organizePosts(state.allPosts);
+        Map<int, Map<int, List<Post>>> postsByYearAndMonth =
+            organizePostsByYearAndMonth(state.allPosts);
 
-        state = state.copyWith(
-            postsMappedByDate: {...state.postsMappedByDate, ...postsByDate});
+        state = state.copyWith(postsMappedByYearAndMonth: {
+          ...state.postsMappedByYearAndMonth,
+          ...postsByYearAndMonth
+        });
       },
     );
   }
@@ -193,10 +202,17 @@ class PostListNotifier extends Notifier<PostsRepository> {
         } else {
           endFutureList = body.end;
         }
-        // bool used to reiterate until it finds the date of today to scroll to
-        bool gotTodayScrollValue = false;
         ref.read(appStateProvider.notifier).resetValueToScrollToday();
         for (Post post in state.allPosts) {
+          ///TODO ottimizzare e mettere entrambi i metodi duplicati in un unico metodo
+          final postsPerDate = state.postsMappedByDate[post.date] ?? [];
+          postsPerDate.add(post);
+          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
+          state = state.copyWith(postsMappedByDate: {
+            ...state.postsMappedByDate,
+            post.date: postsPerDate
+          });
+
           //used to iterate until you find the date of today to scroll to
           bool gotTodayScrollValue = false;
           gotTodayScrollValue =
@@ -206,11 +222,13 @@ class PostListNotifier extends Notifier<PostsRepository> {
                   );
         }
 
-        Map<int, Map<int, Map<String, List<Post>>>> postsByDate =
-            organizePosts(state.allPosts);
+        Map<int, Map<int, List<Post>>> postsByYearAndMonth =
+            organizePostsByYearAndMonth(state.allPosts);
 
-        state = state.copyWith(
-            postsMappedByDate: {...state.postsMappedByDate, ...postsByDate});
+        state = state.copyWith(postsMappedByYearAndMonth: {
+          ...state.postsMappedByYearAndMonth,
+          ...postsByYearAndMonth
+        });
       },
     );
   }
@@ -264,14 +282,10 @@ class PostListNotifier extends Notifier<PostsRepository> {
         endList = r.end;
 
         for (var i in state.allPosts) {
-          final List<Post> postsPerDate =
-              state.postsMappedByDate[i.date.dateFromString.year]
-                      ?[i.date.dateFromString.month]?[i.date] ??
-                  [];
+          final postsPerDate = state.postsMappedByDate[i.date] ?? [];
           postsPerDate.add(i);
           postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state.postsMappedByDate[i.date.dateFromString.year]
-              ?[i.date.dateFromString.month]?[i.date] = postsPerDate;
+          state.postsMappedByDate[i.date] = postsPerDate;
         }
       },
     );

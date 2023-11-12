@@ -8,11 +8,11 @@ class MonthDivider extends StatelessWidget {
   const MonthDivider({
     super.key,
     required this.currentDateP,
-    required this.p,
+    required this.postsForCurrentDate,
   });
 
   final DateTime currentDateP;
-  final MapEntry<String, List<Post>> p;
+  final MapEntry<String, List<Post>> postsForCurrentDate;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class MonthDivider extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            "${currentDateP.month.monthFromInt} ${p.key.dateFromString.year}",
+            "${currentDateP.month.monthFromInt} ${postsForCurrentDate.key.dateFromString.year}",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ],
