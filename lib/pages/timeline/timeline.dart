@@ -217,14 +217,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               itemCount: getTotalNumberOfDays(posts),
               padding: EdgeInsets.only(bottom: 80),
               itemBuilder: (_, i) {
-                print('post entries');
-                print(posts.entries.length);
-                final year = posts.entries.toList()[i];
-                final nextYear = i < posts.entries.length - 1
-                    ? posts.entries.toList()[i + 1]
-                    : year;
-
-                print(year.toString());
+                for(y)
 
                 return Column(
                   children: [],

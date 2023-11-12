@@ -9,6 +9,7 @@ import 'package:hippocamp/storage/local_storage.dart';
 
 class NavigationConfiguration {
   static final routes = GoRouter(
+    initialLocation: '/',
     routes: [
       GoRoute(
           path: '/',
@@ -22,7 +23,7 @@ class NavigationConfiguration {
             if (isLogged) {
               return '/splash-screen';
             } else {
-              return '/login-page';
+              return '/';
             }
           }),
       GoRoute(
