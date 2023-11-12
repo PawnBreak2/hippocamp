@@ -36,6 +36,28 @@ class PostListNotifier extends Notifier<PostsRepository> {
   bool postIsSelected(Post post) =>
       state.selectedPosts.map((e) => e.key).contains(post.key);
 
+  Post? getFirstPostOfYear(int year) {
+    // Check if the year exists in the map
+    if (!state.postsMappedByYearAndMonth.containsKey(year)) {
+      return null; // No posts for the given year
+    }
+
+    var months = state.postsMappedByYearAndMonth[year]!;
+    // Sort the months in descending order to start with the latest month
+    var sortedMonths = months.keys.toList()..sort((a, b) => b.compareTo(a));
+
+    for (var month in sortedMonths) {
+      var posts = months[month]!;
+      if (posts.isNotEmpty) {
+        // Since posts are already sorted in descending order in each month,
+        // the first post of the list is the first post of the month (and potentially of the year)
+        return posts.first;
+      }
+    }
+
+    return null; // No posts found in the year
+  }
+
   void addOrRemoveSelectedPost({Post? post}) {
     if (post == null) {
       state = state.copyWith(selectedPosts: []);

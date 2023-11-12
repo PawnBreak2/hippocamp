@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/helpers/extensions/int_extensions.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 
-import '../../../models/responses/posts_response_model.dart';
-
-class MonthDivider extends StatelessWidget {
-  const MonthDivider({
+class YearDivider extends StatelessWidget {
+  const YearDivider({
     super.key,
-    required this.month,
     required this.year,
   });
 
-  final String month;
   final String year;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
+      color: Colors.blueGrey[100],
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "${month} ${year}",
+            "${year}",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ],

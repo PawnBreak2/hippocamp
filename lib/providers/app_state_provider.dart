@@ -29,7 +29,7 @@ class AppStateNotifier extends Notifier<AppState> {
     if (isTodayOrBefore) {
       return false;
     } else {
-      print(p.date + " " + p.key);
+      //print(p.date + " " + p.key);
       state =
           state.copyWith(valueToScrollToToday: state.valueToScrollToToday + 1);
       return true;

@@ -12,6 +12,7 @@ import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/components/time_event_item.dart';
 import 'package:hippocamp/widgets/components/timeline/month_divider.dart';
 import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart';
+import 'package:hippocamp/widgets/components/timeline/year_divider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
@@ -23,6 +24,12 @@ class TimelinePage extends ConsumerStatefulWidget {
 }
 
 class _TimelinePageState extends ConsumerState<TimelinePage> {
+  // used to avoid the repetition of the call to the getFirstPostOfTheYear function saving resources
+  bool gotFirstPostOfYear = false;
+
+  // used to check the previous year of post rendered and activate dividers accordingly
+  String previousYearInTimeLinePost = '';
+
   bool _isLoading = true;
   bool _getNewPosts = false;
   bool _showCenterButton = false;
@@ -84,7 +91,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       await Future.delayed(Duration(milliseconds: 5000));
 
       final appStateProviderState = ref.read(appStateProvider);
-      final postsProviderNotifier = ref.read(postListProvider.notifier);
       itemScrollController.scrollTo(
         index: appStateProviderState.valueToScrollToToday,
         duration: Duration(milliseconds: 1),
@@ -166,8 +172,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsMappedByDate = postsProviderState.postsMappedByDate;
     final postsMappedByYearAndMonth =
         postsProviderState.postsMappedByYearAndMonth;
-    print('value to scroll to');
-    print(ref.read(appStateProvider).valueToScrollToToday);
+    //print('value to scroll to');
+    //print(ref.read(appStateProvider).valueToScrollToToday);
     if (_isLoading)
       return Scaffold(
         backgroundColor: Color.fromRGBO(227, 218, 210, 1),
@@ -202,19 +208,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               itemCount: postsMappedByDate.entries.length,
               padding: EdgeInsets.only(bottom: 80),
               itemBuilder: (_, i) {
-                /*    The variable p is assigned to the current entry in the posts.entries list for the given index i. Each entry in this list is a key-value pair, where the key is a string representing a date and the value is a list of posts (List<Post>) for that date.
-                 The p variable is used within the itemBuilder to:
-                 Display dividers (month, year, date) based on the date of the current entry.
-                 Render the posts for the current date.
-                 Determine if the layout needs to include a divider for a change in year or month when compared to the next post entry (using nextP).*/
-
                 final postsForCurrentDate =
                     postsMappedByDate.entries.toList()[i];
-
-                /*   nextP is assigned to the next entry in posts.entries if the current index i is not the last one. If i is the last index, nextP is set to the same value as p.
-                This is used to check if there is a change in the year or month between the current post entry (p) and the next post entry (nextP). If there is a change, this indicates the need  to insert a year or month divider in the layout.
-                The conditional assignment of nextP ensures that even for the last post entry, there's a valid nextP to compare against, avoiding an index out of range error.
-                */
 
                 final postsForNextDate =
                     i < postsMappedByDate.entries.length - 1
@@ -223,23 +218,43 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
                 final currentDateP = postsForCurrentDate.key.dateFromString;
                 final nextDateP = postsForNextDate.key.dateFromString;
-                print('current key');
-                print(postsForCurrentDate.value[0].key);
-                print('repo key');
 
-                print(postsMappedByYearAndMonth[currentDateP.year]![
-                        currentDateP.month]![0]
-                    .key);
+                bool shouldShowYearDivider = false;
+                bool shouldShowMonthDivider = false;
+
+                if (postsForCurrentDate.value[0].key ==
+                    postsMappedByYearAndMonth[currentDateP.year]![
+                            currentDateP.month]![0]
+                        .key) {
+                  shouldShowMonthDivider = true;
+                }
+
+                if (previousYearInTimeLinePost !=
+                    currentDateP.year.toString()) {
+                  gotFirstPostOfYear = false;
+                }
+                if (!gotFirstPostOfYear) {
+                  Post? firstPostOfYear = postsProviderNotifier
+                      .getFirstPostOfYear(currentDateP.year);
+                  if (firstPostOfYear != null &&
+                      firstPostOfYear.key == postsForCurrentDate.value[0].key) {
+                    previousYearInTimeLinePost = currentDateP.year.toString();
+                    shouldShowYearDivider = true;
+                    gotFirstPostOfYear = true;
+                  }
+                }
+
                 return Column(
                   children: [
-                    if (postsForCurrentDate.value[0].key ==
-                        postsMappedByYearAndMonth[currentDateP.year]![
-                                currentDateP.month]![0]
-                            .key)
-                      // Month divider
-                      MonthDivider(
-                          currentDateP: currentDateP,
-                          postsForCurrentDate: postsForCurrentDate),
+                    shouldShowYearDivider
+                        ? YearDivider(year: currentDateP.year.toString())
+                        : const SizedBox(),
+                    // Month divider
+                    shouldShowMonthDivider
+                        ? MonthDivider(
+                            month: currentDateP.month.monthFromInt,
+                            year: currentDateP.year.toString())
+                        : const SizedBox(),
                     if (i == appStateProviderState.valueToScrollToToday)
                       // Date divider
                       _timeDivider(
@@ -283,43 +298,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                               post: j);
                           setState(() {});
                         },
-                      ),
-
-                    // Year divider
-                    if (currentDateP.year != nextDateP.year)
-                      Container(
-                        color: Colors.blueGrey[100],
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${nextDateP.year}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    // Month divider
-                    if (currentDateP.month != nextDateP.month)
-                      Container(
-                        color: Colors.grey[200],
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              "${nextDateP.month.monthFromInt} ${postsForNextDate.key.dateFromString.year}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
                       ),
                   ],
                 );

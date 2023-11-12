@@ -11,4 +11,19 @@ class Constants {
     "RID mensile Carta di Credito": "RID CC",
     "Compravendita Valuta": "Compravaluta",
   };
+
+  static final List<String> mesiInItaliano = [
+    "Gennaio",
+    "Febbraio",
+    "Marzo",
+    "Aprile",
+    "Maggio",
+    "Giugno",
+    "Luglio",
+    "Agosto",
+    "Settembre",
+    "Ottobre",
+    "Novembre",
+    "Dicembre"
+  ];
 }
