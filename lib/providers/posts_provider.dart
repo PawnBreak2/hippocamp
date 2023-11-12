@@ -155,11 +155,14 @@ class PostListNotifier extends Notifier<PostsRepository> {
           postsMappedByDate: {},
         );
 
-        if (past)
+        if (past) {
           endList = body.end;
-        else
+        } else {
           endFutureList = body.end;
-
+        }
+        // bool used to reiterate until it finds the date of today to scroll to
+        bool gotTodayScrollValue = false;
+        ref.read(appStateProvider.notifier).resetValueToScrollToday();
         for (var i in state.allPosts) {
           final postsPerDate = state.postsMappedByDate[i.date] ?? [];
           postsPerDate.add(i);
@@ -169,10 +172,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
             i.date: postsPerDate
           });
           inspect(state.postsMappedByDate);
-
-          // bool used to reiterate until it finds the date of today to scroll to
-          bool gotTodayScrollValue = false;
-
           gotTodayScrollValue =
               ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
                     i,

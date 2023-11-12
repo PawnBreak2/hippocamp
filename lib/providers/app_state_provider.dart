@@ -18,20 +18,28 @@ class AppStateNotifier extends Notifier<AppState> {
 
   //POSTS
 
+  ///TODO: ottimizzare
+
   bool calculateIndexOfTodayInPosts(Post p, bool continueSearching) {
     final datePost = DateUtils.dateOnly(DateTime.parse(p.date));
     final today = DateUtils.dateOnly(DateTime.now());
-    final isTodayOrLess =
+    final bool isTodayOrBefore =
         datePost.compareTo(today) == 0 || datePost.compareTo(today) == -1;
 
-    if (isTodayOrLess && !continueSearching)
-      return true;
-    else if (!continueSearching) {
+    if (isTodayOrBefore) {
+      return false;
+    } else {
+      print(p.date + " " + p.key);
       state =
           state.copyWith(valueToScrollToToday: state.valueToScrollToToday + 1);
+      return true;
     }
-    ;
-    return false;
+  }
+
+  // reset the property valueToScrollToToday to 0
+
+  void resetValueToScrollToday() {
+    state = state.copyWith(valueToScrollToToday: 0);
   }
 
   // ATTACHMENTS
