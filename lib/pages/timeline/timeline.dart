@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocamp/helpers/extensions/int_extensions.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
@@ -15,6 +16,7 @@ import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart'
 import 'package:hippocamp/widgets/components/timeline/year_divider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hippocamp/constants/common.dart';
+import 'package:collection/collection.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
   final bool isSearching;
@@ -118,6 +120,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
   }
 
   void checkScrolling() async {
+    //print(itemPositionsListener.itemPositions.value);
     final postsProviderNotifier = ref.read(postListProvider.notifier);
     final postsProviderState = ref.read(postListProvider);
     final appStateProviderState = ref.read(appStateProvider);
@@ -146,7 +149,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       if (_getNewPosts) return;
 
       _getNewPosts = true;
-      await postsProviderNotifier.getNewPosts(past: false);
+      //await postsProviderNotifier.getNewPosts(past: false);
       _getNewPosts = false;
     }
 
@@ -154,7 +157,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       if (_getNewPosts) return;
 
       _getNewPosts = true;
-      await postsProviderNotifier.getNewPosts(past: true);
+      //await postsProviderNotifier.getNewPosts(past: true);
       _getNewPosts = false;
     }
   }
@@ -167,6 +170,31 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     });
 
     return totalMonths;
+  }
+
+  bool shouldDisplayTodayDivider(Post post) {
+    final postsProviderState = ref.watch(postListProvider);
+    final postsMappedByYearAndMonth =
+        postsProviderState.postsMappedByYearAndMonth;
+
+    final currentDate = DateTime.now();
+    final currentMonth = currentDate.month;
+    final currentYear = currentDate.year;
+    final postsForCurrentMonth =
+        postsMappedByYearAndMonth[currentYear]![currentMonth]!;
+
+    if (postsForCurrentMonth.isEmpty) {
+      return true;
+    }
+
+    final Post? postBeforeToday = postsForCurrentMonth.firstWhereOrNull(
+        (element) => element.date.dateFromString.isBefore(currentDate));
+
+    if (post.key == postBeforeToday?.key) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -183,8 +211,9 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsMappedByDate = postsProviderState.postsMappedByDate;
     final postsMappedByYearAndMonth =
         postsProviderState.postsMappedByYearAndMonth;
-    print('value to scroll to');
-    print(ref.read(appStateProvider).valueToScrollToToday);
+
+    //
+
     if (_isLoading)
       return Scaffold(
         backgroundColor: Color.fromRGBO(227, 218, 210, 1),
@@ -257,19 +286,21 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                 }*/
                 bool shouldShowYearDivider = false;
                 bool shouldShowMonthDivider = false;
+                bool shouldShowDayDivider = false;
 
-                var currentMonth = 12 - (i % 12);
+                // these are reversed to show the most recent posts first
+
+                var monthForPost = 12 - (i % 12);
 
                 var yearIndex = (i / 12).floor();
-                var currentYear = postsMappedByYearAndMonth.keys
+                var yearForPost = postsMappedByYearAndMonth.keys
                     .toList()
                     .reversed
                     .toList()[yearIndex.toInt()];
 
-                final currentDate = DateTime(currentYear, currentMonth);
-                final nextDate = DateTime(currentYear, currentMonth);
+                final dateForPost = DateTime(yearForPost, monthForPost);
 
-                if (currentDate.month == 1) {
+                if (dateForPost.month == 1) {
                   shouldShowYearDivider = true;
                 }
 
@@ -277,23 +308,32 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                   children: [
                     // Month divider
                     MonthDivider(
-                        month: currentDate.month.monthFromInt,
-                        year: currentDate.year.toString()),
+                        month: dateForPost.month.monthFromInt,
+                        year: dateForPost.year.toString()),
 
-                    (i == appStateProviderState.valueToScrollToToday)
+                    /*(i == appStateProviderState.valueToScrollToToday)
                         ?
                         // Date divider
                         _timeDivider(
                             date: DateTime.now(),
                             isToday: true,
                           )
-                        : SizedBox(),
+                        : SizedBox(),*/
 
                     // Posts per date
                     for (var post in postsMappedByYearAndMonth[
-                        currentDate.year]![currentDate.month]!)
+                        dateForPost.year]![dateForPost.month]!)
                       Column(
                         children: [
+                          /// TODO: spostare nello stato tutta questa roba?
+                          (DateTime.now().month == dateForPost.month &&
+                                  shouldDisplayTodayDivider(post))
+                              ? _timeDivider(
+                                  date: DateTime.now(),
+                                  isToday: true,
+                                )
+                              : SizedBox(),
+
                           _timeDivider(
                             date: post.dateTimeFromString,
                             isToday: false,
@@ -329,7 +369,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         ],
                       ),
                     shouldShowYearDivider
-                        ? YearDivider(year: currentDate.year.toString())
+                        ? YearDivider(year: dateForPost.year.toString())
                         : const SizedBox(),
                   ],
                 );
