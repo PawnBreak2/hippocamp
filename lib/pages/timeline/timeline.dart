@@ -159,6 +159,16 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
   }
 
+  int countTotalMonths(Map<int, Map<int, List<Post>>> postsByDate) {
+    int totalMonths = 0;
+
+    postsByDate.forEach((year, months) {
+      totalMonths += months.length; // Add the number of months in this year
+    });
+
+    return totalMonths;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -173,8 +183,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsMappedByDate = postsProviderState.postsMappedByDate;
     final postsMappedByYearAndMonth =
         postsProviderState.postsMappedByYearAndMonth;
-    //print('value to scroll to');
-    //print(ref.read(appStateProvider).valueToScrollToToday);
+    print('value to scroll to');
+    print(ref.read(appStateProvider).valueToScrollToToday);
     if (_isLoading)
       return Scaffold(
         backgroundColor: Color.fromRGBO(227, 218, 210, 1),
@@ -206,11 +216,11 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
               physics: ClampingScrollPhysics(),
-              itemCount: postsMappedByDate.entries.length,
+              itemCount: countTotalMonths(postsMappedByYearAndMonth),
               padding: EdgeInsets.only(bottom: 80),
               itemBuilder: (_, i) {
-                final postsForCurrentDate =
-                    postsMappedByDate.entries.toList()[i];
+                /*final postsForCurrentMonth =
+                    postsMappedByYearAndMonth.entries.toList()[i];
 
                 final postsForNextDate =
                     i < postsMappedByDate.entries.length - 1
@@ -244,69 +254,83 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                     shouldShowYearDivider = true;
                     gotFirstPostOfYear = true;
                   }
+                }*/
+                bool shouldShowYearDivider = false;
+                bool shouldShowMonthDivider = false;
+
+                var currentMonth = 12 - (i % 12);
+
+                var yearIndex = (i / 12).floor();
+                var currentYear = postsMappedByYearAndMonth.keys
+                    .toList()
+                    .reversed
+                    .toList()[yearIndex.toInt()];
+
+                final currentDate = DateTime(currentYear, currentMonth);
+                final nextDate = DateTime(currentYear, currentMonth);
+
+                if (currentDate.month == 1) {
+                  shouldShowYearDivider = true;
                 }
 
                 return Column(
                   children: [
-                    shouldShowYearDivider
-                        ? YearDivider(year: currentDateP.year.toString())
-                        : const SizedBox(),
                     // Month divider
-                    shouldShowMonthDivider
-                        ? MonthDivider(
-                            month: currentDateP.month.monthFromInt,
-                            year: currentDateP.year.toString())
-                        : const SizedBox(),
+                    MonthDivider(
+                        month: currentDate.month.monthFromInt,
+                        year: currentDate.year.toString()),
 
-                    for (String month in Constants.monthsNames.reversed)
-                      if (currentDateP.month.monthFromInt != month)
-                        MonthDivider(
-                            month: month, year: currentDateP.year.toString()),
-
-                    if (i == appStateProviderState.valueToScrollToToday)
-                      // Date divider
-                      _timeDivider(
-                        date: DateTime.now(),
-                        isToday: true,
-                      ),
-
-                    if (postsForCurrentDate.key.dateFromString !=
-                        "${DateTime.now()}".dateFromString)
-                      // Date divider
-                      _timeDivider(
-                        date: postsForCurrentDate.key.dateFromString,
-                        isToday: false,
-                      ),
+                    (i == appStateProviderState.valueToScrollToToday)
+                        ?
+                        // Date divider
+                        _timeDivider(
+                            date: DateTime.now(),
+                            isToday: true,
+                          )
+                        : SizedBox(),
 
                     // Posts per date
-                    for (var j in postsMappedByDate[postsForCurrentDate.key]!)
-                      TimeEventItem(
-                        post: j,
-                        isSelectedItem: postsProviderNotifier.postIsSelected(j),
-                        showSelectionCircle:
-                            postsProviderNotifier.isSelectingPosts,
-                        onTap: postsProviderNotifier.isSelectingPosts
-                            ? () {
-                                if (postsProviderNotifier.isSelectingPosts)
-                                  postsProviderNotifier.addOrRemoveSelectedPost(
-                                      post: j);
+                    for (var post in postsMappedByYearAndMonth[
+                        currentDate.year]![currentDate.month]!)
+                      Column(
+                        children: [
+                          _timeDivider(
+                            date: post.dateTimeFromString,
+                            isToday: false,
+                          ),
+                          TimeEventItem(
+                            post: post,
+                            isSelectedItem:
+                                postsProviderNotifier.postIsSelected(post),
+                            showSelectionCircle:
+                                postsProviderNotifier.isSelectingPosts,
+                            onTap: postsProviderNotifier.isSelectingPosts
+                                ? () {
+                                    if (postsProviderNotifier.isSelectingPosts)
+                                      postsProviderNotifier
+                                          .addOrRemoveSelectedPost(post: post);
+                                  }
+                                : null,
+                            onLongPress: () {
+                              if (postsProviderNotifier.isSelectingPosts) {
+                                postsProviderNotifier.isSelectingPosts = false;
+                                postsProviderNotifier.addOrRemoveSelectedPost();
+                                setState(() {});
+
+                                return;
                               }
-                            : null,
-                        onLongPress: () {
-                          if (postsProviderNotifier.isSelectingPosts) {
-                            postsProviderNotifier.isSelectingPosts = false;
-                            postsProviderNotifier.addOrRemoveSelectedPost();
-                            setState(() {});
 
-                            return;
-                          }
-
-                          postsProviderNotifier.isSelectingPosts = true;
-                          postsProviderNotifier.addOrRemoveSelectedPost(
-                              post: j);
-                          setState(() {});
-                        },
+                              postsProviderNotifier.isSelectingPosts = true;
+                              postsProviderNotifier.addOrRemoveSelectedPost(
+                                  post: post);
+                              setState(() {});
+                            },
+                          ),
+                        ],
                       ),
+                    shouldShowYearDivider
+                        ? YearDivider(year: currentDate.year.toString())
+                        : const SizedBox(),
                   ],
                 );
               },

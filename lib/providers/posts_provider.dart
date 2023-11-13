@@ -77,18 +77,32 @@ class PostListNotifier extends Notifier<PostsRepository> {
   Map<int, Map<int, List<Post>>> organizePostsByYearAndMonth(List<Post> posts) {
     Map<int, Map<int, List<Post>>> postsByDate = {};
 
+    // Initialize each year with 12 empty months
     for (var post in posts) {
-      DateTime postDate =
-          post.dateTimeFromString; // Assuming this returns a DateTime object
+      int year = post.dateTimeFromString.year;
+      if (!postsByDate.containsKey(year)) {
+        postsByDate[year] = {
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: [],
+          9: [],
+          10: [],
+          11: [],
+          12: []
+        };
+      }
+    }
+
+    // Populate the posts in the respective year and month
+    for (var post in posts) {
+      DateTime postDate = post.dateTimeFromString;
       int year = postDate.year;
       int month = postDate.month;
-
-      if (!postsByDate.containsKey(year)) {
-        postsByDate[year] = {};
-      }
-      if (!postsByDate[year]!.containsKey(month)) {
-        postsByDate[year]![month] = [];
-      }
 
       postsByDate[year]![month]!.add(post);
 
