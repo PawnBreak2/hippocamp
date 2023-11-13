@@ -14,6 +14,7 @@ import 'package:hippocamp/widgets/components/timeline/month_divider.dart';
 import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart';
 import 'package:hippocamp/widgets/components/timeline/year_divider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:hippocamp/constants/common.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
   final bool isSearching;
@@ -29,7 +30,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
   // used to check the previous year of post rendered and activate dividers accordingly
   String previousYearInTimeLinePost = '';
-
+  int indexForMonths = 0;
   bool _isLoading = true;
   bool _getNewPosts = false;
   bool _showCenterButton = false;
@@ -221,6 +222,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
                 bool shouldShowYearDivider = false;
                 bool shouldShowMonthDivider = false;
+                bool shouldShowMonthDividerForEmptyMonth = false;
 
                 if (postsForCurrentDate.value[0].key ==
                     postsMappedByYearAndMonth[currentDateP.year]![
@@ -255,6 +257,12 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                             month: currentDateP.month.monthFromInt,
                             year: currentDateP.year.toString())
                         : const SizedBox(),
+
+                    for (String month in Constants.monthsNames.reversed)
+                      if (currentDateP.month.monthFromInt != month)
+                        MonthDivider(
+                            month: month, year: currentDateP.year.toString()),
+
                     if (i == appStateProviderState.valueToScrollToToday)
                       // Date divider
                       _timeDivider(

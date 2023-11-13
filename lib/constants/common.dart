@@ -12,7 +12,7 @@ class Constants {
     "Compravendita Valuta": "Compravaluta",
   };
 
-  static final List<String> mesiInItaliano = [
+  static final List<String> monthsNames = [
     "Gennaio",
     "Febbraio",
     "Marzo",
