@@ -172,7 +172,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     return totalMonths;
   }
 
-  bool shouldDisplayTodayDivider(Post post) {
+  bool shouldShowTodayDivider(Post post) {
     final postsProviderState = ref.watch(postListProvider);
     final postsMappedByYearAndMonth =
         postsProviderState.postsMappedByYearAndMonth;
@@ -191,6 +191,30 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
         (element) => element.date.dateFromString.isBefore(currentDate));
 
     if (post.key == postBeforeToday?.key) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool shouldShowTimeDivider(Post post) {
+    final postsProviderState = ref.watch(postListProvider);
+    final postsMappedByYearAndMonth =
+        postsProviderState.postsMappedByYearAndMonth;
+
+    final currentDate = DateTime.now();
+    final currentMonth = currentDate.month;
+    final currentYear = currentDate.year;
+    final postsForCurrentMonth =
+        postsMappedByYearAndMonth[currentYear]![currentMonth]!;
+    final List<Post> postsForCurrentDay = postsForCurrentMonth
+        .where((element) =>
+            element.dateTimeFromString.day == post.dateTimeFromString.day)
+        .toList();
+    print('posts for current day');
+    print(postsForCurrentDay);
+
+    if (postsForCurrentDay[0].key == post.key) {
       return true;
     } else {
       return false;
@@ -327,17 +351,18 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         children: [
                           /// TODO: spostare nello stato tutta questa roba?
                           (DateTime.now().month == dateForPost.month &&
-                                  shouldDisplayTodayDivider(post))
+                                  shouldShowTodayDivider(post))
                               ? _timeDivider(
                                   date: DateTime.now(),
                                   isToday: true,
                                 )
-                              : SizedBox(),
-
-                          _timeDivider(
-                            date: post.dateTimeFromString,
-                            isToday: false,
-                          ),
+                              : const SizedBox(),
+                          shouldShowTimeDivider(post)
+                              ? _timeDivider(
+                                  date: post.dateTimeFromString,
+                                  isToday: false,
+                                )
+                              : const SizedBox(),
                           TimeEventItem(
                             post: post,
                             isSelectedItem:
