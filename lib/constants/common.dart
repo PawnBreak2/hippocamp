@@ -5,14 +5,14 @@ enum TypeWallets {
 }
 
 class Constants {
-  static final Map<String, String> typeFinanceMovement = {
+  static const Map<String, String> typeFinanceMovement = {
     "Prelievo ATM": "Prelievo",
     "Trasferimento Portafoglio": "Trasferimento",
     "RID mensile Carta di Credito": "RID CC",
     "Compravendita Valuta": "Compravaluta",
   };
 
-  static final List<String> monthsNames = [
+  static const List<String> monthsNames = [
     "Gennaio",
     "Febbraio",
     "Marzo",
@@ -26,4 +26,7 @@ class Constants {
     "Novembre",
     "Dicembre"
   ];
+
+  static const databaseName = "hippocamp.db";
+  static const databaseVersion = 1;
 }
