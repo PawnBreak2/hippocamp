@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:hippocamp/clients/main_client.dart';
 import 'package:hippocamp/constants/storage_keys.dart';
@@ -37,7 +39,7 @@ class PostsClient {
       },
     );
 
-    if (resp.statusCode == 200)
+    if (resp.statusCode == 200) {
       return Right(
         PostResponse(
           posts:
@@ -45,6 +47,7 @@ class PostsClient {
           end: resp.data["end"] ?? true,
         ),
       );
+    }
 
     return Left(
       ErrorCallModel(

@@ -155,7 +155,7 @@ class _SubCategoriesInactiveState extends ConsumerState<SubCategoriesInactive> {
           SizedBox(height: 8),
           Expanded(
             child: Text(
-              category.localizedName,
+              category.name,
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.black,

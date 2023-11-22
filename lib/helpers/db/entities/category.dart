@@ -11,7 +11,7 @@ class CategoryEntity {
   final String domainKey;
   @ColumnInfo(name: 'domain_background_color_hex')
   final String domainBackgroundColorHex;
-  final String localizedName;
+  final String name;
   final String type;
   @ColumnInfo(name: 'icon_url')
   final String iconUrl;
@@ -20,7 +20,7 @@ class CategoryEntity {
     required this.key,
     required this.domainKey,
     required this.domainBackgroundColorHex,
-    required this.localizedName,
+    required this.name,
     required this.type,
     required this.iconUrl,
   });
@@ -30,7 +30,7 @@ class CategoryEntity {
       key: category.key,
       domainKey: category.domainKey,
       domainBackgroundColorHex: category.domainBackgroundColorHex,
-      localizedName: category.localizedName,
+      name: category.name,
       type: category.type,
       iconUrl: category.iconUrl,
     );

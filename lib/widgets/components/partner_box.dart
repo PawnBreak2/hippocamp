@@ -21,6 +21,7 @@ class PartnerBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        border: Border.all(color: borderColor),
         color: backgroundColor,
         borderRadius: BorderRadius.circular(8),
       ),

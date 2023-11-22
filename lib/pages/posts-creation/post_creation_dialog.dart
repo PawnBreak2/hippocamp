@@ -213,7 +213,7 @@ class ListCategories extends ConsumerWidget {
     if (text.isEmpty) return categories;
 
     return categories
-        .where((e) => e.localizedName.toLowerCase().contains(text))
+        .where((e) => e.name.toLowerCase().contains(text))
         .toList();
   }
 
@@ -256,7 +256,7 @@ class ListCategories extends ConsumerWidget {
               ),
               Expanded(
                 child: Text(
-                  categories[i].localizedName,
+                  categories[i].name,
                   style: TextStyle(
                     fontSize: 16,
                   ),

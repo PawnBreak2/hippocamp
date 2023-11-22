@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hippocamp/styles/colors.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class YearDivider extends StatelessWidget {
   const YearDivider({
@@ -11,14 +13,29 @@ class YearDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blueGrey[100],
+      color: CustomColors.darkerGrey,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            "${year}",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: CustomColors.lightGrey,
+            ),
+            height: 4.h,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "${year}",
+                style: TextStyle(
+                    color: CustomColors.primaryRed,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16),
+              ),
+            ),
           ),
         ],
       ),

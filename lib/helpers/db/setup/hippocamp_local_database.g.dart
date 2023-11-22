@@ -98,7 +98,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `attachments` (`key` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `icon_url` TEXT NOT NULL, `content_type` TEXT NOT NULL, `location` TEXT NOT NULL, `size_in_kb` INTEGER NOT NULL, PRIMARY KEY (`key`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `posts` (`key` TEXT NOT NULL, `domain_key` TEXT NOT NULL, `domain_background_color_hex` TEXT NOT NULL, `localizedName` TEXT NOT NULL, `type` TEXT NOT NULL, `icon_url` TEXT NOT NULL, PRIMARY KEY (`key`))');
+            'CREATE TABLE IF NOT EXISTS `posts` (`key` TEXT NOT NULL, `domain_key` TEXT NOT NULL, `domain_background_color_hex` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `icon_url` TEXT NOT NULL, PRIMARY KEY (`key`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `posts` (`key` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `attachment_count` INTEGER NOT NULL, `category_key` TEXT NOT NULL, `multi_party_transaction_key` TEXT, `latitude` TEXT NOT NULL, `longitude` TEXT NOT NULL, `address` TEXT NOT NULL, `important` INTEGER NOT NULL, `canceled` INTEGER NOT NULL, `uncertain` INTEGER NOT NULL, `sensitive_info` INTEGER NOT NULL, `type` TEXT NOT NULL, `rating` TEXT NOT NULL, `from` TEXT NOT NULL, `to` TEXT NOT NULL, `interval` TEXT NOT NULL, `date` TEXT NOT NULL, `holiday` TEXT NOT NULL, `at` TEXT NOT NULL, `within` TEXT NOT NULL, `notifications_unit` TEXT NOT NULL, `morning` INTEGER NOT NULL, `afternoon` INTEGER NOT NULL, `evening` INTEGER NOT NULL, `whole_day` INTEGER NOT NULL, `notifications_active` INTEGER NOT NULL, `business_partners_keys` TEXT NOT NULL, `single_party_transaction_keys` TEXT NOT NULL, `attachment_keys` TEXT NOT NULL, `stories_json` TEXT NOT NULL, PRIMARY KEY (`key`))');
         await database.execute(
@@ -244,7 +244,7 @@ class _$CategoryEntityDao extends CategoryEntityDao {
                   'key': item.key,
                   'domain_key': item.domainKey,
                   'domain_background_color_hex': item.domainBackgroundColorHex,
-                  'localizedName': item.localizedName,
+                  'name': item.name,
                   'type': item.type,
                   'icon_url': item.iconUrl
                 }),
@@ -256,7 +256,7 @@ class _$CategoryEntityDao extends CategoryEntityDao {
                   'key': item.key,
                   'domain_key': item.domainKey,
                   'domain_background_color_hex': item.domainBackgroundColorHex,
-                  'localizedName': item.localizedName,
+                  'name': item.name,
                   'type': item.type,
                   'icon_url': item.iconUrl
                 });
@@ -279,7 +279,7 @@ class _$CategoryEntityDao extends CategoryEntityDao {
             domainKey: row['domain_key'] as String,
             domainBackgroundColorHex:
                 row['domain_background_color_hex'] as String,
-            localizedName: row['localizedName'] as String,
+            name: row['name'] as String,
             type: row['type'] as String,
             iconUrl: row['icon_url'] as String),
         arguments: [key]);
@@ -293,7 +293,7 @@ class _$CategoryEntityDao extends CategoryEntityDao {
             domainKey: row['domain_key'] as String,
             domainBackgroundColorHex:
                 row['domain_background_color_hex'] as String,
-            localizedName: row['localizedName'] as String,
+            name: row['name'] as String,
             type: row['type'] as String,
             iconUrl: row['icon_url'] as String));
   }

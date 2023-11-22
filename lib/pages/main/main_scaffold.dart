@@ -32,20 +32,15 @@ class _HomePageState extends ConsumerState<MainScaffold> {
       "icon": "assets/icons/nav-bar-category.png",
     },
     {
-      "name": "Finanza",
+      "name": "Moduli",
       "page": FinancePage(),
-      "icon": "assets/icons/nav-bar-finance.png",
-    },
-    {
-      "name": "Documenti",
-      "page": AttachmentsPage(),
-      "icon": "assets/icons/nav-bar-document.png",
+      "icon": "assets/icons/nav-bar-category.png",
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    final appStateProviderState = ref.read(appStateProvider);
+    final appStateProviderState = ref.watch(appStateProvider);
 
     return Scaffold(
       body: Stack(
@@ -62,7 +57,7 @@ class _HomePageState extends ConsumerState<MainScaffold> {
       bottomNavigationBar: UnconstrainedBox(
         child: Container(
           width: 100.w,
-          height: 73,
+          height: 9.h,
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
@@ -184,41 +179,48 @@ class _HomePageState extends ConsumerState<MainScaffold> {
             children: [
               Material(
                 color: Colors.transparent,
-                child: Consumer(builder: (context, ref, child) {
-                  final appStateProviderNotifier = ref.read(appStateProvider.notifier);
-                  final postsProviderNotifier = ref.read(postListProvider.notifier);
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final appStateProviderNotifier =
+                        ref.read(appStateProvider.notifier);
+                    final postsProviderNotifier =
+                        ref.read(postListProvider.notifier);
 
-                  return InkWell(
-
-                  onTap: () {
-                    appStateProviderNotifier.setIsSelectingPosts(false);
-                    postsProviderNotifier.addOrRemoveSelectedPost();
+                    return InkWell(
+                      onTap: () {
+                        appStateProviderNotifier.setIsSelectingPosts(false);
+                        postsProviderNotifier.addOrRemoveSelectedPost();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 16,
+                        ),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: CustomColors.primaryBlue,
+                          size: 24,
+                        ),
+                      ),
+                    );
                   },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 16,
-                    ),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: CustomColors.primaryBlue,
-                      size: 24,
-                    ),
-                  ),
-                ); },),
+                ),
               ),
               SizedBox(width: 8),
-              Consumer(builder: (context, ref, child) {
-                final postsProviderState = ref.read(postListProvider);
+              Consumer(
+                builder: (context, ref, child) {
+                  final postsProviderState = ref.watch(postListProvider);
 
-                return Text(
-                "${postsProviderState.selectedPosts.length}",
-                style: TextStyle(
-                  color: CustomColors.primaryBlue,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ); },),
+                  return Text(
+                    "${postsProviderState.selectedPosts.length}",
+                    style: TextStyle(
+                      color: CustomColors.primaryBlue,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ),
             ],
           ),
 
@@ -228,82 +230,88 @@ class _HomePageState extends ConsumerState<MainScaffold> {
             children: [
               Material(
                 color: Colors.transparent,
-                child: Consumer(builder: (context, ref, child) {
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final postsProviderNotifier =
+                        ref.read(postListProvider.notifier);
+                    final postsProviderState = ref.read(postListProvider);
 
-                  final postsProviderNotifier = ref.read(postListProvider.notifier);
-                  final postsProviderState = ref.read(postListProvider);
-
-                  return InkWell(
-                  onTap: () async {
-                    await postsProviderNotifier.duplicatePosts(
-                      postKeys: postsProviderState.selectedPosts
-                          .map((e) => e.key)
-                          .toList(),
+                    return InkWell(
+                      onTap: () async {
+                        await postsProviderNotifier.duplicatePosts(
+                          postKeys: postsProviderState.selectedPosts
+                              .map((e) => e.key)
+                              .toList(),
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.copy,
+                              color: CustomColors.primaryBlue,
+                              size: 20,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              "Duplica\npost",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: CustomColors.primaryBlue,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.copy,
-                          color: CustomColors.primaryBlue,
-                          size: 20,
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Duplica\npost",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: CustomColors.primaryBlue,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ); },),
+                ),
               ),
               SizedBox(width: 12),
               Material(
                 color: Colors.transparent,
-                child: Consumer(builder: (context, ref, child) {
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final postsProviderNotifier =
+                        ref.read(postListProvider.notifier);
+                    final postsProviderState = ref.read(postListProvider);
 
-                  final postsProviderNotifier = ref.read(postListProvider.notifier);
-                  final postsProviderState = ref.read(postListProvider);
-
-                  return InkWell(
-                  onTap: () async {
-                    await postsProviderNotifier.deletePosts(
-                      postsKey: postsProviderState.selectedPosts
-                          .map((e) => e.key)
-                          .toList(),
+                    return InkWell(
+                      onTap: () async {
+                        await postsProviderNotifier.deletePosts(
+                          postsKey: postsProviderState.selectedPosts
+                              .map((e) => e.key)
+                              .toList(),
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.delete_outline,
+                              color: CustomColors.primaryBlue,
+                              size: 20,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              "Elimina\npost",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: CustomColors.primaryBlue,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.delete_outline,
-                          color: CustomColors.primaryBlue,
-                          size: 20,
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Elimina\npost",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: CustomColors.primaryBlue,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ); },),
+                ),
               ),
             ],
           ),

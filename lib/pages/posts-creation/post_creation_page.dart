@@ -91,7 +91,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
 
     category = widget.category ??
         PostCategory.fromCategoryModel(widget.post!.category);
-    _controllerCategory.text = category.localizedName;
+    _controllerCategory.text = category.name;
 
     if (widget.post == null) return;
 
@@ -473,7 +473,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
                 category = c;
 
                 if (widget.post == null)
-                  _controllerCategory.text = category.localizedName;
+                  _controllerCategory.text = category.name;
                 setState(() {});
               },
               onPartnerTap: () async {
@@ -549,8 +549,8 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
         overlayColor: Colors.black12,
         children: [
           // Movimenti di finanza
-          if (Constants.typeFinanceMovement[category.localizedName] == null ||
-              (Constants.typeFinanceMovement[category.localizedName] != null &&
+          if (Constants.typeFinanceMovement[category.name] == null ||
+              (Constants.typeFinanceMovement[category.name] != null &&
                   _financeMovementListToSave.isEmpty))
             SpeedDialChild(
               backgroundColor: Colors.white,
@@ -594,7 +594,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
   }
 
   Future<void> addFinancesMovement() async {
-    final id = Constants.typeFinanceMovement[category.localizedName];
+    final id = Constants.typeFinanceMovement[category.name];
     int? resp;
 
     if (id == null) {
@@ -864,7 +864,7 @@ class _AppBarSection extends ConsumerWidget {
                           FlashCustomDialog.showPopUp(
                             context: context,
                             text:
-                                "Questo post è stato salvato come modello predefinito della Categoria \"${category.localizedName}\"",
+                                "Questo post è stato salvato come modello predefinito della Categoria \"${category.name}\"",
                             isError: false,
                           );
                         else
@@ -1003,7 +1003,7 @@ class _AppBarSection extends ConsumerWidget {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      category.localizedName,
+                                      category.name,
                                       style: TextStyle(
                                         fontSize: 17,
                                         color: Color.fromRGBO(51, 51, 51, 1),

@@ -60,7 +60,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
       if (postIsSelected(post)) {
         state = state.copyWith(
           selectedPosts: [
-            ...state.selectedPosts.where((e) => e.key != post.key).toList(),
+            ...state.selectedPosts.where((e) => e.key != post.key),
           ],
         );
       } else {

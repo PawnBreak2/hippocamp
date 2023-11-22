@@ -472,7 +472,7 @@ class _AppBarSection extends StatelessWidget {
                           children: [
                             // Title
                             Text(
-                              category.localizedName,
+                              category.name,
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Color.fromRGBO(51, 51, 51, 1),
@@ -558,7 +558,7 @@ class _AppBarSection extends StatelessWidget {
                               ),
                               SizedBox(height: 8),
                               Text(
-                                categories[i].localizedName,
+                                categories[i].name,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 11,

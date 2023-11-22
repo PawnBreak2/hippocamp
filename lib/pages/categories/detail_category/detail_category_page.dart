@@ -29,6 +29,11 @@ class _DetailCategoryPageState extends ConsumerState<DetailCategoryPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _init();
   }
 
@@ -52,7 +57,7 @@ class _DetailCategoryPageState extends ConsumerState<DetailCategoryPage> {
           key: element.first.key,
           image: element.first.iconUrl,
           backgroundColor: element.first.domainBackgroundColorHex.colorFromHex,
-          title: element.first.localizedName,
+          title: element.first.name,
           onPressed: () {},
         );
       else
@@ -62,11 +67,14 @@ class _DetailCategoryPageState extends ConsumerState<DetailCategoryPage> {
           key: "",
         );
     }
-    setState(() {});
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(elements);
     return Scaffold(
       backgroundColor: Color.fromRGBO(239, 230, 222, 1),
       appBar: AppBar(

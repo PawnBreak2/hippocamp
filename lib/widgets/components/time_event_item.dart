@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
@@ -5,6 +7,9 @@ import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/pages/posts-creation/post_creation_page.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/components/partner_box.dart';
+import 'package:hippocamp/widgets/components/timeline/timeline_post_icon.dart';
+import 'package:hippocamp/widgets/components/timeline/timeline_post_title_and_description.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TimeEventItem extends StatelessWidget {
   final Post post;
@@ -45,16 +50,19 @@ class TimeEventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    inspect(post);
     final listChips = _chipsBoxList;
     final isPast = post.dateTimeFromString.isBefore(DateTime.now());
 
     return Material(
       color: isSelectedItem
-          ? Color.fromRGBO(235, 235, 235, 1)
+          ? CustomColors.mediumRed
           : isPast
               ? Colors.white
               : CustomColors.primaryLightBlue,
       child: InkWell(
+        overlayColor: MaterialStateProperty.all(CustomColors.mediumRed),
+        splashColor: CustomColors.mediumRed,
         onTap: onTap ??
             () {
               Navigator.popUntil(context, (route) => route.isFirst);
@@ -81,68 +89,10 @@ class TimeEventItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Icon / Texts
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: post
-                                .category.domainBackgroundColorHex.colorFromHex,
-                          ),
-                          child: SvgPicture.network(
-                            post.category.iconUrl,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Title
-                              Text(
-                                post.title,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: CustomColors.grey66,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 6),
-                              // Category & Price
-                              Row(
-                                children: [
-                                  // Category
-                                  Expanded(
-                                    child: Text(
-                                      post.category.localizedName,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                  SizedBox(width: 6),
-
-                                  // Price
-                                  if (post.totalAmountSpent.isNotEmpty)
-                                    Text(
-                                      post.totalAmountSpent,
-                                      style: TextStyle(
-                                        color: post.colorAmountSpent,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(width: 16),
+                        TimelinePostIcon(post: post),
+                        SizedBox(width: 3.w),
+                        TimeLinePostTitleAndDescription(post: post),
+                        SizedBox(width: 3.w),
 
                         // Image / time
                         Column(
@@ -152,25 +102,22 @@ class TimeEventItem extends StatelessWidget {
                               iconUrl: post.businessPartners.isEmpty
                                   ? ""
                                   : post.businessPartners.first.iconUrl,
-                              width: 65,
-                              height: 30,
+                              width: 15.w,
+                              height: 15.w,
                               backgroundColor: post.businessPartners.isEmpty
-                                  ? CustomColors.white243
+                                  ? Colors.white
                                   : Colors.transparent,
-                            ),
-                            SizedBox(height: 14),
-                            Text(
-                              post.timePost,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
+                              borderColor: post.businessPartners.isEmpty
+                                  ? CustomColors.darkerGrey
+                                  : Colors.black54,
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
+
+                  /// TODO: cosa sono?
 
                   // Data 2 -> List chips data
                   if (_chipsBoxList.isNotEmpty)
@@ -200,16 +147,16 @@ class TimeEventItem extends StatelessWidget {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
-                  color: isSelectedItem ? Colors.green : Colors.grey,
+                  color: isSelectedItem ? CustomColors.primaryRed : Colors.grey,
                   shape: BoxShape.circle,
                   border: Border.all(width: 3, color: Colors.white),
                 ),
                 width: 26,
                 height: 26,
                 child: Icon(
-                  Icons.check,
+                  Icons.circle,
                   color: isSelectedItem ? Colors.white : Colors.grey,
-                  size: 14,
+                  size: 6,
                 ),
               ),
           ],
