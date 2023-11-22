@@ -271,6 +271,7 @@ class Partner {
 }
 
 class SinglePartyTransactionPost {
+  final String key;
   final double amount;
   final String currencyCode;
   final String currencySymbol;
@@ -289,6 +290,7 @@ class SinglePartyTransactionPost {
     required this.currencyCode,
     required this.currencySymbol,
     required this.date,
+    required this.key,
     required this.type,
     required this.wallet,
     required this.walletName,
@@ -302,6 +304,7 @@ class SinglePartyTransactionPost {
   static SinglePartyTransactionPost fromMap(Map map) {
     return SinglePartyTransactionPost(
       amount: map["amount"] ?? 0,
+      key: map["key"] ?? "",
       currencyCode: map["currencyCode"] ?? "",
       currencySymbol: map["currencySymbol"] ?? "",
       date: map["date"] ?? "",

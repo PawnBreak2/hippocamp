@@ -149,22 +149,8 @@ class PostListNotifier extends Notifier<PostsRepository> {
             allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
               ..sort((a, b) => b.date.compareTo(a.date)));
 
-        List<Map<String, Post>> postsToAddToPostsMappedByDate = [];
-
         // iterate each post in allPosts and map them by date
         ref.read(appStateProvider.notifier).resetValueToScrollToday();
-
-/*        for (Post post in state.allPosts) {
-          // For each post i, the code looks up or creates a list of posts for its specific date. If there are no posts yet for i.date in state.postsMappedByDate, it initializes an empty list ([]
-          final postsPerDate = state.postsMappedByDate[post.date] ?? [];
-          //The current post i is added to the list postsPerDate, which contains all posts for a particular date.
-          postsPerDate.add(post);
-          //The list of posts for a specific date is sorted. The sorting is based on timePost in descending order, meaning the newest posts come first.
-          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          //The list of posts for a specific date is added to the postsFiltered map, which contains all posts for all dates.
-          List postPerMonth = postsPerDate.map((e) {
-            return e;
-          }).toList();*/
 
         for (Post post in state.allPosts) {
           // maps posts by date & puts them into the post repository
