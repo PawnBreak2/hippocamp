@@ -40,7 +40,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../models/posts-creation/partner_model.dart';
 
 class PostCreationPage extends ConsumerStatefulWidget {
-  final Categories? category;
+  final PostCategory? category;
   final Post? post;
   const PostCreationPage({
     this.category,
@@ -52,7 +52,7 @@ class PostCreationPage extends ConsumerStatefulWidget {
 }
 
 class _PostCreationPageState extends ConsumerState<PostCreationPage> {
-  late Categories category;
+  late PostCategory category;
   PartnerModel? _partnerModel;
 
   late final FocusNode _focusNode = FocusNode()
@@ -89,8 +89,8 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
     final walletsProviderNotifier = ref.read(walletsProvider.notifier);
     final walletsProviderState = ref.read(walletsProvider);
 
-    category =
-        widget.category ?? Categories.fromCategoryModel(widget.post!.category);
+    category = widget.category ??
+        PostCategory.fromCategoryModel(widget.post!.category);
     _controllerCategory.text = category.localizedName;
 
     if (widget.post == null) return;
@@ -802,8 +802,8 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
 
 class _AppBarSection extends ConsumerWidget {
   final CreatePost createPost;
-  final Categories category;
-  final void Function(Categories?) onCategoryTap;
+  final PostCategory category;
+  final void Function(PostCategory?) onCategoryTap;
   final void Function()? onPartnerTap;
   final void Function() onSave;
   final PartnerModel? partnerModel;

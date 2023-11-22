@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
+import 'package:hippocamp/models/responses/categories_response_model.dart';
 
 class PostResponse {
   final List<Post> posts;
@@ -13,7 +14,7 @@ class Post {
   final String key;
   final String description;
   final int attachmentCount;
-  final Category category;
+  final PostCategory category;
   final MultiPartyTransaction? multiPartyTransaction;
   final String latitude;
   final String longitude;
@@ -83,7 +84,7 @@ class Post {
       key: json["key"] ?? "",
       description: json["description"] ?? "",
       attachmentCount: json["attachmentCount"] ?? 0,
-      category: Category.fromMap(json["category"] ?? {}),
+      category: PostCategory.fromMap(json["category"] ?? {}),
       businessPartners: json["businessPartners"] != null
           ? (json["businessPartners"] as List)
               .map((e) => Partner.fromMap(e))
@@ -163,35 +164,6 @@ class Post {
 
     return totalAmountSpentInDouble.abs().toStringAsFixed(2).thousandsFormat +
         currency;
-  }
-}
-
-class Category {
-  final String key;
-  final String domainKey;
-  final String domainBackgroundColorHex;
-  final String nome;
-  final String type;
-  final String iconUrl;
-
-  const Category({
-    required this.key,
-    required this.domainKey,
-    required this.domainBackgroundColorHex,
-    required this.nome,
-    required this.type,
-    required this.iconUrl,
-  });
-
-  static Category fromMap(Map json) {
-    return Category(
-      key: json["key"] ?? "",
-      domainKey: json["domainKey"] ?? "",
-      domainBackgroundColorHex: json["domainBackgroundColorHex"] ?? "",
-      nome: json["name"] ?? "",
-      type: json["type"] ?? "",
-      iconUrl: json["iconUrl"] ?? "",
-    );
   }
 }
 

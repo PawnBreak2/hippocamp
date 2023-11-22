@@ -13,19 +13,16 @@ import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/storage/secure_storage.dart';
 
 class AppStateClient {
-  final CustomDio _dio = CustomDio();
+  /// TODO: controllare duplicati tra i client
 
+  final CustomDio _dio = CustomDio();
 
   final String _categories = "/categories";
   final String _domains = "/domains";
   final String _partners = "/business-partners";
   final String _attachmentTypes = "/attachment-types";
 
-
-
-
-
-  Future<Either<ErrorCallModel, List<Domains>>> getDomains({
+  Future<Either<ErrorCallModel, List<Domain>>> getDomains({
     bool active = true,
     bool fromDomains = false,
   }) async {
@@ -41,7 +38,7 @@ class AppStateClient {
 
     if (resp.statusCode == 200) {
       return Right(
-        (resp.data as List).map((e) => Domains.fromMap(e)).toList(),
+        (resp.data as List).map((e) => Domain.fromMap(e)).toList(),
       );
     }
 
@@ -113,7 +110,7 @@ class AppStateClient {
     return resp.statusCode == 200;
   }
 
-  Future<Either<ErrorCallModel, List<Categories>>> getCategories({
+  Future<Either<ErrorCallModel, List<PostCategory>>> getCategories({
     String? key,
     bool active = true,
   }) async {
@@ -130,17 +127,17 @@ class AppStateClient {
     if (resp.statusCode == 200) {
       if (key != null) {
         return Right(
-          (resp.data as List).map((e) => Categories.fromMap(e)).toList(),
+          (resp.data as List).map((e) => PostCategory.fromMap(e)).toList(),
         );
       }
 
       final listResp = (resp.data as List);
 
-      final List<Categories> categories = [];
+      final List<PostCategory> categories = [];
 
       for (var i in listResp) {
         final categoriesFromList = (i["categories"] as List)
-            .map((e) => Categories.fromMap(e))
+            .map((e) => PostCategory.fromMap(e))
             .toList();
 
         categories.addAll(categoriesFromList);
@@ -206,6 +203,4 @@ class AppStateClient {
       ),
     );
   }
-
-
 }

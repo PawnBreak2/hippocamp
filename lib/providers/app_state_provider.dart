@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hippocamp/clients/appstate_client.dart';
+import 'package:hippocamp/clients/posts_client.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:hippocamp/models/posts-creation/partner_model.dart';
 import 'package:hippocamp/models/repositories/app_state_repository.dart';
@@ -42,6 +43,10 @@ class AppStateNotifier extends Notifier<AppState> {
     state = state.copyWith(valueToScrollToToday: 0);
   }
 
+  void setIsSelectingPosts(bool v) {
+    state = state.copyWith(isSelectingPosts: v);
+  }
+
   // ATTACHMENTS
 
   Future<List<AttachmentType>> getAttachmentTypes() async {
@@ -58,7 +63,7 @@ class AppStateNotifier extends Notifier<AppState> {
 
   //DOMAINS
 
-  Future<List<Domains>> getDomains({bool forceCall = false}) async {
+  Future<List<Domain>> getDomains({bool forceCall = false}) async {
     if (state.domains.isNotEmpty && !forceCall) return state.domains;
 
     final resp = await _appStateClient.getDomains();
@@ -75,6 +80,76 @@ class AppStateNotifier extends Notifier<AppState> {
     );
 
     return state.domains;
+  }
+
+  Future<void> getCategoriesInDomains({
+    required String domainKey,
+    bool forceCall = false,
+    bool active = true,
+  }) async {
+    if (state.categoriesInDomains.isNotEmpty && !forceCall) return;
+    final resp = await _appStateClient.getCategories(
+      key: domainKey,
+      active: active,
+    );
+
+    resp.fold(
+      (l) => null,
+      (response) {
+        if (active) {
+          response.sort(
+            (a, b) => a.position.compareTo(b.position),
+          );
+          state = state.copyWith(categoriesInDomains: response);
+        } else {
+          response.sort(
+            (a, b) => a.position.compareTo(b.position),
+          );
+          state = state.copyWith(categoriesInDomainsInactive: response);
+        }
+      },
+    );
+  }
+
+  Future<void> getDomainsInCategories({
+    bool forceCall = false,
+    bool active = true,
+  }) async {
+    if (state.domainsInCategories.isNotEmpty && !forceCall) return;
+
+    final resp = await _appStateClient.getDomains(
+      active: active,
+      fromDomains: true,
+    );
+
+    resp.fold(
+      (l) => null,
+      (response) {
+        if (active) {
+          response.sort(
+            (a, b) => a.position.compareTo(b.position),
+          );
+          state = state.copyWith(domainsInCategories: response);
+        } else {
+          response.sort(
+            (a, b) => a.position.compareTo(b.position),
+          );
+          state = state.copyWith(domainsInCategoriesInactive: response);
+        }
+      },
+    );
+  }
+
+  Future<bool> updateIndexCategory(
+    String domainKey,
+    String categoryKey,
+    int i,
+  ) async {
+    return await _appStateClient.updateIndexCategoryList(
+      domainKey: domainKey,
+      categoryKey: categoryKey,
+      newPosition: i,
+    );
   }
 
   Future<bool> updateIndexDomain(String domainKey, int i) async {
@@ -100,7 +175,7 @@ class AppStateNotifier extends Notifier<AppState> {
 
   // CATEGORIES
 
-  Future<List<Categories>> getCategories(
+  Future<List<PostCategory>> getCategories(
       {bool forceCall = false, String? key}) async {
     if (state.categories.isNotEmpty && !forceCall) return state.categories;
 
@@ -114,18 +189,6 @@ class AppStateNotifier extends Notifier<AppState> {
       },
     );
     return state.categories;
-  }
-
-  Future<bool> updateIndexCategory(
-    String domainKey,
-    String categoryKey,
-    int i,
-  ) async {
-    return await _appStateClient.updateIndexCategoryList(
-      domainKey: domainKey,
-      categoryKey: categoryKey,
-      newPosition: i,
-    );
   }
 
   // PARTNERS

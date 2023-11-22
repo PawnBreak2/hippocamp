@@ -140,7 +140,7 @@ class _PostCreationDialogState extends ConsumerState<PostCreationDialog> {
 
 class ListDomains extends StatelessWidget {
   final int selectedDomain;
-  final List<Domains> domains;
+  final List<Domain> domains;
   final void Function(int) onTap;
   const ListDomains({
     required this.domains,
@@ -207,7 +207,7 @@ class ListCategories extends ConsumerWidget {
     required this.selectNewCategory,
   });
 
-  List<Categories> categoriesFilter(List<Categories> categories) {
+  List<PostCategory> categoriesFilter(List<PostCategory> categories) {
     final text = controller.text.toLowerCase();
 
     if (text.isEmpty) return categories;

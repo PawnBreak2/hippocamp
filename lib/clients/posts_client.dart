@@ -55,6 +55,8 @@ class PostsClient {
     );
   }
 
+  /// TODO: controllare con Lorenzo: esiste ancora questa chiamata?
+
   Future<Either<ErrorCallModel, PostResponse>> getPostsFromCategory({
     required String categoryKey,
     required bool attachments,
@@ -216,67 +218,6 @@ class PostsClient {
     );
   }
 
-  Future<Either<ErrorCallModel, List<Domains>>> getDomains({
-    bool active = true,
-    bool fromDomains = false,
-  }) async {
-    final token = await SecureStorage.read(StorageKeys.token);
-
-    final resp = await _dio.get(
-      url:
-          "${Urls.baseUrl}${fromDomains ? "/domains" : _domains}?active=$active",
-      headers: {
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (resp.statusCode == 200) {
-      return Right(
-        (resp.data as List).map((e) => Domains.fromMap(e)).toList(),
-      );
-    }
-
-    return Left(
-      ErrorCallModel(
-        statusCode: resp.statusCode ?? 0,
-        type: (resp.data ?? {})["title"],
-        message: (resp.data ?? {})["localizedMessage"],
-      ),
-    );
-  }
-
-  Future<bool> updateIndexCategoryList({
-    required String domainKey,
-    required String categoryKey,
-    required int newPosition,
-  }) async {
-    final token = await SecureStorage.read(StorageKeys.token);
-
-    final resp = await _dio.patch(
-      url:
-          "${Urls.baseUrl}/domains/$domainKey$_categories/$categoryKey?newPosition=$newPosition",
-      headers: {
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    return resp.statusCode == 200;
-  }
-
-  Future<bool> updateIndexDomainList(
-      {required String domainKey, required int newPosition}) async {
-    final token = await SecureStorage.read(StorageKeys.token);
-
-    final resp = await _dio.patch(
-      url: "${Urls.baseUrl}/domains/$domainKey?newPosition=$newPosition",
-      headers: {
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    return resp.statusCode == 200;
-  }
-
   Future<bool> uninstallDomain({required String domainKey}) async {
     final token = await SecureStorage.read(StorageKeys.token);
 
@@ -302,75 +243,6 @@ class PostsClient {
     );
 
     return resp.statusCode == 200;
-  }
-
-  Future<Either<ErrorCallModel, List<Categories>>> getCategories({
-    String? key,
-    bool active = true,
-  }) async {
-    final token = await SecureStorage.read(StorageKeys.token);
-
-    final resp = await _dio.get(
-      url:
-          "${Urls.baseUrl}${key != null ? "/domains/$key" : ""}${key != null ? _categories : _domains}?active=$active",
-      headers: {
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (resp.statusCode == 200) {
-      if (key != null) {
-        return Right(
-          (resp.data as List).map((e) => Categories.fromMap(e)).toList(),
-        );
-      }
-
-      final listResp = (resp.data as List);
-
-      final List<Categories> categories = [];
-
-      for (var i in listResp) {
-        final categoriesFromList = (i["categories"] as List)
-            .map((e) => Categories.fromMap(e))
-            .toList();
-
-        categories.addAll(categoriesFromList);
-      }
-
-      return Right(categories);
-    }
-
-    return Left(
-      ErrorCallModel(
-        statusCode: resp.statusCode ?? 0,
-        type: (resp.data ?? {})["title"],
-        message: (resp.data ?? {})["localizedMessage"],
-      ),
-    );
-  }
-
-  Future<Either<ErrorCallModel, List<PartnerModel>>> getPartners() async {
-    final token = await SecureStorage.read(StorageKeys.token);
-
-    final resp = await _dio.get(
-      url: "${Urls.baseUrl}$_partners",
-      headers: {
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (resp.statusCode == 200)
-      return Right(
-        (resp.data as List).map((e) => PartnerModel.fromMap(e)).toList(),
-      );
-
-    return Left(
-      ErrorCallModel(
-        statusCode: resp.statusCode ?? 0,
-        type: (resp.data ?? {})["title"],
-        message: (resp.data ?? {})["localizedMessage"],
-      ),
-    );
   }
 
   Future<Either<ErrorCallModel, bool>> createPost({

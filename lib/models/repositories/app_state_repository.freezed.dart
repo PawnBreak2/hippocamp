@@ -18,10 +18,18 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AppState {
   List<AttachmentType> get attachmentTypes =>
       throw _privateConstructorUsedError;
-  List<Categories> get categories => throw _privateConstructorUsedError;
-  List<Domains> get domains => throw _privateConstructorUsedError;
+  List<PostCategory> get categories => throw _privateConstructorUsedError;
+  List<Domain> get domains => throw _privateConstructorUsedError;
   List<PartnerModel> get businessPartners => throw _privateConstructorUsedError;
   int get valueToScrollToToday => throw _privateConstructorUsedError;
+  List<Domain> get domainsInCategories => throw _privateConstructorUsedError;
+  List<Domain> get domainsInCategoriesInactive =>
+      throw _privateConstructorUsedError;
+  List<PostCategory> get categoriesInDomains =>
+      throw _privateConstructorUsedError;
+  List<PostCategory> get categoriesInDomainsInactive =>
+      throw _privateConstructorUsedError;
+  bool get isSelectingPosts => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
@@ -35,10 +43,15 @@ abstract class $AppStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<AttachmentType> attachmentTypes,
-      List<Categories> categories,
-      List<Domains> domains,
+      List<PostCategory> categories,
+      List<Domain> domains,
       List<PartnerModel> businessPartners,
-      int valueToScrollToToday});
+      int valueToScrollToToday,
+      List<Domain> domainsInCategories,
+      List<Domain> domainsInCategoriesInactive,
+      List<PostCategory> categoriesInDomains,
+      List<PostCategory> categoriesInDomainsInactive,
+      bool isSelectingPosts});
 }
 
 /// @nodoc
@@ -59,6 +72,11 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? domains = null,
     Object? businessPartners = null,
     Object? valueToScrollToToday = null,
+    Object? domainsInCategories = null,
+    Object? domainsInCategoriesInactive = null,
+    Object? categoriesInDomains = null,
+    Object? categoriesInDomainsInactive = null,
+    Object? isSelectingPosts = null,
   }) {
     return _then(_value.copyWith(
       attachmentTypes: null == attachmentTypes
@@ -68,11 +86,11 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
       categories: null == categories
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
-              as List<Categories>,
+              as List<PostCategory>,
       domains: null == domains
           ? _value.domains
           : domains // ignore: cast_nullable_to_non_nullable
-              as List<Domains>,
+              as List<Domain>,
       businessPartners: null == businessPartners
           ? _value.businessPartners
           : businessPartners // ignore: cast_nullable_to_non_nullable
@@ -81,6 +99,26 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.valueToScrollToToday
           : valueToScrollToToday // ignore: cast_nullable_to_non_nullable
               as int,
+      domainsInCategories: null == domainsInCategories
+          ? _value.domainsInCategories
+          : domainsInCategories // ignore: cast_nullable_to_non_nullable
+              as List<Domain>,
+      domainsInCategoriesInactive: null == domainsInCategoriesInactive
+          ? _value.domainsInCategoriesInactive
+          : domainsInCategoriesInactive // ignore: cast_nullable_to_non_nullable
+              as List<Domain>,
+      categoriesInDomains: null == categoriesInDomains
+          ? _value.categoriesInDomains
+          : categoriesInDomains // ignore: cast_nullable_to_non_nullable
+              as List<PostCategory>,
+      categoriesInDomainsInactive: null == categoriesInDomainsInactive
+          ? _value.categoriesInDomainsInactive
+          : categoriesInDomainsInactive // ignore: cast_nullable_to_non_nullable
+              as List<PostCategory>,
+      isSelectingPosts: null == isSelectingPosts
+          ? _value.isSelectingPosts
+          : isSelectingPosts // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -95,10 +133,15 @@ abstract class _$$AppStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<AttachmentType> attachmentTypes,
-      List<Categories> categories,
-      List<Domains> domains,
+      List<PostCategory> categories,
+      List<Domain> domains,
       List<PartnerModel> businessPartners,
-      int valueToScrollToToday});
+      int valueToScrollToToday,
+      List<Domain> domainsInCategories,
+      List<Domain> domainsInCategoriesInactive,
+      List<PostCategory> categoriesInDomains,
+      List<PostCategory> categoriesInDomainsInactive,
+      bool isSelectingPosts});
 }
 
 /// @nodoc
@@ -117,6 +160,11 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? domains = null,
     Object? businessPartners = null,
     Object? valueToScrollToToday = null,
+    Object? domainsInCategories = null,
+    Object? domainsInCategoriesInactive = null,
+    Object? categoriesInDomains = null,
+    Object? categoriesInDomainsInactive = null,
+    Object? isSelectingPosts = null,
   }) {
     return _then(_$AppStateImpl(
       attachmentTypes: null == attachmentTypes
@@ -126,11 +174,11 @@ class __$$AppStateImplCopyWithImpl<$Res>
       categories: null == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
-              as List<Categories>,
+              as List<PostCategory>,
       domains: null == domains
           ? _value._domains
           : domains // ignore: cast_nullable_to_non_nullable
-              as List<Domains>,
+              as List<Domain>,
       businessPartners: null == businessPartners
           ? _value._businessPartners
           : businessPartners // ignore: cast_nullable_to_non_nullable
@@ -139,6 +187,26 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.valueToScrollToToday
           : valueToScrollToToday // ignore: cast_nullable_to_non_nullable
               as int,
+      domainsInCategories: null == domainsInCategories
+          ? _value._domainsInCategories
+          : domainsInCategories // ignore: cast_nullable_to_non_nullable
+              as List<Domain>,
+      domainsInCategoriesInactive: null == domainsInCategoriesInactive
+          ? _value._domainsInCategoriesInactive
+          : domainsInCategoriesInactive // ignore: cast_nullable_to_non_nullable
+              as List<Domain>,
+      categoriesInDomains: null == categoriesInDomains
+          ? _value._categoriesInDomains
+          : categoriesInDomains // ignore: cast_nullable_to_non_nullable
+              as List<PostCategory>,
+      categoriesInDomainsInactive: null == categoriesInDomainsInactive
+          ? _value._categoriesInDomainsInactive
+          : categoriesInDomainsInactive // ignore: cast_nullable_to_non_nullable
+              as List<PostCategory>,
+      isSelectingPosts: null == isSelectingPosts
+          ? _value.isSelectingPosts
+          : isSelectingPosts // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -148,14 +216,23 @@ class __$$AppStateImplCopyWithImpl<$Res>
 class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
   const _$AppStateImpl(
       {final List<AttachmentType> attachmentTypes = const [],
-      final List<Categories> categories = const [],
-      final List<Domains> domains = const [],
+      final List<PostCategory> categories = const [],
+      final List<Domain> domains = const [],
       final List<PartnerModel> businessPartners = const [],
-      this.valueToScrollToToday = 0})
+      this.valueToScrollToToday = 0,
+      final List<Domain> domainsInCategories = const [],
+      final List<Domain> domainsInCategoriesInactive = const [],
+      final List<PostCategory> categoriesInDomains = const [],
+      final List<PostCategory> categoriesInDomainsInactive = const [],
+      this.isSelectingPosts = false})
       : _attachmentTypes = attachmentTypes,
         _categories = categories,
         _domains = domains,
-        _businessPartners = businessPartners;
+        _businessPartners = businessPartners,
+        _domainsInCategories = domainsInCategories,
+        _domainsInCategoriesInactive = domainsInCategoriesInactive,
+        _categoriesInDomains = categoriesInDomains,
+        _categoriesInDomainsInactive = categoriesInDomainsInactive;
 
   final List<AttachmentType> _attachmentTypes;
   @override
@@ -166,19 +243,19 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
     return EqualUnmodifiableListView(_attachmentTypes);
   }
 
-  final List<Categories> _categories;
+  final List<PostCategory> _categories;
   @override
   @JsonKey()
-  List<Categories> get categories {
+  List<PostCategory> get categories {
     if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_categories);
   }
 
-  final List<Domains> _domains;
+  final List<Domain> _domains;
   @override
   @JsonKey()
-  List<Domains> get domains {
+  List<Domain> get domains {
     if (_domains is EqualUnmodifiableListView) return _domains;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_domains);
@@ -197,10 +274,53 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
   @override
   @JsonKey()
   final int valueToScrollToToday;
+  final List<Domain> _domainsInCategories;
+  @override
+  @JsonKey()
+  List<Domain> get domainsInCategories {
+    if (_domainsInCategories is EqualUnmodifiableListView)
+      return _domainsInCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_domainsInCategories);
+  }
+
+  final List<Domain> _domainsInCategoriesInactive;
+  @override
+  @JsonKey()
+  List<Domain> get domainsInCategoriesInactive {
+    if (_domainsInCategoriesInactive is EqualUnmodifiableListView)
+      return _domainsInCategoriesInactive;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_domainsInCategoriesInactive);
+  }
+
+  final List<PostCategory> _categoriesInDomains;
+  @override
+  @JsonKey()
+  List<PostCategory> get categoriesInDomains {
+    if (_categoriesInDomains is EqualUnmodifiableListView)
+      return _categoriesInDomains;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_categoriesInDomains);
+  }
+
+  final List<PostCategory> _categoriesInDomainsInactive;
+  @override
+  @JsonKey()
+  List<PostCategory> get categoriesInDomainsInactive {
+    if (_categoriesInDomainsInactive is EqualUnmodifiableListView)
+      return _categoriesInDomainsInactive;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_categoriesInDomainsInactive);
+  }
+
+  @override
+  @JsonKey()
+  final bool isSelectingPosts;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppState(attachmentTypes: $attachmentTypes, categories: $categories, domains: $domains, businessPartners: $businessPartners, valueToScrollToToday: $valueToScrollToToday)';
+    return 'AppState(attachmentTypes: $attachmentTypes, categories: $categories, domains: $domains, businessPartners: $businessPartners, valueToScrollToToday: $valueToScrollToToday, domainsInCategories: $domainsInCategories, domainsInCategoriesInactive: $domainsInCategoriesInactive, categoriesInDomains: $categoriesInDomains, categoriesInDomainsInactive: $categoriesInDomainsInactive, isSelectingPosts: $isSelectingPosts)';
   }
 
   @override
@@ -212,7 +332,14 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       ..add(DiagnosticsProperty('categories', categories))
       ..add(DiagnosticsProperty('domains', domains))
       ..add(DiagnosticsProperty('businessPartners', businessPartners))
-      ..add(DiagnosticsProperty('valueToScrollToToday', valueToScrollToToday));
+      ..add(DiagnosticsProperty('valueToScrollToToday', valueToScrollToToday))
+      ..add(DiagnosticsProperty('domainsInCategories', domainsInCategories))
+      ..add(DiagnosticsProperty(
+          'domainsInCategoriesInactive', domainsInCategoriesInactive))
+      ..add(DiagnosticsProperty('categoriesInDomains', categoriesInDomains))
+      ..add(DiagnosticsProperty(
+          'categoriesInDomainsInactive', categoriesInDomainsInactive))
+      ..add(DiagnosticsProperty('isSelectingPosts', isSelectingPosts));
   }
 
   @override
@@ -228,7 +355,19 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
             const DeepCollectionEquality()
                 .equals(other._businessPartners, _businessPartners) &&
             (identical(other.valueToScrollToToday, valueToScrollToToday) ||
-                other.valueToScrollToToday == valueToScrollToToday));
+                other.valueToScrollToToday == valueToScrollToToday) &&
+            const DeepCollectionEquality()
+                .equals(other._domainsInCategories, _domainsInCategories) &&
+            const DeepCollectionEquality().equals(
+                other._domainsInCategoriesInactive,
+                _domainsInCategoriesInactive) &&
+            const DeepCollectionEquality()
+                .equals(other._categoriesInDomains, _categoriesInDomains) &&
+            const DeepCollectionEquality().equals(
+                other._categoriesInDomainsInactive,
+                _categoriesInDomainsInactive) &&
+            (identical(other.isSelectingPosts, isSelectingPosts) ||
+                other.isSelectingPosts == isSelectingPosts));
   }
 
   @override
@@ -238,7 +377,12 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       const DeepCollectionEquality().hash(_categories),
       const DeepCollectionEquality().hash(_domains),
       const DeepCollectionEquality().hash(_businessPartners),
-      valueToScrollToToday);
+      valueToScrollToToday,
+      const DeepCollectionEquality().hash(_domainsInCategories),
+      const DeepCollectionEquality().hash(_domainsInCategoriesInactive),
+      const DeepCollectionEquality().hash(_categoriesInDomains),
+      const DeepCollectionEquality().hash(_categoriesInDomainsInactive),
+      isSelectingPosts);
 
   @JsonKey(ignore: true)
   @override
@@ -250,21 +394,36 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
 abstract class _AppState implements AppState {
   const factory _AppState(
       {final List<AttachmentType> attachmentTypes,
-      final List<Categories> categories,
-      final List<Domains> domains,
+      final List<PostCategory> categories,
+      final List<Domain> domains,
       final List<PartnerModel> businessPartners,
-      final int valueToScrollToToday}) = _$AppStateImpl;
+      final int valueToScrollToToday,
+      final List<Domain> domainsInCategories,
+      final List<Domain> domainsInCategoriesInactive,
+      final List<PostCategory> categoriesInDomains,
+      final List<PostCategory> categoriesInDomainsInactive,
+      final bool isSelectingPosts}) = _$AppStateImpl;
 
   @override
   List<AttachmentType> get attachmentTypes;
   @override
-  List<Categories> get categories;
+  List<PostCategory> get categories;
   @override
-  List<Domains> get domains;
+  List<Domain> get domains;
   @override
   List<PartnerModel> get businessPartners;
   @override
   int get valueToScrollToToday;
+  @override
+  List<Domain> get domainsInCategories;
+  @override
+  List<Domain> get domainsInCategoriesInactive;
+  @override
+  List<PostCategory> get categoriesInDomains;
+  @override
+  List<PostCategory> get categoriesInDomainsInactive;
+  @override
+  bool get isSelectingPosts;
   @override
   @JsonKey(ignore: true)
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>

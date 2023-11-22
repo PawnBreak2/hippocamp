@@ -8,11 +8,15 @@ part 'app_state_repository.freezed.dart';
 
 @freezed
 class AppState with _$AppState {
-  const factory AppState({
-    @Default([]) List<AttachmentType> attachmentTypes,
-    @Default([]) List<Categories> categories,
-    @Default([]) List<Domains> domains,
-    @Default([]) List<PartnerModel> businessPartners,
-    @Default(0) int valueToScrollToToday,
-  }) = _AppState;
+  const factory AppState(
+      {@Default([]) List<AttachmentType> attachmentTypes,
+      @Default([]) List<PostCategory> categories,
+      @Default([]) List<Domain> domains,
+      @Default([]) List<PartnerModel> businessPartners,
+      @Default(0) int valueToScrollToToday,
+      @Default([]) List<Domain> domainsInCategories,
+      @Default([]) List<Domain> domainsInCategoriesInactive,
+      @Default([]) List<PostCategory> categoriesInDomains,
+      @Default([]) List<PostCategory> categoriesInDomainsInactive,
+      @Default(false) bool isSelectingPosts}) = _AppState;
 }

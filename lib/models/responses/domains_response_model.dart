@@ -1,11 +1,11 @@
-class Domains {
+class Domain {
   final int position;
   final String key;
   final String backgroundColorHex;
   final String localizedName;
   final String iconUrl;
 
-  const Domains({
+  const Domain({
     required this.iconUrl,
     required this.key,
     required this.localizedName,
@@ -13,8 +13,8 @@ class Domains {
     required this.position,
   });
 
-  static Domains fromMap(Map json) {
-    return Domains(
+  static Domain fromMap(Map json) {
+    return Domain(
       position: json["position"] ?? 0,
       key: json["key"] ?? "",
       iconUrl: json["iconUrl"] ?? "",

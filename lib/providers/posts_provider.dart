@@ -27,11 +27,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
   bool endFutureList = false;
 
   // Used in timeline when user is selecting multiple posts
-  bool _isSelectingPosts = false;
-  bool get isSelectingPosts => _isSelectingPosts;
-  set isSelectingPosts(bool v) {
-    _isSelectingPosts = v;
-  }
 
   bool postIsSelected(Post post) =>
       state.selectedPosts.map((e) => e.key).contains(post.key);
@@ -255,6 +250,37 @@ class PostListNotifier extends Notifier<PostsRepository> {
     );
   }
 
+  Future<Map<String, List<Post>>> getPostsFromCategory({
+    required String categoryKey,
+    bool withFinance = false,
+    bool withAttachments = false,
+  }) async {
+    final resp = await _postsClient.getPostsFromCategory(
+      categoryKey: categoryKey,
+      attachments: withAttachments,
+      transactions: withFinance,
+    );
+
+    return resp.fold(
+      (l) => {},
+      (r) {
+        final newPostsPerCategory = r.posts;
+        Map<String, List<Post>> newPostsFilteredPerCategory = {};
+
+        newPostsPerCategory.sort((a, b) => b.date.compareTo(a.date));
+
+        for (var i in newPostsPerCategory) {
+          final postsPerDate = newPostsFilteredPerCategory[i.date] ?? [];
+          postsPerDate.add(i);
+          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
+          newPostsFilteredPerCategory[i.date] = postsPerDate;
+        }
+
+        return newPostsFilteredPerCategory;
+      },
+    );
+  }
+
   ///TODO: chiedere spiegazioni a Lorenzo
 
 /*  Future<void> searchPosts(String text) async {
@@ -363,11 +389,28 @@ class PostListNotifier extends Notifier<PostsRepository> {
       await _postsClient.duplicatePosts(postKey: i);
     }
 
-    _isSelectingPosts = false;
     state = state.copyWith(selectedPosts: []);
     await getPosts();
 
     return true;
+  }
+
+  Future<bool> deletePosts({required List<String> postsKey}) async {
+    final resp = await _postsClient.deletePosts(
+      postsKey: postsKey,
+    );
+
+    return resp.fold(
+      (l) => false,
+      (r) async {
+        final appStateProviderNotifier = ref.read(appStateProvider.notifier);
+        appStateProviderNotifier.setIsSelectingPosts(false);
+        state = state.copyWith(selectedPosts: []);
+
+        await getPosts();
+        return true;
+      },
+    );
   }
 
   ///TODO: si può usare il dispose?

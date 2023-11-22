@@ -16,6 +16,8 @@ import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
 import 'package:hippocamp/widgets/forms/primary_text_form.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+/// this page contains timeline and memo pages
+
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -285,9 +287,10 @@ class _FinancePageState extends ConsumerState<HomePage> {
               ),
             );
         },
-        backgroundColor: CustomColors.primaryYellow,
+        backgroundColor: Colors.white,
         child: Icon(
           Icons.add,
+          color: CustomColors.lightRed,
           size: 32,
         ),
       ),

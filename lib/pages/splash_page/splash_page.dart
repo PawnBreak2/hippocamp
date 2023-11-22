@@ -43,7 +43,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       var endTime = DateTime.now();
       var duration = endTime.difference(startTime);
       print('initialization finished in $duration milliseconds ✅');
-      context.goNamed(routeMap[routeNames.home]);
+      context.goNamed(routeMap[routeNames.mainScaffold]);
     });
   }
 
@@ -59,7 +59,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Future<void> _getAllDomainsAndPrecacheImages() async {
     var startTime = DateTime.now();
     var appStateProviderNotifier = ref.read(appStateProvider.notifier);
-    List<Domains> domains = await appStateProviderNotifier.getDomains();
+    List<Domain> domains = await appStateProviderNotifier.getDomains();
     await _precacheImages(elements: domains);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
@@ -69,7 +69,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Future<void> _getAllCategoriesAndPrecacheImages() async {
     var startTime = DateTime.now();
     var appStateProviderNotifier = ref.read(appStateProvider.notifier);
-    List<Categories> categories =
+    List<PostCategory> categories =
         await appStateProviderNotifier.getCategories();
     await _precacheImages(elements: categories);
     var endTime = DateTime.now();

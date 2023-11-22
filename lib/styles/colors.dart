@@ -28,4 +28,7 @@ class CustomColors {
   static const Color pinkWhite = Color.fromRGBO(239, 230, 222, 1);
 
   static const Color pinkWhiteDeep = Color.fromRGBO(204, 196, 190, 1);
+  static const Color lightRed = Color.fromRGBO(255, 126, 89, 1);
+
+  //FF7E59
 }

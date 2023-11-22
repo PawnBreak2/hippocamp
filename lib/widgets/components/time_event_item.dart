@@ -117,7 +117,7 @@ class TimeEventItem extends StatelessWidget {
                                   // Category
                                   Expanded(
                                     child: Text(
-                                      post.category.nome,
+                                      post.category.localizedName,
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),

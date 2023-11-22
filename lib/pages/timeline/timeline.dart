@@ -231,6 +231,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
   Widget build(BuildContext context) {
     final postsProviderState = ref.watch(postListProvider);
     final appStateProviderState = ref.watch(appStateProvider);
+    final appStateProviderNotifier = ref.read(appStateProvider.notifier);
     final postsProviderNotifier = ref.read(postListProvider.notifier);
     final postsMappedByDate = postsProviderState.postsMappedByDate;
     final postsMappedByYearAndMonth =
@@ -368,24 +369,25 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                             isSelectedItem:
                                 postsProviderNotifier.postIsSelected(post),
                             showSelectionCircle:
-                                postsProviderNotifier.isSelectingPosts,
-                            onTap: postsProviderNotifier.isSelectingPosts
+                                appStateProviderState.isSelectingPosts,
+                            onTap: appStateProviderState.isSelectingPosts
                                 ? () {
-                                    if (postsProviderNotifier.isSelectingPosts)
-                                      postsProviderNotifier
-                                          .addOrRemoveSelectedPost(post: post);
+                                    postsProviderNotifier
+                                        .addOrRemoveSelectedPost(post: post);
                                   }
                                 : null,
                             onLongPress: () {
-                              if (postsProviderNotifier.isSelectingPosts) {
-                                postsProviderNotifier.isSelectingPosts = false;
+                              if (appStateProviderState.isSelectingPosts) {
+                                appStateProviderNotifier
+                                    .setIsSelectingPosts(false);
                                 postsProviderNotifier.addOrRemoveSelectedPost();
                                 setState(() {});
 
                                 return;
                               }
 
-                              postsProviderNotifier.isSelectingPosts = true;
+                              appStateProviderNotifier
+                                  .setIsSelectingPosts(true);
                               postsProviderNotifier.addOrRemoveSelectedPost(
                                   post: post);
                               setState(() {});
