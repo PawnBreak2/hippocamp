@@ -211,8 +211,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
         .where((element) =>
             element.dateTimeFromString.day == post.dateTimeFromString.day)
         .toList();
-    print('posts for current day');
-    print(postsForCurrentDay);
+    // print('posts for current day');
+    // print(postsForCurrentDay);
 
     if (postsForCurrentDay[0].key == post.key) {
       return true;

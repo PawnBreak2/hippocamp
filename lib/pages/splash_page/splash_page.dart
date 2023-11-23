@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hippocamp/constants/navigation/routeNames.dart';
+import 'package:hippocamp/constants/storage_keys.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:hippocamp/models/posts-creation/partner_model.dart';
 import 'package:hippocamp/models/responses/categories_response_model.dart';
@@ -11,6 +15,7 @@ import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/user_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
+import 'package:hippocamp/storage/local_storage.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'dart:async';
@@ -23,6 +28,8 @@ class SplashPage extends ConsumerStatefulWidget {
 }
 
 class _SplashPageState extends ConsumerState<SplashPage> {
+  final cacheManager = DefaultCacheManager();
+
   @override
   void initState() {
     _init();
@@ -31,14 +38,16 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   void _init() async {
     var startTime = DateTime.now();
+    print(LocalStorage.readString(StorageKeys.token));
     await Future.wait([
       _getAllPosts(),
       _getAllDomainsAndPrecacheImages(),
-      //_getAllCategoriesAndPrecacheImages(),
+      _getAllCategoriesAndPrecacheImages(),
       _getAllPartnersAndPrecacheImages(),
       _getAllWallets(),
       _setUserProfile(),
-      _getAttachmentTypesAndPrecacheImages()
+      _getAttachmentTypesAndPrecacheImages(),
+      _getAllCategoriesAndPrecacheImages(),
     ]).whenComplete(() {
       var endTime = DateTime.now();
       var duration = endTime.difference(startTime);
@@ -63,7 +72,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     await _precacheImages(elements: domains);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
-    //print('domains loaded in $duration milliseconds ✅');
+    print('domains loaded in $duration milliseconds ✅');
   }
 
   Future<void> _getAllCategoriesAndPrecacheImages() async {
@@ -74,7 +83,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     await _precacheImages(elements: categories);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
-    //print('categories loaded in $duration milliseconds ✅');
+    print('categories loaded in $duration milliseconds ✅');
   }
 
   Future<void> _getAllPartnersAndPrecacheImages() async {
@@ -125,12 +134,9 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }) async {
     for (dynamic element in elements) {
       if ((element.iconUrl as String).isNotEmpty) {
-        final SvgNetworkLoader loader = SvgNetworkLoader(element?.iconUrl);
+        await cacheManager.getSingleFile(element.iconUrl);
         //print('precaching image ${element.iconUrl}');
-        try {
-          svg.cache
-              .putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
-        } catch (e) {
+        try {} catch (e) {
           print('error while precaching image ${element.iconUrl}');
           continue;
         }

@@ -65,6 +65,7 @@ dependencies:
   path: ^1.8.3
   floor: ^1.4.2
   flutter_draggable_gridview: ^0.0.8
+  flutter_cache_manager: ^3.3.1
 
 dev_dependencies:
   flutter_test:

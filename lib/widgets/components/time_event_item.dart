@@ -9,6 +9,7 @@ import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/components/partner_box.dart';
 import 'package:hippocamp/widgets/components/timeline/timeline_post_icon.dart';
 import 'package:hippocamp/widgets/components/timeline/timeline_post_title_and_description.dart';
+import 'package:hippocamp/widgets/images/cached_timeline_post_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TimeEventItem extends StatelessWidget {
@@ -89,7 +90,7 @@ class TimeEventItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Icon / Texts
-                        TimelinePostIcon(post: post),
+                        CachedSvgImage(post: post, width: 50, height: 50),
                         SizedBox(width: 3.w),
                         TimeLinePostTitleAndDescription(post: post),
                         SizedBox(width: 3.w),
