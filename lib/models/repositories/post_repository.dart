@@ -14,5 +14,16 @@ class PostsRepository with _$PostsRepository {
     // this is a list of posts grouped by date
     @Default({}) Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
     @Default({}) Map<String, List<Post>> postsMappedByDate,
+    DateTime? datePagination, // Made nullable
+    DateTime? futureDatePagination, // Made nullable
+    @Default(false) bool endList,
+    @Default(false) bool endFutureList,
   }) = _PostsRepository;
+
+  factory PostsRepository.initial() {
+    return PostsRepository(
+      datePagination: DateTime.now(),
+      futureDatePagination: DateTime.now(),
+    );
+  }
 }

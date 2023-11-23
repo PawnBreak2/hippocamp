@@ -59,7 +59,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Future<void> _getAllPosts() async {
     var startTime = DateTime.now();
     var posts = ref.read(postListProvider.notifier);
-    await posts.getPosts(past: true);
+    // gets the posts for the previous two months
+    await posts.getPosts(past: true, monthsToGoBack: 2);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
     //print('posts loaded in $duration milliseconds ✅');

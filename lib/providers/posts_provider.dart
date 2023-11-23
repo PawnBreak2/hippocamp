@@ -18,14 +18,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
 
   final _postsClient = PostsClient();
 
-  late DateTime datePagination =
-      DateTime(DateTime.now().year, DateTime.now().month);
-  late DateTime futureDatePagination =
-      DateTime(DateTime.now().year, DateTime.now().month);
-  // Used in timeline for getting new posts when scrolling down
-  bool endList = false;
-  bool endFutureList = false;
-
   // Used in timeline when user is selecting multiple posts
 
   bool postIsSelected(Post post) =>
@@ -109,76 +101,89 @@ class PostListNotifier extends Notifier<PostsRepository> {
     return postsByDate;
   }
 
-  Future<void> getPosts({bool past = true}) async {
-    DateTime datePagination =
+  Future<void> getPosts({bool past = true, monthsToGoBack = 1}) async {
+    DateTime datePaginationForThisGetCall =
         DateTime(DateTime.now().year, DateTime.now().month);
-    final resp = await _postsClient.getPosts(
-      dateTime: datePagination,
-      past: past,
-    );
+    for (var i = 0; i < monthsToGoBack; i++) {
+      final resp = await _postsClient.getPosts(
+        dateTime: datePaginationForThisGetCall,
+        past: past,
+      );
 
-    if (past) {
-      final month = datePagination.month - 1;
-      DateTime newDate = DateTime(datePagination.year, month);
+      if (past) {
+        final month = datePaginationForThisGetCall.month - 1;
+        DateTime newDate = DateTime(datePaginationForThisGetCall.year, month);
 
-      if (month == 0) newDate = DateTime(datePagination.year - 1, 12);
+        if (month == 0)
+          newDate = DateTime(datePaginationForThisGetCall.year - 1, 12);
 
-      datePagination = newDate;
-    }
+        datePaginationForThisGetCall = newDate;
+      } else {
+        final month = datePaginationForThisGetCall.month + 1;
+        DateTime newDate = DateTime(datePaginationForThisGetCall.year, month);
 
-    resp.fold(
-      (error) => null,
-      (body) async {
-        /// TODO: ottimizzare e vedere se è necessario tenere allPosts nello stato
+        if (month == 13)
+          newDate = DateTime(datePaginationForThisGetCall.year + 1, 1);
 
-        // filters all the posts that are already in the state repository using the unique key
+        datePaginationForThisGetCall = newDate;
+      }
 
-        List<Post> newPostsFilteredFromDuplicate = body.posts;
+      resp.fold(
+        (error) => null,
+        (body) async {
+          /// TODO: ottimizzare e vedere se è necessario tenere allPosts nello stato
 
-        newPostsFilteredFromDuplicate.removeWhere((Post element) =>
-            state.allPosts.any((Post post) => element.key == post.key));
+          // filters all the posts that are already in the state repository using the unique key
 
-        // adds them to the allPosts property in state
+          List<Post> newPostsFilteredFromDuplicate = body.posts;
 
-        state = state.copyWith(
-            allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
-              ..sort((a, b) => b.date.compareTo(a.date)));
+          newPostsFilteredFromDuplicate.removeWhere((Post element) =>
+              state.allPosts.any((Post post) => element.key == post.key));
 
-        // iterate each post in allPosts and map them by date
-        ref.read(appStateProvider.notifier).resetValueToScrollToday();
+          // adds them to the allPosts property in state
 
-        for (Post post in state.allPosts) {
-          // maps posts by date & puts them into the post repository
-          final postsPerDate = state.postsMappedByDate[post.date] ?? [];
-          postsPerDate.add(post);
-          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state = state.copyWith(postsMappedByDate: {
-            ...state.postsMappedByDate,
-            post.date: postsPerDate
+          state = state.copyWith(
+              allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
+                ..sort((a, b) => b.date.compareTo(a.date)));
+
+          ref.read(appStateProvider.notifier).resetValueToScrollToday();
+
+          for (Post post in state.allPosts) {
+            // maps posts by date & puts them into the post repository
+            final postsPerDate = state.postsMappedByDate[post.date] ?? [];
+            postsPerDate.add(post);
+            postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
+            state = state.copyWith(postsMappedByDate: {
+              ...state.postsMappedByDate,
+              post.date: postsPerDate
+            });
+
+            //used to iterate until you find the date of today to scroll to
+            bool gotTodayScrollValue = false;
+            gotTodayScrollValue = ref
+                .read(appStateProvider.notifier)
+                .calculateIndexOfTodayInPosts(
+                  post,
+                  gotTodayScrollValue,
+                );
+          }
+
+          Map<int, Map<int, List<Post>>> postsByYearAndMonth =
+              organizePostsByYearAndMonth(state.allPosts);
+
+          state = state.copyWith(postsMappedByYearAndMonth: {
+            ...state.postsMappedByYearAndMonth,
+            ...postsByYearAndMonth
           });
-
-          //used to iterate until you find the date of today to scroll to
-          bool gotTodayScrollValue = false;
-          gotTodayScrollValue =
-              ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
-                    post,
-                    gotTodayScrollValue,
-                  );
-        }
-
-        Map<int, Map<int, List<Post>>> postsByYearAndMonth =
-            organizePostsByYearAndMonth(state.allPosts);
-
-        state = state.copyWith(postsMappedByYearAndMonth: {
-          ...state.postsMappedByYearAndMonth,
-          ...postsByYearAndMonth
-        });
-      },
-    );
+        },
+      );
+    }
   }
 
   Future<void> getNewPosts({bool past = true}) async {
-    final resp = await _postsClient.getPosts(
+    print('getting new post DEBUG');
+    return;
+    /*final resp = await _postsClient.getPosts(
       dateTime: past ? datePagination : futureDatePagination,
       past: past,
     );
@@ -247,7 +252,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
           ...postsByYearAndMonth
         });
       },
-    );
+    );*/
   }
 
   Future<Map<String, List<Post>>> getPostsFromCategory({
@@ -327,7 +332,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
           allPosts: [...state.allPosts, ...r.posts],
         );
 
-        endList = r.end;
+        state = state.copyWith(endList: r.end);
 
         for (var i in state.allPosts) {
           final postsPerDate = state.postsMappedByDate[i.date] ?? [];
@@ -416,8 +421,6 @@ class PostListNotifier extends Notifier<PostsRepository> {
   ///TODO: si può usare il dispose?
 
   void clearAllData() {
-    datePagination = DateTime.now();
-    endList = false;
     //goes back to initializing an empty repository
 
     state = const PostsRepository();

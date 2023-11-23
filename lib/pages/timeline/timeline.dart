@@ -145,7 +145,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
     if (widget.isSearching) return;
 
-    if (nearTheStart && !postsProviderNotifier.endFutureList) {
+    if (nearTheStart && !postsProviderState.endFutureList) {
       if (_getNewPosts) return;
 
       _getNewPosts = true;
@@ -153,7 +153,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       _getNewPosts = false;
     }
 
-    if (nearTheEnd && !postsProviderNotifier.endList) {
+    if (nearTheEnd && !postsProviderState.endList) {
       if (_getNewPosts) return;
 
       _getNewPosts = true;
@@ -202,7 +202,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsMappedByYearAndMonth =
         postsProviderState.postsMappedByYearAndMonth;
 
-    final currentDate = DateTime.now();
+    final currentDate = post.dateTimeFromString;
     final currentMonth = currentDate.month;
     final currentYear = currentDate.year;
     final postsForCurrentMonth =
@@ -211,8 +211,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
         .where((element) =>
             element.dateTimeFromString.day == post.dateTimeFromString.day)
         .toList();
-    // print('posts for current day');
-    // print(postsForCurrentDay);
+    print('posts for current month');
+    print(postsForCurrentMonth);
 
     if (postsForCurrentDay[0].key == post.key) {
       return true;

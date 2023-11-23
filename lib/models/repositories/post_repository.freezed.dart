@@ -24,6 +24,12 @@ mixin _$PostsRepository {
       throw _privateConstructorUsedError;
   Map<String, List<Post>> get postsMappedByDate =>
       throw _privateConstructorUsedError;
+  DateTime? get datePagination =>
+      throw _privateConstructorUsedError; // Made nullable
+  DateTime? get futureDatePagination =>
+      throw _privateConstructorUsedError; // Made nullable
+  bool get endList => throw _privateConstructorUsedError;
+  bool get endFutureList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PostsRepositoryCopyWith<PostsRepository> get copyWith =>
@@ -40,7 +46,11 @@ abstract class $PostsRepositoryCopyWith<$Res> {
       {List<Post> allPosts,
       List<Post> selectedPosts,
       Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
-      Map<String, List<Post>> postsMappedByDate});
+      Map<String, List<Post>> postsMappedByDate,
+      DateTime? datePagination,
+      DateTime? futureDatePagination,
+      bool endList,
+      bool endFutureList});
 }
 
 /// @nodoc
@@ -60,6 +70,10 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
     Object? selectedPosts = null,
     Object? postsMappedByYearAndMonth = null,
     Object? postsMappedByDate = null,
+    Object? datePagination = freezed,
+    Object? futureDatePagination = freezed,
+    Object? endList = null,
+    Object? endFutureList = null,
   }) {
     return _then(_value.copyWith(
       allPosts: null == allPosts
@@ -78,6 +92,22 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
           ? _value.postsMappedByDate
           : postsMappedByDate // ignore: cast_nullable_to_non_nullable
               as Map<String, List<Post>>,
+      datePagination: freezed == datePagination
+          ? _value.datePagination
+          : datePagination // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      futureDatePagination: freezed == futureDatePagination
+          ? _value.futureDatePagination
+          : futureDatePagination // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      endList: null == endList
+          ? _value.endList
+          : endList // ignore: cast_nullable_to_non_nullable
+              as bool,
+      endFutureList: null == endFutureList
+          ? _value.endFutureList
+          : endFutureList // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -94,7 +124,11 @@ abstract class _$$PostsRepositoryImplCopyWith<$Res>
       {List<Post> allPosts,
       List<Post> selectedPosts,
       Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
-      Map<String, List<Post>> postsMappedByDate});
+      Map<String, List<Post>> postsMappedByDate,
+      DateTime? datePagination,
+      DateTime? futureDatePagination,
+      bool endList,
+      bool endFutureList});
 }
 
 /// @nodoc
@@ -112,6 +146,10 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
     Object? selectedPosts = null,
     Object? postsMappedByYearAndMonth = null,
     Object? postsMappedByDate = null,
+    Object? datePagination = freezed,
+    Object? futureDatePagination = freezed,
+    Object? endList = null,
+    Object? endFutureList = null,
   }) {
     return _then(_$PostsRepositoryImpl(
       allPosts: null == allPosts
@@ -130,6 +168,22 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
           ? _value._postsMappedByDate
           : postsMappedByDate // ignore: cast_nullable_to_non_nullable
               as Map<String, List<Post>>,
+      datePagination: freezed == datePagination
+          ? _value.datePagination
+          : datePagination // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      futureDatePagination: freezed == futureDatePagination
+          ? _value.futureDatePagination
+          : futureDatePagination // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      endList: null == endList
+          ? _value.endList
+          : endList // ignore: cast_nullable_to_non_nullable
+              as bool,
+      endFutureList: null == endFutureList
+          ? _value.endFutureList
+          : endFutureList // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -143,7 +197,11 @@ class _$PostsRepositoryImpl
       {final List<Post> allPosts = const [],
       final List<Post> selectedPosts = const [],
       final Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth = const {},
-      final Map<String, List<Post>> postsMappedByDate = const {}})
+      final Map<String, List<Post>> postsMappedByDate = const {},
+      this.datePagination,
+      this.futureDatePagination,
+      this.endList = false,
+      this.endFutureList = false})
       : _allPosts = allPosts,
         _selectedPosts = selectedPosts,
         _postsMappedByYearAndMonth = postsMappedByYearAndMonth,
@@ -192,8 +250,21 @@ class _$PostsRepositoryImpl
   }
 
   @override
+  final DateTime? datePagination;
+// Made nullable
+  @override
+  final DateTime? futureDatePagination;
+// Made nullable
+  @override
+  @JsonKey()
+  final bool endList;
+  @override
+  @JsonKey()
+  final bool endFutureList;
+
+  @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PostsRepository(allPosts: $allPosts, selectedPosts: $selectedPosts, postsMappedByYearAndMonth: $postsMappedByYearAndMonth, postsMappedByDate: $postsMappedByDate)';
+    return 'PostsRepository(allPosts: $allPosts, selectedPosts: $selectedPosts, postsMappedByYearAndMonth: $postsMappedByYearAndMonth, postsMappedByDate: $postsMappedByDate, datePagination: $datePagination, futureDatePagination: $futureDatePagination, endList: $endList, endFutureList: $endFutureList)';
   }
 
   @override
@@ -205,7 +276,11 @@ class _$PostsRepositoryImpl
       ..add(DiagnosticsProperty('selectedPosts', selectedPosts))
       ..add(DiagnosticsProperty(
           'postsMappedByYearAndMonth', postsMappedByYearAndMonth))
-      ..add(DiagnosticsProperty('postsMappedByDate', postsMappedByDate));
+      ..add(DiagnosticsProperty('postsMappedByDate', postsMappedByDate))
+      ..add(DiagnosticsProperty('datePagination', datePagination))
+      ..add(DiagnosticsProperty('futureDatePagination', futureDatePagination))
+      ..add(DiagnosticsProperty('endList', endList))
+      ..add(DiagnosticsProperty('endFutureList', endFutureList));
   }
 
   @override
@@ -219,7 +294,14 @@ class _$PostsRepositoryImpl
             const DeepCollectionEquality().equals(
                 other._postsMappedByYearAndMonth, _postsMappedByYearAndMonth) &&
             const DeepCollectionEquality()
-                .equals(other._postsMappedByDate, _postsMappedByDate));
+                .equals(other._postsMappedByDate, _postsMappedByDate) &&
+            (identical(other.datePagination, datePagination) ||
+                other.datePagination == datePagination) &&
+            (identical(other.futureDatePagination, futureDatePagination) ||
+                other.futureDatePagination == futureDatePagination) &&
+            (identical(other.endList, endList) || other.endList == endList) &&
+            (identical(other.endFutureList, endFutureList) ||
+                other.endFutureList == endFutureList));
   }
 
   @override
@@ -228,7 +310,11 @@ class _$PostsRepositoryImpl
       const DeepCollectionEquality().hash(_allPosts),
       const DeepCollectionEquality().hash(_selectedPosts),
       const DeepCollectionEquality().hash(_postsMappedByYearAndMonth),
-      const DeepCollectionEquality().hash(_postsMappedByDate));
+      const DeepCollectionEquality().hash(_postsMappedByDate),
+      datePagination,
+      futureDatePagination,
+      endList,
+      endFutureList);
 
   @JsonKey(ignore: true)
   @override
@@ -243,7 +329,11 @@ abstract class _PostsRepository implements PostsRepository {
       {final List<Post> allPosts,
       final List<Post> selectedPosts,
       final Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
-      final Map<String, List<Post>> postsMappedByDate}) = _$PostsRepositoryImpl;
+      final Map<String, List<Post>> postsMappedByDate,
+      final DateTime? datePagination,
+      final DateTime? futureDatePagination,
+      final bool endList,
+      final bool endFutureList}) = _$PostsRepositoryImpl;
 
   @override // this is a list of all posts
   List<Post> get allPosts;
@@ -253,6 +343,14 @@ abstract class _PostsRepository implements PostsRepository {
   Map<int, Map<int, List<Post>>> get postsMappedByYearAndMonth;
   @override
   Map<String, List<Post>> get postsMappedByDate;
+  @override
+  DateTime? get datePagination;
+  @override // Made nullable
+  DateTime? get futureDatePagination;
+  @override // Made nullable
+  bool get endList;
+  @override
+  bool get endFutureList;
   @override
   @JsonKey(ignore: true)
   _$$PostsRepositoryImplCopyWith<_$PostsRepositoryImpl> get copyWith =>
