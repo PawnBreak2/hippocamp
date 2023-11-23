@@ -12,7 +12,7 @@ import 'package:hippocamp/models/responses/posts_response_model.dart';
 class AppStateNotifier extends Notifier<AppState> {
   @override
   build() {
-    return AppState();
+    return const AppState();
   }
 
   final _appStateClient = AppStateClient();

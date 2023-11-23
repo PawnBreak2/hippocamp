@@ -1,10 +1,9 @@
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/clients/posts_client.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
+import 'package:hippocamp/helpers/providers/post_provider_helpers.dart';
 import 'package:hippocamp/models/body/create_post.dart';
+import 'package:hippocamp/models/error_call_model.dart';
 import 'package:hippocamp/models/repositories/post_repository.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
@@ -12,8 +11,7 @@ import 'package:hippocamp/providers/app_state_provider.dart';
 class PostListNotifier extends Notifier<PostsRepository> {
   @override
   PostsRepository build() {
-    // TODO: implement build
-    return PostsRepository();
+    return const PostsRepository();
   }
 
   final _postsClient = PostsClient();
@@ -61,122 +59,46 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
-  Map<int, Map<int, List<Post>>> organizePostsByYearAndMonth(List<Post> posts) {
-    Map<int, Map<int, List<Post>>> postsByDate = {};
-
-    // Initialize each year with 12 empty months
-    for (var post in posts) {
-      int year = post.dateTimeFromString.year;
-      if (!postsByDate.containsKey(year)) {
-        postsByDate[year] = {
-          1: [],
-          2: [],
-          3: [],
-          4: [],
-          5: [],
-          6: [],
-          7: [],
-          8: [],
-          9: [],
-          10: [],
-          11: [],
-          12: []
-        };
-      }
-    }
-
-    // Populate the posts in the respective year and month
-    for (var post in posts) {
-      DateTime postDate = post.dateTimeFromString;
-      int year = postDate.year;
-      int month = postDate.month;
-
-      postsByDate[year]![month]!.add(post);
-
-      // Sorting the posts in descending order by dateTime
-      postsByDate[year]![month]!
-          .sort((a, b) => b.dateTimeFromString.compareTo(a.dateTimeFromString));
-    }
-
-    return postsByDate;
-  }
-
-  Future<void> getPosts({bool past = true, monthsToGoBack = 1}) async {
+  Future<void> getPosts(
+      {bool past = true, monthsToGoBack = 1, yearsToGoForward = 1}) async {
     DateTime datePaginationForThisGetCall =
         DateTime(DateTime.now().year, DateTime.now().month);
-    for (var i = 0; i < monthsToGoBack; i++) {
-      final resp = await _postsClient.getPosts(
-        dateTime: datePaginationForThisGetCall,
-        past: past,
-      );
 
-      if (past) {
+    if (past) {
+      for (var i = 0; i < monthsToGoBack; i++) {
+        final resp = await _postsClient.getPosts(
+          dateTime: datePaginationForThisGetCall,
+          past: past,
+        );
+
+        PostsProviderHelpers.manageGetPostsResponseFromAPI(
+            response: resp, ref: ref);
+
         final month = datePaginationForThisGetCall.month - 1;
         DateTime newDate = DateTime(datePaginationForThisGetCall.year, month);
 
-        if (month == 0)
+        if (month == 0) {
           newDate = DateTime(datePaginationForThisGetCall.year - 1, 12);
-
-        datePaginationForThisGetCall = newDate;
-      } else {
-        final month = datePaginationForThisGetCall.month + 1;
-        DateTime newDate = DateTime(datePaginationForThisGetCall.year, month);
-
-        if (month == 13)
-          newDate = DateTime(datePaginationForThisGetCall.year + 1, 1);
+        }
 
         datePaginationForThisGetCall = newDate;
       }
+    } else {
+      for (var i = 0; i < yearsToGoForward; i++) {
+        final resp = await _postsClient.getPosts(
+          dateTime: datePaginationForThisGetCall,
+          past: past,
+        );
 
-      resp.fold(
-        (error) => null,
-        (body) async {
-          /// TODO: ottimizzare e vedere se è necessario tenere allPosts nello stato
+        PostsProviderHelpers.manageGetPostsResponseFromAPI(
+            response: resp, ref: ref);
 
-          // filters all the posts that are already in the state repository using the unique key
+        final year = datePaginationForThisGetCall.year + 1;
+        final month = datePaginationForThisGetCall.month;
+        DateTime newDate = DateTime(year, month);
 
-          List<Post> newPostsFilteredFromDuplicate = body.posts;
-
-          newPostsFilteredFromDuplicate.removeWhere((Post element) =>
-              state.allPosts.any((Post post) => element.key == post.key));
-
-          // adds them to the allPosts property in state
-
-          state = state.copyWith(
-              allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
-                ..sort((a, b) => b.date.compareTo(a.date)));
-
-          ref.read(appStateProvider.notifier).resetValueToScrollToday();
-
-          for (Post post in state.allPosts) {
-            // maps posts by date & puts them into the post repository
-            final postsPerDate = state.postsMappedByDate[post.date] ?? [];
-            postsPerDate.add(post);
-            postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-            state = state.copyWith(postsMappedByDate: {
-              ...state.postsMappedByDate,
-              post.date: postsPerDate
-            });
-
-            //used to iterate until you find the date of today to scroll to
-            bool gotTodayScrollValue = false;
-            gotTodayScrollValue = ref
-                .read(appStateProvider.notifier)
-                .calculateIndexOfTodayInPosts(
-                  post,
-                  gotTodayScrollValue,
-                );
-          }
-
-          Map<int, Map<int, List<Post>>> postsByYearAndMonth =
-              organizePostsByYearAndMonth(state.allPosts);
-
-          state = state.copyWith(postsMappedByYearAndMonth: {
-            ...state.postsMappedByYearAndMonth,
-            ...postsByYearAndMonth
-          });
-        },
-      );
+        datePaginationForThisGetCall = newDate;
+      }
     }
   }
 

@@ -96,7 +96,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       final appStateProviderState = ref.read(appStateProvider);
       itemScrollController.scrollTo(
         index: appStateProviderState.valueToScrollToToday,
-        duration: Duration(milliseconds: 1),
+        duration: Duration(milliseconds: 100),
       );
 
       itemPositionsListener.itemPositions.addListener(checkScrolling);
@@ -211,8 +211,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
         .where((element) =>
             element.dateTimeFromString.day == post.dateTimeFromString.day)
         .toList();
-    print('posts for current month');
-    print(postsForCurrentMonth);
+    // print('posts for current month');
+    // print(postsForCurrentMonth);
 
     if (postsForCurrentDay[0].key == post.key) {
       return true;
