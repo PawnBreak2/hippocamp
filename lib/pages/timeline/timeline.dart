@@ -144,8 +144,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool showCenterButton = ref.watch(
-        uiStateProvider.select((state) => state.showCenterButtonInTimeline));
     final postsMappedByDate =
         ref.watch(postListProvider.select((state) => state.postsMappedByDate));
     final postsMappedByYearAndMonth = ref.watch(
@@ -158,54 +156,54 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
 
     return Scaffold(
-      backgroundColor: postsMappedByDate.entries.isEmpty
-          ? const Color.fromRGBO(227, 218, 210, 1)
-          : Colors.white,
-      body: postsMappedByDate.isEmpty
-          ? Column(
-              children: [
-                // Date divider
-                TimelineTimeDivider(date: DateTime.now(), isToday: true),
-                // Text
-                const NoPostsInTimelineSection(),
-              ],
-            )
-          : ScrollablePositionedList.builder(
-              shrinkWrap: true,
-              itemScrollController: itemScrollController,
-              itemPositionsListener: itemPositionsListener,
-              physics: const ClampingScrollPhysics(),
-              itemCount:
-                  TimelineHelpers.countTotalMonths(postsMappedByYearAndMonth),
-              padding: const EdgeInsets.only(bottom: 80),
-              itemBuilder: (_, i) {
-                bool shouldShowYearDivider = false;
+        backgroundColor: postsMappedByDate.entries.isEmpty
+            ? const Color.fromRGBO(227, 218, 210, 1)
+            : Colors.white,
+        body: postsMappedByDate.isEmpty
+            ? Column(
+                children: [
+                  // Date divider
+                  TimelineTimeDivider(date: DateTime.now(), isToday: true),
+                  // Text
+                  const NoPostsInTimelineSection(),
+                ],
+              )
+            : ScrollablePositionedList.builder(
+                shrinkWrap: true,
+                itemScrollController: itemScrollController,
+                itemPositionsListener: itemPositionsListener,
+                physics: const ClampingScrollPhysics(),
+                itemCount:
+                    TimelineHelpers.countTotalMonths(postsMappedByYearAndMonth),
+                padding: const EdgeInsets.only(bottom: 80),
+                itemBuilder: (_, i) {
+                  bool shouldShowYearDivider = false;
 
-                // these are reversed to show the most recent posts first
+                  // these are reversed to show the most recent posts first
 
-                var monthForPost = 12 - (i % 12);
+                  var monthForPost = 12 - (i % 12);
 
-                var yearIndex = (i / 12).floor();
-                var yearForPost = postsMappedByYearAndMonth.keys
-                    .toList()
-                    .reversed
-                    .toList()[yearIndex.toInt()];
+                  var yearIndex = (i / 12).floor();
+                  var yearForPost = postsMappedByYearAndMonth.keys
+                      .toList()
+                      .reversed
+                      .toList()[yearIndex.toInt()];
 
-                final dateForPost = DateTime(yearForPost, monthForPost);
+                  final dateForPost = DateTime(yearForPost, monthForPost);
 
-                if (dateForPost.month == 1) {
-                  shouldShowYearDivider = true;
-                }
+                  if (dateForPost.month == 1) {
+                    shouldShowYearDivider = true;
+                  }
 
-                return Column(
-                  key: ValueKey(dateForPost),
-                  children: [
-                    // Month divider
-                    MonthDivider(
-                        month: dateForPost.month.monthFromInt,
-                        year: dateForPost.year.toString()),
+                  return Column(
+                    key: ValueKey(dateForPost),
+                    children: [
+                      // Month divider
+                      MonthDivider(
+                          month: dateForPost.month.monthFromInt,
+                          year: dateForPost.year.toString()),
 
-                    /*(i == appStateProviderState.valueToScrollToToday)
+                      /*(i == appStateProviderState.valueToScrollToToday)
                         ?
                         // Date divider
                         _timeDivider(
@@ -214,111 +212,118 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                           )
                         : SizedBox(),*/
 
-                    // Posts per date
-                    for (var post in postsMappedByYearAndMonth[
-                        dateForPost.year]![dateForPost.month]!)
-                      Column(
-                        children: [
-                          /// TODO: spostare nello stato tutta questa roba?
-                          (DateTime.now().month == dateForPost.month &&
-                                  TimelineHelpers.shouldShowTodayDivider(
-                                      post: post,
-                                      postsMappedByYearAndMonth:
-                                          postsMappedByYearAndMonth))
-                              ? TimelineTimeDivider(
-                                  date: DateTime.now(), isToday: true)
-                              : const SizedBox(),
-                          (TimelineHelpers.shouldShowTimeDivider(
-                                      post: post,
-                                      postsMappedByDate: postsMappedByDate,
-                                      postsMappedByYearAndMonth:
-                                          postsMappedByYearAndMonth) &&
-                                  !TimelineHelpers.shouldShowTodayDivider(
-                                      post: post,
-                                      postsMappedByYearAndMonth:
-                                          postsMappedByYearAndMonth))
-                              ? TimelineTimeDivider(
-                                  date: post.dateTimeFromString, isToday: false)
-                              : const SizedBox(),
-                          Consumer(
-                            builder: (context, ref, child) {
-                              final isSelectingPosts = ref.watch(
-                                  appStateProvider.select(
-                                      (state) => state.isSelectingPosts));
+                      // Posts per date
+                      for (var post in postsMappedByYearAndMonth[
+                          dateForPost.year]![dateForPost.month]!)
+                        Column(
+                          children: [
+                            /// TODO: spostare nello stato tutta questa roba?
+                            (DateTime.now().month == dateForPost.month &&
+                                    TimelineHelpers.shouldShowTodayDivider(
+                                        post: post,
+                                        postsMappedByYearAndMonth:
+                                            postsMappedByYearAndMonth))
+                                ? TimelineTimeDivider(
+                                    date: DateTime.now(), isToday: true)
+                                : const SizedBox(),
+                            (TimelineHelpers.shouldShowTimeDivider(
+                                        post: post,
+                                        postsMappedByDate: postsMappedByDate,
+                                        postsMappedByYearAndMonth:
+                                            postsMappedByYearAndMonth) &&
+                                    !TimelineHelpers.shouldShowTodayDivider(
+                                        post: post,
+                                        postsMappedByYearAndMonth:
+                                            postsMappedByYearAndMonth))
+                                ? TimelineTimeDivider(
+                                    date: post.dateTimeFromString,
+                                    isToday: false)
+                                : const SizedBox(),
+                            Consumer(
+                              builder: (context, ref, child) {
+                                final isSelectingPosts = ref.watch(
+                                    appStateProvider.select(
+                                        (state) => state.isSelectingPosts));
 
-                              return TimeEventItem(
-                                post: post,
-                                isSelectedItem:
-                                    postsProviderNotifier.postIsSelected(post),
-                                showSelectionCircle: isSelectingPosts,
-                                onTap: isSelectingPosts
-                                    ? () {
-                                        postsProviderNotifier
-                                            .addOrRemoveSelectedPost(
-                                                post: post);
-                                      }
-                                    : null,
-                                onLongPress: () {
-                                  if (isSelectingPosts) {
+                                return TimeEventItem(
+                                  post: post,
+                                  isSelectedItem: postsProviderNotifier
+                                      .postIsSelected(post),
+                                  showSelectionCircle: isSelectingPosts,
+                                  onTap: isSelectingPosts
+                                      ? () {
+                                          postsProviderNotifier
+                                              .addOrRemoveSelectedPost(
+                                                  post: post);
+                                        }
+                                      : null,
+                                  onLongPress: () {
+                                    if (isSelectingPosts) {
+                                      appStateProviderNotifier
+                                          .setIsSelectingPosts(false);
+                                      postsProviderNotifier
+                                          .addOrRemoveSelectedPost();
+                                      setState(() {});
+
+                                      return;
+                                    }
+
                                     appStateProviderNotifier
-                                        .setIsSelectingPosts(false);
+                                        .setIsSelectingPosts(true);
                                     postsProviderNotifier
-                                        .addOrRemoveSelectedPost();
+                                        .addOrRemoveSelectedPost(post: post);
                                     setState(() {});
-
-                                    return;
-                                  }
-
-                                  appStateProviderNotifier
-                                      .setIsSelectingPosts(true);
-                                  postsProviderNotifier.addOrRemoveSelectedPost(
-                                      post: post);
-                                  setState(() {});
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    shouldShowYearDivider
-                        ? YearDivider(year: dateForPost.year.toString())
-                        : const SizedBox(),
-                  ],
-                );
-              },
-            ),
-      floatingActionButton: showCenterButton
-          ? Container(
-              alignment: Alignment.centerRight,
-              child: InkWell(
-                onTap: () {
-                  itemScrollController.scrollTo(
-                    index: appStateProviderState.valueToScrollToToday,
-                    duration: Duration(milliseconds: 1),
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      shouldShowYearDivider
+                          ? YearDivider(year: dateForPost.year.toString())
+                          : const SizedBox(),
+                    ],
                   );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(94, 95, 95, 1),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10,
-                        spreadRadius: .1,
-                        color: Colors.black45,
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.all(8),
-                  child: Icon(
-                    Icons.compress_rounded,
-                    size: 18,
-                    color: Colors.white,
-                  ),
-                ),
               ),
-            )
-          : null,
-    );
+        floatingActionButton: Consumer(
+          builder: (context, ref, child) {
+            bool showCenterButton = ref.watch(uiStateProvider
+                .select((state) => state.showCenterButtonInTimeline));
+
+            return showCenterButton
+                ? Container(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        itemScrollController.scrollTo(
+                          index: appStateProviderState.valueToScrollToToday,
+                          duration: Duration(milliseconds: 1),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(94, 95, 95, 1),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 10,
+                              spreadRadius: .1,
+                              color: Colors.black45,
+                            ),
+                          ],
+                        ),
+                        padding: EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.compress_rounded,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox();
+          },
+        ));
   }
 }
