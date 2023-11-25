@@ -7,6 +7,7 @@ import 'package:hippocamp/models/error_call_model.dart';
 import 'package:hippocamp/models/repositories/post_repository.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
+import 'package:hippocamp/providers/ui_state_provider.dart';
 
 class PostListNotifier extends Notifier<PostsRepository> {
   @override
@@ -43,6 +44,8 @@ class PostListNotifier extends Notifier<PostsRepository> {
     return null; // No posts found in the year
   }
 
+  /// Used to remove and add posts to the selectedPosts list (mainly for duplication, assigning of categories, and deletion).
+  /// This affects only the local state of the application
   void addOrRemoveSelectedPost({Post? post}) {
     if (post == null) {
       state = state.copyWith(selectedPosts: []);
@@ -59,23 +62,32 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
+  /// Used to assign one or more posts to a category.
+  /// This modifies the remote database, the local state of the application, and the UI state of the application.
+  /// The change is written also to the local database.
   Future<bool> assignPostsToCategory(
       List<String> postsKeys, String categoryKey) async {
     final resp = await _postsClient.assignPostsToCategory(
         postsKeys: postsKeys, categoryKey: categoryKey);
-    bool success = resp.fold(
+    return resp.fold(
       (l) => false,
       (r) {
+        for (String key in postsKeys) {
+          // find the post in allPosts
+          final post = state.allPosts.firstWhere((e) => e.key == key);
+
+          // create a new post with the new category
+
+          // remove post from allPosts
+          state = state.copyWith(
+            allPosts: [
+              ...state.allPosts.where((e) => e.key != key),
+            ],
+          );
+        }
         return true;
       },
     );
-    if (success) {
-      state = state.copyWith(selectedPosts: []);
-      await getPosts();
-      return true;
-    } else {
-      return false;
-    }
   }
 
   Future<void> getPosts(
@@ -306,6 +318,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
       (l) => false,
       (createdPost) {
         state = state.copyWith(allPosts: [...state.allPosts, createdPost]);
+        PostsProviderHelpers.reorganizePostsAfterUpdate(ref: ref);
         return true;
       },
     );
@@ -322,23 +335,38 @@ class PostListNotifier extends Notifier<PostsRepository> {
 
     return resp.fold(
       (l) => false,
-      (r) {
-        getPosts();
+      (updatedPost) {
+        // remove the old post
+
+        state = state.copyWith(
+          allPosts: [
+            ...state.allPosts.where((e) => e.key != updatedPost.key),
+          ],
+        );
+
+        // add the updated post
+
+        state = state.copyWith(allPosts: [...state.allPosts, updatedPost]);
+        PostsProviderHelpers.reorganizePostsAfterUpdate(ref: ref);
         return true;
       },
     );
   }
 
-  Future<bool> duplicatePosts({
-    required List<String> postKeys,
+  Future<bool> duplicatePost({
+    required String postKey,
     bool defaultDate = true,
   }) async {
-    for (var i in postKeys) {
-      await _postsClient.duplicatePosts(postKey: i);
-    }
+    ref.read(appStateProvider.notifier).setIsSelectingPosts(false);
+    final resp = await _postsClient.duplicatePosts(postKey: postKey);
+
+    resp.fold((l) => false, (duplicatedPost) {
+      state = state
+          .copyWith(selectedPosts: [...state.selectedPosts, duplicatedPost]);
+    });
 
     state = state.copyWith(selectedPosts: []);
-    await getPosts();
+    PostsProviderHelpers.reorganizePostsAfterUpdate(ref: ref);
 
     return true;
   }
@@ -347,15 +375,22 @@ class PostListNotifier extends Notifier<PostsRepository> {
     final resp = await _postsClient.deletePosts(
       postsKey: postsKey,
     );
+    ref.read(appStateProvider.notifier).setIsSelectingPosts(false);
 
     return resp.fold(
       (l) => false,
-      (r) async {
+      (r) {
         final appStateProviderNotifier = ref.read(appStateProvider.notifier);
         appStateProviderNotifier.setIsSelectingPosts(false);
-        state = state.copyWith(selectedPosts: []);
 
-        await getPosts();
+        // remove the deleted post
+        state = state.copyWith(
+          allPosts: [
+            ...state.allPosts.where((e) => !postsKey.contains(e.key)),
+          ],
+        );
+        state = state.copyWith(selectedPosts: []);
+        PostsProviderHelpers.reorganizePostsAfterUpdate(ref: ref);
         return true;
       },
     );

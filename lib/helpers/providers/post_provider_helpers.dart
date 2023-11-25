@@ -28,8 +28,6 @@ class PostsProviderHelpers {
             allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
               ..sort((a, b) => b.date.compareTo(a.date)));
 
-        ref.read(appStateProvider.notifier).resetValueToScrollToday();
-
         for (Post post in state.allPosts) {
           // maps posts by date & puts them into the post repository
           final postsPerDate = state.postsMappedByDate[post.date] ?? [];
@@ -39,13 +37,6 @@ class PostsProviderHelpers {
             ...state.postsMappedByDate,
             post.date: postsPerDate
           });
-          //used to iterate until you find the date of today to scroll to
-          bool gotTodayScrollValue = false;
-          gotTodayScrollValue =
-              ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
-                    post,
-                    gotTodayScrollValue,
-                  );
         }
 
         Map<int, Map<int, List<Post>>> postsByYearAndMonth =
@@ -59,6 +50,34 @@ class PostsProviderHelpers {
         ref.read(postListProvider.notifier).state = state;
       },
     );
+  }
+
+  static void reorganizePostsAfterUpdate(
+      {required NotifierProviderRef ref}) async {
+    /// TODO: ottimizzare e vedere se è necessario tenere allPosts nello stato
+
+    var state = ref.read(postListProvider.notifier).state;
+
+    for (Post post in state.allPosts) {
+      // maps posts by date & puts them into the post repository
+      final postsPerDate = state.postsMappedByDate[post.date] ?? [];
+      postsPerDate.add(post);
+      postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
+      state = state.copyWith(postsMappedByDate: {
+        ...state.postsMappedByDate,
+        post.date: postsPerDate
+      });
+    }
+
+    Map<int, Map<int, List<Post>>> postsByYearAndMonth =
+        organizePostsByYearAndMonth(state.allPosts);
+
+    state = state.copyWith(postsMappedByYearAndMonth: {
+      ...state.postsMappedByYearAndMonth,
+      ...postsByYearAndMonth
+    });
+    // final sync of state
+    ref.read(postListProvider.notifier).state = state;
   }
 
   static Map<int, Map<int, List<Post>>> organizePostsByYearAndMonth(

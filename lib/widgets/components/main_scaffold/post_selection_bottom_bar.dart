@@ -99,9 +99,11 @@ class PostSelectionBottomBar extends StatelessWidget {
                           1);
                       return InkWell(
                         onTap: () async {
-                          await postsProviderNotifier.duplicatePosts(
-                            postKeys: selectedPosts.map((e) => e.key).toList(),
-                          );
+                          await postsProviderNotifier.duplicatePost(
+                              postKey: selectedPosts
+                                  .map((e) => e.key)
+                                  .toList()
+                                  .single);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),

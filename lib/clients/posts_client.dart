@@ -176,7 +176,7 @@ class PostsClient {
     );
   }
 
-  Future<Either<ErrorCallModel, bool>> duplicatePosts(
+  Future<Either<ErrorCallModel, Post>> duplicatePosts(
       {required String postKey}) async {
     final token = await SecureStorage.read(StorageKeys.token);
 
@@ -187,7 +187,7 @@ class PostsClient {
       },
     );
 
-    if (resp.statusCode == 200) return Right(true);
+    if (resp.statusCode == 200) return Right(Post.fromMap(resp.data));
 
     return Left(
       ErrorCallModel(
@@ -295,7 +295,7 @@ class PostsClient {
     );
   }
 
-  Future<Either<ErrorCallModel, bool>> updatePost({
+  Future<Either<ErrorCallModel, Post>> updatePost({
     required String key,
     required CreatePost createPost,
   }) async {
@@ -309,7 +309,7 @@ class PostsClient {
       },
     );
 
-    if (resp.statusCode == 200) return Right(true);
+    if (resp.statusCode == 200) return Right(Post.fromMap(resp.data));
 
     return Left(
       ErrorCallModel(
