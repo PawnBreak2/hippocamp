@@ -104,10 +104,11 @@ class _FinancePageState extends ConsumerState<HomePage> {
       (timer) async {
         if (_textEditingController.text.isEmpty)
           await postProvider.getPosts();
-        else
+        else {
           await postProvider.searchPosts(_textEditingController.text);
-        _timerForSearching = null;
-        timer.cancel();
+          _timerForSearching = null;
+          timer.cancel();
+        }
       },
     );
     setState(() {});
@@ -268,6 +269,9 @@ class _FinancePageState extends ConsumerState<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+        ),
         heroTag: "FloatingActionButton_timeline",
         onPressed: () {
           if (_index == 0)
@@ -285,7 +289,7 @@ class _FinancePageState extends ConsumerState<HomePage> {
               ),
             );
         },
-        backgroundColor: Colors.white,
+        backgroundColor: CustomColors.white243,
         child: Icon(
           Icons.add,
           color: CustomColors.lightRed,

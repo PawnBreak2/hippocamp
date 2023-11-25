@@ -326,9 +326,13 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                                 : const SizedBox(),
                             Consumer(
                               builder: (context, ref, child) {
-                                final isSelectingPosts = ref.watch(
+                                final bool isSelectingPosts = ref.watch(
                                     appStateProvider.select(
                                         (state) => state.isSelectingPosts));
+                                bool isThereOnlyThisPostSelected = (ref.watch(
+                                    postListProvider.select((state) =>
+                                        state.selectedPosts.length == 1 &&
+                                        state.selectedPosts.contains(post))));
 
                                 return TimeEventItem(
                                   post: post,
@@ -340,6 +344,10 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                                           postsProviderNotifier
                                               .addOrRemoveSelectedPost(
                                                   post: post);
+                                          if (isThereOnlyThisPostSelected) {
+                                            appStateProviderNotifier
+                                                .setIsSelectingPosts(false);
+                                          }
                                         }
                                       : null,
                                   onLongPress: () {

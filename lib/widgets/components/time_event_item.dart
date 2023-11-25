@@ -20,6 +20,8 @@ class TimeEventItem extends StatelessWidget {
   final bool isSelectedItem;
   final bool showSelectionCircle;
 
+  /// Widget that represents a single post in the timeline.
+
   const TimeEventItem({
     required this.post,
     this.isLastOne = false,
@@ -79,13 +81,13 @@ class TimeEventItem extends StatelessWidget {
           children: [
             // Item data
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Data 1
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -124,19 +126,19 @@ class TimeEventItem extends StatelessWidget {
                   if (_chipsBoxList.isNotEmpty)
                     Container(
                       height: 30,
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         top: 8,
                       ),
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           left: 74,
                           right: 32,
                         ),
                         itemBuilder: (_, i) => listChips[i],
                         itemCount: listChips.length,
-                        separatorBuilder: (_, __) => SizedBox(width: 8),
+                        separatorBuilder: (_, __) => const SizedBox(width: 8),
                       ),
                     ),
                 ],
@@ -145,21 +147,7 @@ class TimeEventItem extends StatelessWidget {
 
             // Selection circle
             if (showSelectionCircle)
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  color: isSelectedItem ? CustomColors.primaryRed : Colors.grey,
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 3, color: Colors.white),
-                ),
-                width: 26,
-                height: 26,
-                child: Icon(
-                  Icons.circle,
-                  color: isSelectedItem ? Colors.white : Colors.grey,
-                  size: 6,
-                ),
-              ),
+              TimeEventItemSelectionCircle(isSelectedItem: isSelectedItem),
           ],
         ),
       ),
@@ -169,12 +157,12 @@ class TimeEventItem extends StatelessWidget {
   Widget _chipBox({required String name, required String icon}) {
     return Container(
       width: 110,
-      padding: EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         color: Colors.white,
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: Colors.black12,
             spreadRadius: 1,
             blurRadius: 1,
@@ -189,11 +177,11 @@ class TimeEventItem extends StatelessWidget {
             width: 16,
             height: 16,
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Expanded(
             child: Text(
               name,
-              style: TextStyle(
+              style: const TextStyle(
                 color: CustomColors.primaryGrey,
                 fontSize: 12,
               ),
@@ -201,6 +189,34 @@ class TimeEventItem extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TimeEventItemSelectionCircle extends StatelessWidget {
+  const TimeEventItemSelectionCircle({
+    super.key,
+    required this.isSelectedItem,
+  });
+
+  final bool isSelectedItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: isSelectedItem ? CustomColors.primaryRed : Colors.grey,
+        shape: BoxShape.circle,
+        border: Border.all(width: 3, color: Colors.white),
+      ),
+      width: 26,
+      height: 26,
+      child: Icon(
+        Icons.circle,
+        color: isSelectedItem ? Colors.white : Colors.grey,
+        size: 6,
       ),
     );
   }

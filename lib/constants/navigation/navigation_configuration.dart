@@ -3,7 +3,7 @@ import 'package:hippocamp/constants/navigation/routeNames.dart';
 import 'package:hippocamp/constants/storage_keys.dart';
 import 'package:hippocamp/pages/home/home_page.dart';
 import 'package:hippocamp/pages/login/login_page.dart';
-import 'package:hippocamp/pages/main/main_scaffold.dart';
+import 'package:hippocamp/pages/main_scaffold/main_scaffold.dart';
 import 'package:hippocamp/pages/splash_page/splash_page.dart';
 import 'package:hippocamp/storage/local_storage.dart';
 
