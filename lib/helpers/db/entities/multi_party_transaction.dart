@@ -3,7 +3,8 @@ import 'package:hippocamp/constants/db/table_names.dart';
 
 @Entity(tableName: TableNamesForDb.multiPartyTransactions)
 class MultiPartyTransactionEntity {
-  @primaryKey
+  @PrimaryKey(autoGenerate: true)
+  final String key;
   @ColumnInfo(name: 'originating_post_key')
   final String
       originatingPostKey; // This is the key of the post that this transaction originated from
@@ -35,6 +36,7 @@ class MultiPartyTransactionEntity {
   final String toWalletTypeIconUrl;
 
   MultiPartyTransactionEntity({
+    required this.key,
     required this.originatingPostKey,
     required this.amountIn,
     required this.amountOut,

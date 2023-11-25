@@ -15,6 +15,7 @@ import 'package:hippocamp/models/responses/domains_response_model.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/providers/user_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/storage/local_storage.dart';
@@ -51,10 +52,14 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       _getAllWallets(),
       _setUserProfile(),
       _getAttachmentTypesAndPrecacheImages(),
+      _getAllCategoriesAndPrecacheImages()
     ]).whenComplete(() {
       var endTime = DateTime.now();
       var duration = endTime.difference(startTime);
       setValueToScrollToToday();
+      ref
+          .read(uiStateProvider.notifier)
+          .setSelectedDomainKey(ref.read(appStateProvider).domains[0].key);
       print('initialization finished in $duration milliseconds ✅');
       context.goNamed(routeMap[routeNames.mainScaffold]);
     });
@@ -117,6 +122,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Future<void> _getAllCategoriesAndPrecacheImages() async {
     var startTime = DateTime.now();
     List<PostCategory> categories = await appStateNotifier.getCategories();
+    print(categories.length);
     await _precacheImages(elements: categories);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);

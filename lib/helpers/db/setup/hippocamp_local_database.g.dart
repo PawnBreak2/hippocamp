@@ -106,7 +106,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `single_party_transactions` (`key` TEXT PRIMARY KEY AUTOINCREMENT NOT NULL, `originating_post_key` TEXT NOT NULL, `amount` REAL NOT NULL, `currency_code` TEXT NOT NULL, `currency_symbol` TEXT NOT NULL, `date` TEXT NOT NULL, `type` TEXT NOT NULL, `wallet` TEXT NOT NULL, `wallet_name` TEXT NOT NULL, `wallet_type_icon_url` TEXT NOT NULL, `ordinary` INTEGER NOT NULL, `variable` INTEGER NOT NULL, `planned` INTEGER NOT NULL, `tax_relevant` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `multi_party_transactions` (`originating_post_key` TEXT NOT NULL, `amount_in` REAL NOT NULL, `amount_out` REAL NOT NULL, `amount_in_currency_code` TEXT NOT NULL, `amount_in_currency_symbol` TEXT NOT NULL, `amount_out_currency_code` TEXT NOT NULL, `amount_out_currency_symbol` TEXT NOT NULL, `date` TEXT NOT NULL, `type` TEXT NOT NULL, `from_wallet` TEXT NOT NULL, `from_wallet_name` TEXT NOT NULL, `from_wallet_type_icon_url` TEXT NOT NULL, `to_wallet` TEXT NOT NULL, `to_wallet_name` TEXT NOT NULL, `to_wallet_type_icon_url` TEXT NOT NULL, PRIMARY KEY (`originating_post_key`))');
+            'CREATE TABLE IF NOT EXISTS `multi_party_transactions` (`key` TEXT PRIMARY KEY AUTOINCREMENT NOT NULL, `originating_post_key` TEXT NOT NULL, `amount_in` REAL NOT NULL, `amount_out` REAL NOT NULL, `amount_in_currency_code` TEXT NOT NULL, `amount_in_currency_symbol` TEXT NOT NULL, `amount_out_currency_code` TEXT NOT NULL, `amount_out_currency_symbol` TEXT NOT NULL, `date` TEXT NOT NULL, `type` TEXT NOT NULL, `from_wallet` TEXT NOT NULL, `from_wallet_name` TEXT NOT NULL, `from_wallet_type_icon_url` TEXT NOT NULL, `to_wallet` TEXT NOT NULL, `to_wallet_name` TEXT NOT NULL, `to_wallet_type_icon_url` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -853,8 +853,9 @@ class _$MultiPartyTransactionEntityDao extends MultiPartyTransactionEntityDao {
         _multiPartyTransactionEntityUpdateAdapter = UpdateAdapter(
             database,
             'multi_party_transactions',
-            ['originating_post_key'],
+            ['key'],
             (MultiPartyTransactionEntity item) => <String, Object?>{
+                  'key': item.key,
                   'originating_post_key': item.originatingPostKey,
                   'amount_in': item.amountIn,
                   'amount_out': item.amountOut,
@@ -874,8 +875,9 @@ class _$MultiPartyTransactionEntityDao extends MultiPartyTransactionEntityDao {
         _multiPartyTransactionEntityDeletionAdapter = DeletionAdapter(
             database,
             'multi_party_transactions',
-            ['originating_post_key'],
+            ['key'],
             (MultiPartyTransactionEntity item) => <String, Object?>{
+                  'key': item.key,
                   'originating_post_key': item.originatingPostKey,
                   'amount_in': item.amountIn,
                   'amount_out': item.amountOut,
@@ -910,6 +912,7 @@ class _$MultiPartyTransactionEntityDao extends MultiPartyTransactionEntityDao {
     return _queryAdapter.query(
         'SELECT * FROM multi_party_transactions WHERE key = ?1',
         mapper: (Map<String, Object?> row) => MultiPartyTransactionEntity(
+            key: row['key'] as String,
             originatingPostKey: row['originating_post_key'] as String,
             amountIn: row['amount_in'] as double,
             amountOut: row['amount_out'] as double,
@@ -933,6 +936,7 @@ class _$MultiPartyTransactionEntityDao extends MultiPartyTransactionEntityDao {
   Future<List<MultiPartyTransactionEntity>> getAllTransactions() async {
     return _queryAdapter.queryList('SELECT * FROM multi_party_transactions',
         mapper: (Map<String, Object?> row) => MultiPartyTransactionEntity(
+            key: row['key'] as String,
             originatingPostKey: row['originating_post_key'] as String,
             amountIn: row['amount_in'] as double,
             amountOut: row['amount_out'] as double,
@@ -956,7 +960,7 @@ class _$MultiPartyTransactionEntityDao extends MultiPartyTransactionEntityDao {
       String originatingPostKey) async {
     return _queryAdapter.queryList(
         'SELECT * FROM multi_party_transactions WHERE originating_post_key = ?1',
-        mapper: (Map<String, Object?> row) => MultiPartyTransactionEntity(originatingPostKey: row['originating_post_key'] as String, amountIn: row['amount_in'] as double, amountOut: row['amount_out'] as double, amountInCurrencyCode: row['amount_in_currency_code'] as String, amountInCurrencySymbol: row['amount_in_currency_symbol'] as String, amountOutCurrencyCode: row['amount_out_currency_code'] as String, amountOutCurrencySymbol: row['amount_out_currency_symbol'] as String, date: row['date'] as String, type: row['type'] as String, fromWallet: row['from_wallet'] as String, fromWalletName: row['from_wallet_name'] as String, fromWalletTypeIconUrl: row['from_wallet_type_icon_url'] as String, toWallet: row['to_wallet'] as String, toWalletName: row['to_wallet_name'] as String, toWalletTypeIconUrl: row['to_wallet_type_icon_url'] as String),
+        mapper: (Map<String, Object?> row) => MultiPartyTransactionEntity(key: row['key'] as String, originatingPostKey: row['originating_post_key'] as String, amountIn: row['amount_in'] as double, amountOut: row['amount_out'] as double, amountInCurrencyCode: row['amount_in_currency_code'] as String, amountInCurrencySymbol: row['amount_in_currency_symbol'] as String, amountOutCurrencyCode: row['amount_out_currency_code'] as String, amountOutCurrencySymbol: row['amount_out_currency_symbol'] as String, date: row['date'] as String, type: row['type'] as String, fromWallet: row['from_wallet'] as String, fromWalletName: row['from_wallet_name'] as String, fromWalletTypeIconUrl: row['from_wallet_type_icon_url'] as String, toWallet: row['to_wallet'] as String, toWalletName: row['to_wallet_name'] as String, toWalletTypeIconUrl: row['to_wallet_type_icon_url'] as String),
         arguments: [originatingPostKey]);
   }
 

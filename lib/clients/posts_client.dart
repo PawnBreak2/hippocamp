@@ -198,6 +198,29 @@ class PostsClient {
     );
   }
 
+  Future<Either<ErrorCallModel, bool>> assignPostsToCategory(
+      {required List<String> postsKeys, required String categoryKey}) async {
+    final token = await SecureStorage.read(StorageKeys.token);
+
+    final resp = await _dio.patch(
+      url:
+          "${Urls.baseUrl}$_posts?key=${postsKeys.map((e) => e).toList().join(',')}&category=${categoryKey}",
+      headers: {
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (resp.statusCode == 200) return Right(true);
+
+    return Left(
+      ErrorCallModel(
+        statusCode: resp.statusCode ?? 0,
+        type: (resp.data ?? {})["title"],
+        message: (resp.data ?? {})["localizedMessage"],
+      ),
+    );
+  }
+
   Future<Either<ErrorCallModel, bool>> deletePosts(
       {required List<String> postsKey}) async {
     final token = await SecureStorage.read(StorageKeys.token);
@@ -248,7 +271,7 @@ class PostsClient {
     return resp.statusCode == 200;
   }
 
-  Future<Either<ErrorCallModel, bool>> createPost({
+  Future<Either<ErrorCallModel, Post>> createPost({
     required CreatePost createPost,
   }) async {
     final token = await SecureStorage.read(StorageKeys.token);
@@ -261,7 +284,7 @@ class PostsClient {
       },
     );
 
-    if (resp.statusCode == 201) return Right(true);
+    if (resp.statusCode == 201) return Right(Post.fromMap(resp.data));
 
     return Left(
       ErrorCallModel(

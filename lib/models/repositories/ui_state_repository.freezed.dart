@@ -16,7 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$UIState {
-  bool get showCenterButtonInTimeline => throw _privateConstructorUsedError;
+  bool get showCenterButtonInTimeline =>
+      throw _privateConstructorUsedError; // used for cases in which we need to know if the user is selecting a domain or not
+  String get currentlySelectedDomainKey => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UIStateCopyWith<UIState> get copyWith => throw _privateConstructorUsedError;
@@ -27,7 +29,8 @@ abstract class $UIStateCopyWith<$Res> {
   factory $UIStateCopyWith(UIState value, $Res Function(UIState) then) =
       _$UIStateCopyWithImpl<$Res, UIState>;
   @useResult
-  $Res call({bool showCenterButtonInTimeline});
+  $Res call(
+      {bool showCenterButtonInTimeline, String currentlySelectedDomainKey});
 }
 
 /// @nodoc
@@ -44,12 +47,17 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
   @override
   $Res call({
     Object? showCenterButtonInTimeline = null,
+    Object? currentlySelectedDomainKey = null,
   }) {
     return _then(_value.copyWith(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
           ? _value.showCenterButtonInTimeline
           : showCenterButtonInTimeline // ignore: cast_nullable_to_non_nullable
               as bool,
+      currentlySelectedDomainKey: null == currentlySelectedDomainKey
+          ? _value.currentlySelectedDomainKey
+          : currentlySelectedDomainKey // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -61,7 +69,8 @@ abstract class _$$UIStateImplCopyWith<$Res> implements $UIStateCopyWith<$Res> {
       __$$UIStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool showCenterButtonInTimeline});
+  $Res call(
+      {bool showCenterButtonInTimeline, String currentlySelectedDomainKey});
 }
 
 /// @nodoc
@@ -76,12 +85,17 @@ class __$$UIStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? showCenterButtonInTimeline = null,
+    Object? currentlySelectedDomainKey = null,
   }) {
     return _then(_$UIStateImpl(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
           ? _value.showCenterButtonInTimeline
           : showCenterButtonInTimeline // ignore: cast_nullable_to_non_nullable
               as bool,
+      currentlySelectedDomainKey: null == currentlySelectedDomainKey
+          ? _value.currentlySelectedDomainKey
+          : currentlySelectedDomainKey // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -89,15 +103,21 @@ class __$$UIStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
-  const _$UIStateImpl({this.showCenterButtonInTimeline = false});
+  const _$UIStateImpl(
+      {this.showCenterButtonInTimeline = false,
+      this.currentlySelectedDomainKey = ''});
 
   @override
   @JsonKey()
   final bool showCenterButtonInTimeline;
+// used for cases in which we need to know if the user is selecting a domain or not
+  @override
+  @JsonKey()
+  final String currentlySelectedDomainKey;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline)';
+    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
   }
 
   @override
@@ -106,7 +126,9 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
     properties
       ..add(DiagnosticsProperty('type', 'UIState'))
       ..add(DiagnosticsProperty(
-          'showCenterButtonInTimeline', showCenterButtonInTimeline));
+          'showCenterButtonInTimeline', showCenterButtonInTimeline))
+      ..add(DiagnosticsProperty(
+          'currentlySelectedDomainKey', currentlySelectedDomainKey));
   }
 
   @override
@@ -117,11 +139,16 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
             (identical(other.showCenterButtonInTimeline,
                     showCenterButtonInTimeline) ||
                 other.showCenterButtonInTimeline ==
-                    showCenterButtonInTimeline));
+                    showCenterButtonInTimeline) &&
+            (identical(other.currentlySelectedDomainKey,
+                    currentlySelectedDomainKey) ||
+                other.currentlySelectedDomainKey ==
+                    currentlySelectedDomainKey));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, showCenterButtonInTimeline);
+  int get hashCode => Object.hash(
+      runtimeType, showCenterButtonInTimeline, currentlySelectedDomainKey);
 
   @JsonKey(ignore: true)
   @override
@@ -131,11 +158,14 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
 }
 
 abstract class _UIState implements UIState {
-  const factory _UIState({final bool showCenterButtonInTimeline}) =
-      _$UIStateImpl;
+  const factory _UIState(
+      {final bool showCenterButtonInTimeline,
+      final String currentlySelectedDomainKey}) = _$UIStateImpl;
 
   @override
   bool get showCenterButtonInTimeline;
+  @override // used for cases in which we need to know if the user is selecting a domain or not
+  String get currentlySelectedDomainKey;
   @override
   @JsonKey(ignore: true)
   _$$UIStateImplCopyWith<_$UIStateImpl> get copyWith =>

@@ -182,7 +182,6 @@ class AppStateNotifier extends Notifier<AppState> {
   Future<List<PostCategory>> getCategories(
       {bool forceCall = false, String? key}) async {
     if (state.categories.isNotEmpty && !forceCall) return state.categories;
-
     final resp = await _appStateClient.getCategories(key: key);
 
     resp.fold(

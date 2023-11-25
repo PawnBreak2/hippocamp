@@ -59,6 +59,25 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
+  Future<bool> assignPostsToCategory(
+      List<String> postsKeys, String categoryKey) async {
+    final resp = await _postsClient.assignPostsToCategory(
+        postsKeys: postsKeys, categoryKey: categoryKey);
+    bool success = resp.fold(
+      (l) => false,
+      (r) {
+        return true;
+      },
+    );
+    if (success) {
+      state = state.copyWith(selectedPosts: []);
+      await getPosts();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<void> getPosts(
       {bool past = true, monthsToGoBack = 1, yearsToGoForward = 1}) async {
     DateTime datePaginationForThisGetCall =
@@ -285,12 +304,14 @@ class PostListNotifier extends Notifier<PostsRepository> {
 
     return resp.fold(
       (l) => false,
-      (r) {
-        getPosts();
+      (createdPost) {
+        state = state.copyWith(allPosts: [...state.allPosts, createdPost]);
         return true;
       },
     );
   }
+
+  /// TODO: implementare con SQLite
 
   Future<bool> updatePost(
       {required String key, required CreatePost postBody}) async {

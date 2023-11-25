@@ -10,6 +10,10 @@ class UIStateNotifier extends Notifier<UIState> {
   void setShowCenterButtonInTimeline(bool v) {
     state = state.copyWith(showCenterButtonInTimeline: v);
   }
+
+  void setSelectedDomainKey(String key) {
+    state = state.copyWith(currentlySelectedDomainKey: key);
+  }
 }
 
 final uiStateProvider =

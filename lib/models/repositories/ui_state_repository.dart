@@ -8,6 +8,10 @@ part 'ui_state_repository.freezed.dart';
 
 @freezed
 class UIState with _$UIState {
-  const factory UIState({@Default(false) bool showCenterButtonInTimeline}) =
-      _UIState;
+  const factory UIState({
+    @Default(false) bool showCenterButtonInTimeline,
+
+    // used for cases in which we need to know if the user is selecting a domain or not
+    @Default('') String currentlySelectedDomainKey,
+  }) = _UIState;
 }

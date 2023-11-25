@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hippocamp/constants/common.dart';
+import 'package:hippocamp/pages/posts-creation/post_creation_dialog.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocamp/widgets/components/bottom_bar/change_category_dialog.dart';
+import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
 
 class PostSelectionBottomBar extends StatelessWidget {
   /// Bottom bar that appears when the user is selecting posts.
@@ -81,6 +86,52 @@ class PostSelectionBottomBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Material(
+                  color: Colors.transparent,
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final postsProviderNotifier =
+                          ref.read(postListProvider.notifier);
+                      final selectedPosts =
+                          ref.read(postListProvider).selectedPosts;
+                      bool isThereOnlyOnePostSelected = (ref.watch(
+                              postListProvider.select(
+                                  (state) => state.selectedPosts.length)) ==
+                          1);
+                      return InkWell(
+                        onTap: () async {
+                          await postsProviderNotifier.duplicatePosts(
+                            postKeys: selectedPosts.map((e) => e.key).toList(),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: isThereOnlyOnePostSelected
+                              ? const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.copy,
+                                      color: textColor,
+                                      size: 20,
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      "Duplica\npost",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox(),
+                        ),
+                      );
+                    },
+                  )),
+              const SizedBox(width: 12),
+              Material(
                 color: Colors.transparent,
                 child: Consumer(
                   builder: (context, ref, child) {
@@ -90,52 +141,44 @@ class PostSelectionBottomBar extends StatelessWidget {
 
                     return InkWell(
                       onTap: () async {
-                        await postsProviderNotifier.duplicatePosts(
-                          postKeys: postsProviderState.selectedPosts
-                              .map((e) => e.key)
-                              .toList(),
-                        );
+                        final category =
+                            await CustomBottomSheet.showDraggableBottomSheet(
+                          context,
+                          (controller) => ChangeCategoryDialog(
+                            scrollController: controller,
+                            selectNewCategory: true,
+                          ),
+                        ).then((value) => ref
+                                .read(uiStateProvider.notifier)
+                                .setSelectedDomainKey(
+                                    ref.read(appStateProvider).domains[0].key));
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Consumer(
-                          builder: (context, ref, child) {
-                            bool isThereOnlyOnePostSelected = (ref.watch(
-                                    postListProvider.select((state) =>
-                                        state.selectedPosts.length)) ==
-                                1);
-
-                            if (isThereOnlyOnePostSelected) {
-                              return const Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.copy,
-                                    color: textColor,
-                                    size: 20,
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "Duplica\npost",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                                Constants.iconAssetsPath +
+                                    "nav-bar-category.png",
+                                color: textColor,
+                                height: 20),
+                            SizedBox(height: 8),
+                            Text(
+                              "Assegna\ncategoria",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: textColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
                   },
                 ),
               ),
-              const SizedBox(width: 12),
               Material(
                 color: Colors.transparent,
                 child: Consumer(
