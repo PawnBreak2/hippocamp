@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:collection/collection.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -142,6 +143,100 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
   }
 
+  bool shouldShowTodayDivider(Post post) {
+    final postsProviderState = ref.watch(postListProvider);
+    final postsMappedByYearAndMonth =
+        postsProviderState.postsMappedByYearAndMonth;
+
+    final currentDate = DateTime.now();
+    final currentMonth = currentDate.month;
+    final currentYear = currentDate.year;
+    final postsForCurrentMonth =
+        postsMappedByYearAndMonth[currentYear]![currentMonth]!;
+
+    if (postsForCurrentMonth.isEmpty) {
+      return true;
+    }
+
+    final Post? postBeforeToday = postsForCurrentMonth.firstWhereOrNull(
+        (element) => element.date.dateFromString.isBefore(currentDate));
+
+    if (post.key == postBeforeToday?.key) {
+      print('ok');
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool shouldShowTimeDivider(Post post) {
+    final postsProviderState = ref.watch(postListProvider);
+    final postsMappedByYearAndMonth =
+        postsProviderState.postsMappedByYearAndMonth;
+
+    final currentDate = post.dateTimeFromString;
+    final currentMonth = currentDate.month;
+    final currentYear = currentDate.year;
+    final postsForCurrentMonth =
+        postsMappedByYearAndMonth[currentYear]![currentMonth]!;
+    final List<Post> postsForCurrentDay = postsForCurrentMonth
+        .where((element) =>
+            element.dateTimeFromString.day == post.dateTimeFromString.day)
+        .toList();
+    // print('posts for current month');
+    // print(postsForCurrentMonth);
+
+    if (postsForCurrentDay[0].key == post.key) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Widget _timeDivider({
+    required DateTime date,
+    bool isToday = false,
+  }) {
+    final day = date.weekday.dayFromInt.substring(0, 3).toUpperCase();
+    final month = date.month.monthFromInt.substring(0, 3).toUpperCase();
+    final dayNumber = date.day;
+    final isPast = date.isBefore(DateTime.now());
+
+    return Container(
+      color: isToday
+          ? Color.fromRGBO(241, 245, 223, 1)
+          : isPast
+              ? Colors.white
+              : CustomColors.primaryLightBlue,
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              height: .5,
+              color: const Color.fromARGB(255, 100, 100, 100),
+              margin: EdgeInsets.symmetric(horizontal: 12),
+            ),
+          ),
+          Text(
+            "$day $dayNumber $month".toLowerCase(),
+            style: TextStyle(
+              color: CustomColors.blue,
+              fontSize: 14,
+            ),
+          ),
+          Expanded(
+            child: Container(
+              height: .5,
+              color: const Color.fromARGB(255, 100, 100, 100),
+              margin: EdgeInsets.symmetric(horizontal: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final postsMappedByDate =
@@ -219,22 +314,12 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                           children: [
                             /// TODO: spostare nello stato tutta questa roba?
                             (DateTime.now().month == dateForPost.month &&
-                                    TimelineHelpers.shouldShowTodayDivider(
-                                        post: post,
-                                        postsMappedByYearAndMonth:
-                                            postsMappedByYearAndMonth))
-                                ? TimelineTimeDivider(
+                                    shouldShowTodayDivider(post))
+                                ? _timeDivider(
                                     date: DateTime.now(), isToday: true)
                                 : const SizedBox(),
-                            (TimelineHelpers.shouldShowTimeDivider(
-                                        post: post,
-                                        postsMappedByDate: postsMappedByDate,
-                                        postsMappedByYearAndMonth:
-                                            postsMappedByYearAndMonth) &&
-                                    !TimelineHelpers.shouldShowTodayDivider(
-                                        post: post,
-                                        postsMappedByYearAndMonth:
-                                            postsMappedByYearAndMonth))
+                            (shouldShowTimeDivider(post) &&
+                                    post.dateTimeFromString != DateTime.now())
                                 ? TimelineTimeDivider(
                                     date: post.dateTimeFromString,
                                     isToday: false)

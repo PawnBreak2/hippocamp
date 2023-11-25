@@ -20,8 +20,15 @@ class TimelineHelpers {
         (element) => element.date.dateFromString.isBefore(currentDate));
 
     if (post.key == firstPost?.key) {
+      print('true!!!');
+      print(post.date.dateFromString);
       return true;
     } else {
+      print(currentMonth);
+      print(currentYear);
+      print(post.key);
+      print(firstPost?.key);
+      print('returninf false');
       return false;
     }
   }
