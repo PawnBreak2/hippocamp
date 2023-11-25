@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hippocamp/constants/navigation/routeNames.dart';
 import 'package:hippocamp/pages/change_password/change_password.dart';
 import 'package:hippocamp/pages/login/login_page.dart';
 import 'package:hippocamp/pages/memo/create_memo_page.dart';
@@ -220,7 +222,7 @@ class _FinancePageState extends ConsumerState<HomePage> {
                             Icons.more_vert,
                             color: Colors.black,
                           ),
-                          onSelected: (c) async {
+                          onSelected: (c) {
                             switch (c) {
                               case "0":
                                 Navigator.push(
@@ -231,15 +233,11 @@ class _FinancePageState extends ConsumerState<HomePage> {
                                 );
                                 break;
                               case "1":
-                                await ref.read(authProvider.notifier).logout();
-
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => LoginPage(),
-                                  ),
-                                  (_) => false,
-                                );
+                                ref
+                                    .read(authProvider.notifier)
+                                    .logout()
+                                    .whenComplete(() => context
+                                        .goNamed(routeMap[routeNames.login]));
                                 break;
                             }
                           },

@@ -209,10 +209,11 @@ class _HomePageState extends ConsumerState<MainScaffold> {
               SizedBox(width: 8),
               Consumer(
                 builder: (context, ref, child) {
-                  final postsProviderState = ref.watch(postListProvider);
+                  final selectedPostsLength = ref.watch(postListProvider
+                      .select((state) => state.selectedPosts.length));
 
                   return Text(
-                    "${postsProviderState.selectedPosts.length}",
+                    "${selectedPostsLength}",
                     style: TextStyle(
                       color: CustomColors.primaryBlue,
                       fontSize: 20,

@@ -1,22 +1,31 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocamp/helpers/extensions/int_extensions.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
+import 'package:hippocamp/helpers/ui/timeline/timeline_helpers.dart';
+import 'package:hippocamp/models/repositories/app_state_repository.dart';
+import 'package:hippocamp/models/repositories/post_repository.dart';
+import 'package:hippocamp/models/repositories/ui_state_repository.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/components/time_event_item.dart';
 import 'package:hippocamp/widgets/components/timeline/month_divider.dart';
 import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart';
+import 'package:hippocamp/widgets/components/timeline/time_divider.dart';
 import 'package:hippocamp/widgets/components/timeline/year_divider.dart';
+import 'package:hippocamp/widgets/views/loading_screen.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hippocamp/constants/common.dart';
-import 'package:collection/collection.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
   final bool isSearching;
@@ -35,78 +44,47 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
   int indexForMonths = 0;
   bool _isLoading = true;
   bool _getNewPosts = false;
-  bool _showCenterButton = false;
   late ItemScrollController itemScrollController;
   late ItemPositionsListener itemPositionsListener;
-
-  Widget _timeDivider({
-    required DateTime date,
-    bool isToday = false,
-  }) {
-    final day = date.weekday.dayFromInt.substring(0, 3).toUpperCase();
-    final month = date.month.monthFromInt.substring(0, 3).toUpperCase();
-    final dayNumber = date.day;
-    final isPast = date.isBefore(DateTime.now());
-
-    return Container(
-      color: isToday
-          ? Color.fromRGBO(241, 245, 223, 1)
-          : isPast
-              ? Colors.white
-              : CustomColors.primaryLightBlue,
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              height: .5,
-              color: const Color.fromARGB(255, 100, 100, 100),
-              margin: EdgeInsets.symmetric(horizontal: 12),
-            ),
-          ),
-          Text(
-            "$day $dayNumber $month".toLowerCase(),
-            style: TextStyle(
-              color: CustomColors.blue,
-              fontSize: 14,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              height: .5,
-              color: const Color.fromARGB(255, 100, 100, 100),
-              margin: EdgeInsets.symmetric(horizontal: 12),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  late int valueToScrollToToday;
+  late UIState uiStateProviderState;
+  late UIStateNotifier uiStateProviderNotifier;
+  late AppState appStateProviderState;
+  late AppStateNotifier appStateProviderNotifier;
+  late PostsRepository postsProviderState;
+  late PostListNotifier postsProviderNotifier;
+  bool _showCenterButton = false;
 
   @override
   void initState() {
     itemScrollController = ItemScrollController();
     itemPositionsListener = ItemPositionsListener.create();
+
     super.initState();
     _init().whenComplete(() async {
-      print('value to scroll to');
-      print(ref.read(appStateProvider).valueToScrollToToday);
-      await Future.delayed(Duration(milliseconds: 5000));
-
-      final appStateProviderState = ref.read(appStateProvider);
-      itemScrollController.scrollTo(
-        index: appStateProviderState.valueToScrollToToday,
-        duration: Duration(milliseconds: 100),
-      );
+      await Future.delayed(const Duration(milliseconds: 5000));
 
       itemPositionsListener.itemPositions.addListener(checkScrolling);
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    itemPositionsListener.itemPositions.removeListener(checkScrolling);
+  }
+
   Future<void> _init() async {
-    final postsProviderState = ref.read(postListProvider);
-    final postsProviderNotifier = ref.read(postListProvider.notifier);
-    final appStateProviderNotifier = ref.read(appStateProvider.notifier);
+    uiStateProviderState = ref.read(uiStateProvider);
+    uiStateProviderNotifier = ref.read(uiStateProvider.notifier);
+    appStateProviderState = ref.read(appStateProvider);
+    appStateProviderNotifier = ref.read(appStateProvider.notifier);
+    postsProviderState = ref.read(postListProvider);
+    postsProviderNotifier = ref.read(postListProvider.notifier);
+    valueToScrollToToday = ref.read(appStateProvider).valueToScrollToToday;
+
+    SchedulerBinding.instance!.addPostFrameCallback((_) {});
+
     final walletsProviderNotifier = ref.read(walletsProvider.notifier);
     if (postsProviderState.allPosts.isEmpty) {
       await postsProviderNotifier.getPosts();
@@ -115,15 +93,18 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
       _isLoading = false;
       setState(() {});
-    } else
+    } else {
       _isLoading = false;
+    }
+    await Future.delayed(const Duration(milliseconds: 500), () {
+      itemScrollController.scrollTo(
+        index: valueToScrollToToday,
+        duration: const Duration(milliseconds: 500),
+      );
+    });
   }
 
   void checkScrolling() async {
-    //print(itemPositionsListener.itemPositions.value);
-    final postsProviderNotifier = ref.read(postListProvider.notifier);
-    final postsProviderState = ref.read(postListProvider);
-    final appStateProviderState = ref.read(appStateProvider);
     final nearTheStart =
         itemPositionsListener.itemPositions.value.first.index < 3;
 
@@ -132,26 +113,25 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
     final listIndexesVisible =
         itemPositionsListener.itemPositions.value.map((e) => e.index);
-    final showScrollToToday = !listIndexesVisible
-        .contains(appStateProviderState.valueToScrollToToday);
+
+    final showScrollToToday =
+        (!listIndexesVisible.contains(valueToScrollToToday) ||
+            itemPositionsListener.itemPositions.value
+                    .where((element) => element.index == valueToScrollToToday)
+                    .first
+                    .itemLeadingEdge <
+                -0.25);
 
     if (showScrollToToday && !_showCenterButton) {
+      uiStateProviderNotifier.setShowCenterButtonInTimeline(true);
       _showCenterButton = true;
-      setState(() {});
     } else if (!showScrollToToday && _showCenterButton) {
+      uiStateProviderNotifier.setShowCenterButtonInTimeline(false);
+
       _showCenterButton = false;
-      setState(() {});
     }
 
     if (widget.isSearching) return;
-
-    if (nearTheStart && !postsProviderState.endFutureList) {
-      if (_getNewPosts) return;
-
-      _getNewPosts = true;
-      //await postsProviderNotifier.getNewPosts(past: false);
-      _getNewPosts = false;
-    }
 
     if (nearTheEnd && !postsProviderState.endList) {
       if (_getNewPosts) return;
@@ -162,156 +142,44 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
   }
 
-  int countTotalMonths(Map<int, Map<int, List<Post>>> postsByDate) {
-    int totalMonths = 0;
-
-    postsByDate.forEach((year, months) {
-      totalMonths += months.length; // Add the number of months in this year
-    });
-
-    return totalMonths;
-  }
-
-  bool shouldShowTodayDivider(Post post) {
-    final postsProviderState = ref.watch(postListProvider);
-    final postsMappedByYearAndMonth =
-        postsProviderState.postsMappedByYearAndMonth;
-
-    final currentDate = DateTime.now();
-    final currentMonth = currentDate.month;
-    final currentYear = currentDate.year;
-    final postsForCurrentMonth =
-        postsMappedByYearAndMonth[currentYear]![currentMonth]!;
-
-    if (postsForCurrentMonth.isEmpty) {
-      return true;
-    }
-
-    final Post? postBeforeToday = postsForCurrentMonth.firstWhereOrNull(
-        (element) => element.date.dateFromString.isBefore(currentDate));
-
-    if (post.key == postBeforeToday?.key) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  bool shouldShowTimeDivider(Post post) {
-    final postsProviderState = ref.watch(postListProvider);
-    final postsMappedByYearAndMonth =
-        postsProviderState.postsMappedByYearAndMonth;
-
-    final currentDate = post.dateTimeFromString;
-    final currentMonth = currentDate.month;
-    final currentYear = currentDate.year;
-    final postsForCurrentMonth =
-        postsMappedByYearAndMonth[currentYear]![currentMonth]!;
-    final List<Post> postsForCurrentDay = postsForCurrentMonth
-        .where((element) =>
-            element.dateTimeFromString.day == post.dateTimeFromString.day)
-        .toList();
-    // print('posts for current month');
-    // print(postsForCurrentMonth);
-
-    if (postsForCurrentDay[0].key == post.key) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    itemPositionsListener.itemPositions.removeListener(checkScrolling);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final postsProviderState = ref.watch(postListProvider);
-    final appStateProviderState = ref.watch(appStateProvider);
-    final appStateProviderNotifier = ref.read(appStateProvider.notifier);
-    final postsProviderNotifier = ref.read(postListProvider.notifier);
-    final postsMappedByDate = postsProviderState.postsMappedByDate;
-    final postsMappedByYearAndMonth =
-        postsProviderState.postsMappedByYearAndMonth;
+    bool showCenterButton = ref.watch(
+        uiStateProvider.select((state) => state.showCenterButtonInTimeline));
+    final postsMappedByDate =
+        ref.watch(postListProvider.select((state) => state.postsMappedByDate));
+    final postsMappedByYearAndMonth = ref.watch(
+        postListProvider.select((state) => state.postsMappedByYearAndMonth));
 
     //
 
-    if (_isLoading)
-      return Scaffold(
-        backgroundColor: Color.fromRGBO(227, 218, 210, 1),
-        body: Center(
-          child: CircularProgressIndicator(
-            color: Colors.white,
-          ),
-        ),
-      );
+    if (_isLoading) {
+      return const LoadingScreen();
+    }
 
     return Scaffold(
       backgroundColor: postsMappedByDate.entries.isEmpty
-          ? Color.fromRGBO(227, 218, 210, 1)
+          ? const Color.fromRGBO(227, 218, 210, 1)
           : Colors.white,
       body: postsMappedByDate.isEmpty
           ? Column(
               children: [
                 // Date divider
-                _timeDivider(
-                  date: DateTime.now(),
-                  isToday: true,
-                ),
+                TimelineTimeDivider(date: DateTime.now(), isToday: true),
                 // Text
-                NoPostsInTimelineSection(),
+                const NoPostsInTimelineSection(),
               ],
             )
           : ScrollablePositionedList.builder(
               shrinkWrap: true,
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
-              physics: ClampingScrollPhysics(),
-              itemCount: countTotalMonths(postsMappedByYearAndMonth),
-              padding: EdgeInsets.only(bottom: 80),
+              physics: const ClampingScrollPhysics(),
+              itemCount:
+                  TimelineHelpers.countTotalMonths(postsMappedByYearAndMonth),
+              padding: const EdgeInsets.only(bottom: 80),
               itemBuilder: (_, i) {
-                /*final postsForCurrentMonth =
-                    postsMappedByYearAndMonth.entries.toList()[i];
-
-                final postsForNextDate =
-                    i < postsMappedByDate.entries.length - 1
-                        ? postsMappedByDate.entries.toList()[i + 1]
-                        : postsForCurrentDate;
-
-                final currentDateP = postsForCurrentDate.key.dateFromString;
-                final nextDateP = postsForNextDate.key.dateFromString;
-
                 bool shouldShowYearDivider = false;
-                bool shouldShowMonthDivider = false;
-                bool shouldShowMonthDividerForEmptyMonth = false;
-
-                if (postsForCurrentDate.value[0].key ==
-                    postsMappedByYearAndMonth[currentDateP.year]![
-                            currentDateP.month]![0]
-                        .key) {
-                  shouldShowMonthDivider = true;
-                }
-
-                if (previousYearInTimeLinePost !=
-                    currentDateP.year.toString()) {
-                  gotFirstPostOfYear = false;
-                }
-                if (!gotFirstPostOfYear) {
-                  Post? firstPostOfYear = postsProviderNotifier
-                      .getFirstPostOfYear(currentDateP.year);
-                  if (firstPostOfYear != null &&
-                      firstPostOfYear.key == postsForCurrentDate.value[0].key) {
-                    previousYearInTimeLinePost = currentDateP.year.toString();
-                    shouldShowYearDivider = true;
-                    gotFirstPostOfYear = true;
-                  }
-                }*/
-                bool shouldShowYearDivider = false;
-                bool shouldShowMonthDivider = false;
-                bool shouldShowDayDivider = false;
 
                 // these are reversed to show the most recent posts first
 
@@ -330,6 +198,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                 }
 
                 return Column(
+                  key: ValueKey(dateForPost),
                   children: [
                     // Month divider
                     MonthDivider(
@@ -352,45 +221,61 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         children: [
                           /// TODO: spostare nello stato tutta questa roba?
                           (DateTime.now().month == dateForPost.month &&
-                                  shouldShowTodayDivider(post))
-                              ? _timeDivider(
-                                  date: DateTime.now(),
-                                  isToday: true,
-                                )
+                                  TimelineHelpers.shouldShowTodayDivider(
+                                      post: post,
+                                      postsMappedByYearAndMonth:
+                                          postsMappedByYearAndMonth))
+                              ? TimelineTimeDivider(
+                                  date: DateTime.now(), isToday: true)
                               : const SizedBox(),
-                          shouldShowTimeDivider(post)
-                              ? _timeDivider(
-                                  date: post.dateTimeFromString,
-                                  isToday: false,
-                                )
+                          (TimelineHelpers.shouldShowTimeDivider(
+                                      post: post,
+                                      postsMappedByDate: postsMappedByDate,
+                                      postsMappedByYearAndMonth:
+                                          postsMappedByYearAndMonth) &&
+                                  !TimelineHelpers.shouldShowTodayDivider(
+                                      post: post,
+                                      postsMappedByYearAndMonth:
+                                          postsMappedByYearAndMonth))
+                              ? TimelineTimeDivider(
+                                  date: post.dateTimeFromString, isToday: false)
                               : const SizedBox(),
-                          TimeEventItem(
-                            post: post,
-                            isSelectedItem:
-                                postsProviderNotifier.postIsSelected(post),
-                            showSelectionCircle:
-                                appStateProviderState.isSelectingPosts,
-                            onTap: appStateProviderState.isSelectingPosts
-                                ? () {
+                          Consumer(
+                            builder: (context, ref, child) {
+                              final isSelectingPosts = ref.watch(
+                                  appStateProvider.select(
+                                      (state) => state.isSelectingPosts));
+
+                              return TimeEventItem(
+                                post: post,
+                                isSelectedItem:
+                                    postsProviderNotifier.postIsSelected(post),
+                                showSelectionCircle: isSelectingPosts,
+                                onTap: isSelectingPosts
+                                    ? () {
+                                        postsProviderNotifier
+                                            .addOrRemoveSelectedPost(
+                                                post: post);
+                                      }
+                                    : null,
+                                onLongPress: () {
+                                  if (isSelectingPosts) {
+                                    appStateProviderNotifier
+                                        .setIsSelectingPosts(false);
                                     postsProviderNotifier
-                                        .addOrRemoveSelectedPost(post: post);
+                                        .addOrRemoveSelectedPost();
+                                    setState(() {});
+
+                                    return;
                                   }
-                                : null,
-                            onLongPress: () {
-                              if (appStateProviderState.isSelectingPosts) {
-                                appStateProviderNotifier
-                                    .setIsSelectingPosts(false);
-                                postsProviderNotifier.addOrRemoveSelectedPost();
-                                setState(() {});
 
-                                return;
-                              }
-
-                              appStateProviderNotifier
-                                  .setIsSelectingPosts(true);
-                              postsProviderNotifier.addOrRemoveSelectedPost(
-                                  post: post);
-                              setState(() {});
+                                  appStateProviderNotifier
+                                      .setIsSelectingPosts(true);
+                                  postsProviderNotifier.addOrRemoveSelectedPost(
+                                      post: post);
+                                  setState(() {});
+                                },
+                              );
                             },
                           ),
                         ],
@@ -402,7 +287,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                 );
               },
             ),
-      floatingActionButton: _showCenterButton
+      floatingActionButton: showCenterButton
           ? Container(
               alignment: Alignment.centerRight,
               child: InkWell(

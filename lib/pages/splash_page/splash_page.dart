@@ -7,10 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hippocamp/constants/navigation/routeNames.dart';
 import 'package:hippocamp/constants/storage_keys.dart';
+import 'package:hippocamp/helpers/providers/post_provider_helpers.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:hippocamp/models/posts-creation/partner_model.dart';
 import 'package:hippocamp/models/responses/categories_response_model.dart';
 import 'package:hippocamp/models/responses/domains_response_model.dart';
+import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/user_provider.dart';
@@ -29,9 +31,12 @@ class SplashPage extends ConsumerStatefulWidget {
 
 class _SplashPageState extends ConsumerState<SplashPage> {
   final cacheManager = DefaultCacheManager();
+  late AppStateNotifier appStateNotifier;
 
   @override
   void initState() {
+    appStateNotifier = ref.read(appStateProvider.notifier);
+
     _init();
     super.initState();
   }
@@ -42,31 +47,67 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     await Future.wait([
       _getAllPosts(),
       _getAllDomainsAndPrecacheImages(),
-      _getAllCategoriesAndPrecacheImages(),
       _getAllPartnersAndPrecacheImages(),
       _getAllWallets(),
       _setUserProfile(),
       _getAttachmentTypesAndPrecacheImages(),
-      _getAllCategoriesAndPrecacheImages(),
     ]).whenComplete(() {
       var endTime = DateTime.now();
       var duration = endTime.difference(startTime);
+      setValueToScrollToToday();
       print('initialization finished in $duration milliseconds ✅');
       context.goNamed(routeMap[routeNames.mainScaffold]);
     });
   }
 
+  List<DateTime> getListOfMonths(Map<int, Map<int, List<Post>>> postsByDate) {
+    List<DateTime> listOfMonths = [];
+
+    for (var year in postsByDate.keys) {
+      postsByDate[year]!.forEach((month, _) {
+        listOfMonths.add(DateTime(year, month));
+      });
+    }
+
+    // Sorting in reversed chronological order
+    listOfMonths.sort((a, b) => b.compareTo(a));
+
+    return listOfMonths;
+  }
+
+  int findIndexOfMonth(
+      List<DateTime> listOfMonths, DateTime currentYearAndMonth) {
+    // Finding the index of the month that matches currentYearAndMonth
+    return listOfMonths.indexWhere((date) =>
+        date.year == currentYearAndMonth.year &&
+        date.month == currentYearAndMonth.month);
+  }
+
+  void setValueToScrollToToday() {
+    DateTime currentDate = DateTime.now();
+    Map<int, Map<int, List<Post>>> postsMappedByDateAndMonth =
+        ref.read(postListProvider).postsMappedByYearAndMonth;
+    List<DateTime> listOfMonths = getListOfMonths(postsMappedByDateAndMonth);
+    int valueToScrollTo = findIndexOfMonth(listOfMonths, currentDate);
+    appStateNotifier.setValueToScrollToday(valueToScrollTo);
+  }
+
   Future<void> _getAllPosts() async {
+    var startTime = DateTime.now();
+
     var posts = ref.read(postListProvider.notifier);
     // gets the posts for the previous two months
     await posts.getPosts(past: true, monthsToGoBack: 2);
     await posts.getPosts(past: false, yearsToGoForward: 2);
+    var endTime = DateTime.now();
+    var duration = endTime.difference(startTime);
+
+    print('posts loaded in $duration milliseconds ✅');
   }
 
   Future<void> _getAllDomainsAndPrecacheImages() async {
     var startTime = DateTime.now();
-    var appStateProviderNotifier = ref.read(appStateProvider.notifier);
-    List<Domain> domains = await appStateProviderNotifier.getDomains();
+    List<Domain> domains = await appStateNotifier.getDomains();
     await _precacheImages(elements: domains);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
@@ -75,9 +116,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   Future<void> _getAllCategoriesAndPrecacheImages() async {
     var startTime = DateTime.now();
-    var appStateProviderNotifier = ref.read(appStateProvider.notifier);
-    List<PostCategory> categories =
-        await appStateProviderNotifier.getCategories();
+    List<PostCategory> categories = await appStateNotifier.getCategories();
     await _precacheImages(elements: categories);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
@@ -86,9 +125,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   Future<void> _getAllPartnersAndPrecacheImages() async {
     var startTime = DateTime.now();
-    var appStateProviderNotifier = ref.read(appStateProvider.notifier);
     List<PartnerModel> businessPartners =
-        await appStateProviderNotifier.getBusinessPartners();
+        await appStateNotifier.getBusinessPartners();
     await _precacheImages(elements: businessPartners);
 
     var endTime = DateTime.now();
@@ -119,8 +157,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     //loads all attachment types in appState repository and precaches all icons
     var startTime = DateTime.now();
 
-    var appState = ref.read(appStateProvider.notifier);
-    List<AttachmentType> attachments = await appState.getAttachmentTypes();
+    List<AttachmentType> attachments =
+        await appStateNotifier.getAttachmentTypes();
 
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);

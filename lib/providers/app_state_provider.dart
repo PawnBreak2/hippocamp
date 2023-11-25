@@ -43,6 +43,10 @@ class AppStateNotifier extends Notifier<AppState> {
     state = state.copyWith(valueToScrollToToday: 0);
   }
 
+  void setValueToScrollToday(int value) {
+    state = state.copyWith(valueToScrollToToday: value);
+  }
+
   void setIsSelectingPosts(bool v) {
     state = state.copyWith(isSelectingPosts: v);
   }
