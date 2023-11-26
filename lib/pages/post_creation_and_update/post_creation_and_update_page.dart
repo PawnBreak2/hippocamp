@@ -914,7 +914,10 @@ class _AppBarSection extends ConsumerWidget {
               children: [
                 // Arrow back
                 IconButton(
-                  onPressed: () => context.pop(),
+                  onPressed: () => context.canPop()
+                      ? context.pop()
+                      : context.pushReplacementNamed(
+                          routeMap[routeNames.mainScaffold]),
                   icon: Icon(
                     Icons.arrow_back,
                     size: 26,

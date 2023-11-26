@@ -319,11 +319,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                         ..sort((a, b) => b.dateTimeFromString
                             .compareTo(a.dateTimeFromString)))
                         Builder(builder: (context) {
-                          inspect(post);
-                          print(post.title);
-                          print(post.dateTimeFromString);
-                          print('shouldShowTodayDiver');
-                          print(shouldShowTodayDivider(post));
                           String today =
                               DateFormat.yMd().format(DateTime.now());
                           String dayOfPost =
