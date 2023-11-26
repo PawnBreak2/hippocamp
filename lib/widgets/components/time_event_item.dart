@@ -92,7 +92,10 @@ class TimeEventItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Icon / Texts
-                        CachedSvgImage(post: post, width: 50, height: 50),
+                        Hero(
+                            tag: post.key,
+                            child: CachedSvgImage(
+                                post: post, width: 50, height: 50)),
                         SizedBox(width: 3.w),
                         TimeLinePostTitleAndDescription(post: post),
                         SizedBox(width: 3.w),

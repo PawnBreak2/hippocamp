@@ -4,6 +4,7 @@ import 'package:hippocamp/constants/storage_keys.dart';
 import 'package:hippocamp/pages/home/home_page.dart';
 import 'package:hippocamp/pages/login/login_page.dart';
 import 'package:hippocamp/pages/main_scaffold/main_scaffold.dart';
+import 'package:hippocamp/pages/posts-creation/post_creation_page.dart';
 import 'package:hippocamp/pages/splash_page/splash_page.dart';
 import 'package:hippocamp/storage/local_storage.dart';
 
@@ -42,6 +43,11 @@ class NavigationConfiguration {
         path: '/main-scaffold-page',
         name: routeMap[routeNames.mainScaffold],
         builder: (context, state) => const MainScaffold(),
+      ),
+      GoRoute(
+        path: '/post-creation-page',
+        name: routeMap[routeNames.postCreation],
+        builder: (context, state) => const PostCreationPage(),
       ),
     ],
   );

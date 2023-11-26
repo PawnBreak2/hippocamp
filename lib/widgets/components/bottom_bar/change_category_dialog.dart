@@ -25,10 +25,10 @@ class ChangeCategoryDialog extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ChangeCategoryDialog> createState() =>
-      _PostCreationDialogState();
+      _ChangeCategoryDialogState();
 }
 
-class _PostCreationDialogState extends ConsumerState<ChangeCategoryDialog> {
+class _ChangeCategoryDialogState extends ConsumerState<ChangeCategoryDialog> {
   final TextEditingController _textEditingController = TextEditingController();
 
   bool _loading = false;

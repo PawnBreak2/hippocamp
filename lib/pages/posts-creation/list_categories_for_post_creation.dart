@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,10 +18,10 @@ import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class ListCategories extends ConsumerWidget {
+class ListCategoriesForPostCreation extends ConsumerWidget {
   final TextEditingController controller;
   final bool selectNewCategory;
-  const ListCategories({
+  const ListCategoriesForPostCreation({
     required this.controller,
     required this.selectNewCategory,
   });
@@ -40,74 +42,12 @@ class ListCategories extends ConsumerWidget {
       itemBuilder: (_, i) {
         return InkWell(
           onTap: () {
-            AwesomeDialog(
-              context: context,
-              animType: AnimType.scale,
-              dialogType: DialogType.noHeader,
-              body: Center(
-                child: Container(
-                  height: 6.h,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        children: [
-                          const TextSpan(
-                            text:
-                                'Vuoi assegnare il tuo post alla categoria \n',
-                            style: TextStyle(
-                                fontSize: 14, color: CustomColors.grey66),
-                          ),
-                          TextSpan(
-                            text: categories[i].name,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: CustomColors.primaryRed,
-                            ),
-                          ),
-                          const TextSpan(
-                            text: '?',
-                            style: TextStyle(
-                                fontSize: 14, color: CustomColors.grey121),
-                          ),
-                        ],
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ),
-                ),
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => PostCreationPage(
+                category: categories[i],
               ),
-              btnOk: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.primaryRed,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  onPressed: () {
-                    ref.read(postListProvider.notifier).assignPostsToCategory(
-                        ref
-                            .read(postListProvider)
-                            .selectedPosts
-                            .map((e) => e.key)
-                            .toList(),
-                        categories[i].key);
-                    context.pop();
-                    context.pop();
-                  },
-                  child: const Text(
-                    'Si',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ).show();
+            ));
+
             if (!selectNewCategory) {}
           },
           child: Row(

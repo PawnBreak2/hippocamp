@@ -289,7 +289,7 @@ class _FinancePageState extends ConsumerState<HomePage> {
               ),
             );
         },
-        backgroundColor: CustomColors.white243,
+        backgroundColor: Colors.white,
         child: Icon(
           Icons.add,
           color: CustomColors.lightRed,

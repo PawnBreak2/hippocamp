@@ -31,12 +31,35 @@ class TimeLinePostTitleAndDescription extends StatelessWidget {
           // Category & Price
           Row(
             children: [
-              Text(
-                post.timePost,
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
+              // Builds this section depending on the post type based on time
+              Builder(builder: (context) {
+                if (post.wholeDay) {
+                  return Icon(
+                    Icons.square,
+                    color: CustomColors.grey66,
+                    size: 10,
+                  );
+                } else if (!post.wholeDay && post.from == post.to) {
+                  return Text(post.timePost,
+                      style: TextStyle(
+                        fontSize: 14,
+                      ));
+                } else if (!post.wholeDay && post.from != post.to) {
+                  return Text(
+                    '${post.from.substring(0, post.from.length - 3)} - ${post.to.substring(0, post.to.length - 3)}',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  );
+                } else {
+                  /// TODO: da completare
+                  return Icon(
+                    Icons.square,
+                    color: CustomColors.grey66,
+                    size: 10,
+                  );
+                }
+              }),
               SizedBox(width: 1.w),
               Text(
                 " | ",

@@ -67,24 +67,39 @@ class PostListNotifier extends Notifier<PostsRepository> {
   /// The change is written also to the local database.
   Future<bool> assignPostsToCategory(
       List<String> postsKeys, String categoryKey) async {
+    ref.read(appStateProvider.notifier).setIsSelectingPosts(false);
+
     final resp = await _postsClient.assignPostsToCategory(
         postsKeys: postsKeys, categoryKey: categoryKey);
     return resp.fold(
       (l) => false,
       (r) {
         for (String key in postsKeys) {
-          // find the post in allPosts
+          // find the category in the appStateProvider state with categoryKey
+          final categoryToAssign = ref
+              .read(appStateProvider)
+              .categories
+              .firstWhere((e) => e.key == categoryKey);
+
+          // Find the post in allPosts with key
           final post = state.allPosts.firstWhere((e) => e.key == key);
+          // Find the index of the post in allPosts (used to replace the post in the same position)
+          final index = state.allPosts.indexWhere((e) => e.key == key);
+          // Create a new post with the new category
+          final newPost = post.copyWith(category: categoryToAssign);
 
-          // create a new post with the new category
+          if (index != -1) {
+            // Create a new list of posts with the updated post
+            final updatedPosts = List<Post>.from(state.allPosts);
 
-          // remove post from allPosts
-          state = state.copyWith(
-            allPosts: [
-              ...state.allPosts.where((e) => e.key != key),
-            ],
-          );
+            updatedPosts[index] = newPost;
+
+            // Update the state with the new list of posts
+            state = state.copyWith(allPosts: updatedPosts);
+          }
         }
+        state = state.copyWith(selectedPosts: []);
+        PostsProviderHelpers.reorganizePostsAfterUpdate(ref: ref);
         return true;
       },
     );

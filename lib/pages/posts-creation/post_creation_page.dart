@@ -31,6 +31,7 @@ import 'package:hippocamp/widgets/dialogs/cupertino_bottom_sheet.dart';
 import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
 import 'package:hippocamp/widgets/dialogs/flash_dialog.dart';
 import 'package:hippocamp/widgets/forms/primary_text_form.dart';
+import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
 import 'package:hippocamp/widgets/view/photo_view.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -468,6 +469,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
 
             // Appbar
             _AppBarSection(
+              post: widget.post as Post,
               onCategoryTap: (c) async {
                 if (c == null) return;
                 category = c;
@@ -801,6 +803,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
 }
 
 class _AppBarSection extends ConsumerWidget {
+  final Post post;
   final CreatePost createPost;
   final PostCategory category;
   final void Function(PostCategory?) onCategoryTap;
@@ -809,6 +812,7 @@ class _AppBarSection extends ConsumerWidget {
   final PartnerModel? partnerModel;
 
   const _AppBarSection({
+    required this.post,
     required this.createPost,
     required this.category,
     required this.onCategoryTap,
@@ -945,9 +949,10 @@ class _AppBarSection extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            child: SvgPicture.network(
-                              category.iconUrl,
-                            ),
+                            child: Hero(
+                                tag: post.key,
+                                child: GenericCachedIcon(
+                                    imageUrl: category.iconUrl)),
                           ),
                         ),
                       ),
