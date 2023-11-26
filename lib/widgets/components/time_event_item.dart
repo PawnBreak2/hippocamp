@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/pages/posts-creation/post_creation_page.dart';
+import 'package:hippocamp/pages/post_creation/post_creation_page.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/components/partner_box.dart';
 import 'package:hippocamp/widgets/components/timeline/timeline_post_icon.dart';

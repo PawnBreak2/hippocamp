@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/pages/posts-creation/post_creation_dialog.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';

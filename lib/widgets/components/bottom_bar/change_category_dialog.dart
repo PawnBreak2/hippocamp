@@ -6,7 +6,6 @@ import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/repositories/app_state_repository.dart';
 import 'package:hippocamp/models/responses/categories_response_model.dart';
 import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/pages/posts-creation/post_creation_page.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';
