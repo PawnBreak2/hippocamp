@@ -25,6 +25,7 @@ import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart'
 import 'package:hippocamp/widgets/components/timeline/time_divider.dart';
 import 'package:hippocamp/widgets/components/timeline/year_divider.dart';
 import 'package:hippocamp/widgets/views/loading_screen.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hippocamp/constants/common.dart';
@@ -144,7 +145,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
   }
 
-  bool shouldShowTodayDivider(Post post) {
+  bool shouldShowTodayDivider(Post processedPost) {
     final postsProviderState = ref.watch(postListProvider);
     final postsMappedByYearAndMonth =
         postsProviderState.postsMappedByYearAndMonth;
@@ -155,14 +156,19 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsForCurrentMonth =
         postsMappedByYearAndMonth[currentYear]![currentMonth]!;
 
+    // if there are no posts for current month, show the today divider
+
     if (postsForCurrentMonth.isEmpty) {
       return true;
     }
 
+    // if there are posts for current month, check if the processed post is the first one of the month
+    // in that case, put the today divider on top of it
+
     final Post? postBeforeToday = postsForCurrentMonth.firstWhereOrNull(
         (element) => element.date.dateFromString.isBefore(currentDate));
 
-    if (post.key == postBeforeToday?.key) {
+    if (processedPost.key == postBeforeToday?.key) {
       return true;
     } else {
       return false;
@@ -314,6 +320,14 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                             .compareTo(a.dateTimeFromString)))
                         Builder(builder: (context) {
                           inspect(post);
+                          print(post.title);
+                          print(post.dateTimeFromString);
+                          print('shouldShowTodayDiver');
+                          print(shouldShowTodayDivider(post));
+                          String today =
+                              DateFormat.yMd().format(DateTime.now());
+                          String dayOfPost =
+                              DateFormat.yMd().format(post.dateTimeFromString);
                           return Column(
                             children: [
                               /// TODO: spostare nello stato tutta questa roba?
@@ -323,7 +337,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                                       date: DateTime.now(), isToday: true)
                                   : const SizedBox(),
                               (shouldShowTimeDivider(post) &&
-                                      post.dateTimeFromString != DateTime.now())
+                                      today != dayOfPost)
                                   ? TimelineTimeDivider(
                                       date: post.dateTimeFromString,
                                       isToday: false)

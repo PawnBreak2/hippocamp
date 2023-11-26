@@ -66,20 +66,6 @@ class NavigationConfiguration {
         },
       ),
       GoRoute(
-        path: '/post-creation-and-update-page',
-        name: routeMap[routeNames.postCreationAndUpdate],
-        builder: (context, state) {
-          if (state.extra.runtimeType == Post && state.extra != null) {
-            return PostCreationAndUpdatePage(post: state.extra as Post);
-          } else if (state.extra.runtimeType == PostCategory &&
-              state.extra != null) {
-            return PostCreationAndUpdatePage(
-                category: state.extra as PostCategory);
-          }
-          return const PostCreationAndUpdatePage();
-        },
-      ),
-      GoRoute(
         path: '/memo-page',
         name: routeMap[routeNames.memoPage],
         builder: (context, state) => const MemoPage(),
