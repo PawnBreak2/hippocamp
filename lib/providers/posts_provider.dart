@@ -62,6 +62,10 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
+  void clearAllSelectedPosts() {
+    state = state.copyWith(selectedPosts: []);
+  }
+
   /// Used to assign one or more posts to a category.
   /// This modifies the remote database, the local state of the application, and the UI state of the application.
   /// The change is written also to the local database.

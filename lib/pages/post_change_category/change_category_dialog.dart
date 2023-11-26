@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/repositories/app_state_repository.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
+import 'package:hippocamp/pages/post_change_category/list_categories.dart';
+import 'package:hippocamp/pages/post_change_category/list_domains.dart';
+
 import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/bottom_bar/list_categories.dart';
-import 'package:hippocamp/widgets/components/bottom_bar/list_domains.dart';
+
 import 'package:hippocamp/widgets/forms/primary_text_form.dart';
 
 class ChangeCategoryDialog extends ConsumerStatefulWidget {
@@ -64,7 +57,7 @@ class _ChangeCategoryDialogState extends ConsumerState<ChangeCategoryDialog> {
               child: Column(
                 children: [
                   const Text(
-                    "Seleziona la categoria per il post",
+                    "A quale categoria vuoi assegnare il tuo post?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -76,7 +69,7 @@ class _ChangeCategoryDialogState extends ConsumerState<ChangeCategoryDialog> {
                     controller: _textEditingController,
                     action: TextInputAction.done,
                     backgroundColor: Colors.white,
-                    hintText: "Cerca categoria",
+                    hintText: "Cerca nelle categorie",
                     suffixIcon: const Icon(Icons.search),
                   ),
                 ],
@@ -89,7 +82,7 @@ class _ChangeCategoryDialogState extends ConsumerState<ChangeCategoryDialog> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : ListCategories(
+                : ListCategoriesForPostupdate(
                     controller: _textEditingController,
                     selectNewCategory: widget.selectNewCategory,
                   ),
@@ -100,7 +93,7 @@ class _ChangeCategoryDialogState extends ConsumerState<ChangeCategoryDialog> {
           right: 8,
           top: 100,
           bottom: 20,
-          child: ListDomains(
+          child: ListDomainsForPostUpdate(
             domains: domains,
           ),
         ),

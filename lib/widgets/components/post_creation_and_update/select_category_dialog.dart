@@ -1,34 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/repositories/app_state_repository.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/pages/post_creation/list_categories_for_post_creation.dart';
+import 'package:hippocamp/pages/post_creation_and_update/list_categories_for_post_creation.dart';
+import 'package:hippocamp/pages/post_creation_and_update/list_domains.dart';
 
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/bottom_bar/list_categories.dart';
-import 'package:hippocamp/widgets/components/bottom_bar/list_domains.dart';
+
 import 'package:hippocamp/widgets/forms/primary_text_form.dart';
 
-class PostCreationDialog extends ConsumerStatefulWidget {
+class SelectCategoriesDialog extends ConsumerStatefulWidget {
   final ScrollController scrollController;
   final bool selectNewCategory;
-  const PostCreationDialog({
+  const SelectCategoriesDialog({
     required this.scrollController,
     this.selectNewCategory = false,
   });
 
   @override
-  ConsumerState<PostCreationDialog> createState() => _PostCreationDialogState();
+  ConsumerState<SelectCategoriesDialog> createState() =>
+      _PostCreationDialogState();
 }
 
-class _PostCreationDialogState extends ConsumerState<PostCreationDialog> {
+class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
   final TextEditingController _textEditingController = TextEditingController();
 
   bool _loading = false;
@@ -42,7 +35,10 @@ class _PostCreationDialogState extends ConsumerState<PostCreationDialog> {
     });
   }
 
-  void init() {}
+  void init() {
+    // if there are posts selected, they are cleared and the ui is updated
+    ref.read(postListProvider.notifier).clearAllSelectedPosts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +61,7 @@ class _PostCreationDialogState extends ConsumerState<PostCreationDialog> {
               child: Column(
                 children: [
                   const Text(
-                    "Seleziona la categoria per il post",
+                    "In quale categoria vuoi inserire il tuo post?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -77,7 +73,7 @@ class _PostCreationDialogState extends ConsumerState<PostCreationDialog> {
                     controller: _textEditingController,
                     action: TextInputAction.done,
                     backgroundColor: Colors.white,
-                    hintText: "Cerca categoria",
+                    hintText: "Cerca nelle categorie",
                     suffixIcon: const Icon(Icons.search),
                   ),
                 ],
@@ -101,7 +97,7 @@ class _PostCreationDialogState extends ConsumerState<PostCreationDialog> {
           right: 8,
           top: 100,
           bottom: 20,
-          child: ListDomains(
+          child: ListDomainsForPostCreation(
             domains: domains,
           ),
         ),

@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hippocamp/constants/navigation/routeNames.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/pages/post_creation/post_creation_page.dart';
+import 'package:hippocamp/pages/post_creation_and_update/post_creation_and_update_page.dart';
 import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/partner_box.dart';
+import 'package:hippocamp/widgets/components/timeline/partner_box.dart';
 import 'package:hippocamp/widgets/components/timeline/timeline_post_icon.dart';
 import 'package:hippocamp/widgets/components/timeline/timeline_post_title_and_description.dart';
 import 'package:hippocamp/widgets/images/cached_timeline_post_icon.dart';
@@ -68,13 +70,8 @@ class TimeEventItem extends StatelessWidget {
         splashColor: CustomColors.mediumRed,
         onTap: onTap ??
             () {
-              Navigator.popUntil(context, (route) => route.isFirst);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => PostCreationPage(post: post),
-                ),
-              );
+              context.pushNamed(routeMap[routeNames.postCreationAndUpdate],
+                  extra: post);
             },
         onLongPress: onLongPress,
         child: Stack(
@@ -101,24 +98,15 @@ class TimeEventItem extends StatelessWidget {
                         SizedBox(width: 3.w),
 
                         // Image / time
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            PartnerBox(
-                              iconUrl: post.businessPartners.isEmpty
-                                  ? ""
-                                  : post.businessPartners.first.iconUrl,
-                              width: 15.w,
-                              height: 15.w,
-                              backgroundColor: post.businessPartners.isEmpty
-                                  ? Colors.white
-                                  : Colors.transparent,
-                              borderColor: post.businessPartners.isEmpty
-                                  ? CustomColors.darkerGrey
-                                  : Colors.black54,
-                            ),
-                          ],
-                        ),
+
+                        post.businessPartners.isNotEmpty
+                            ? PartnerBox(
+                                iconUrl: post.businessPartners.first.iconUrl,
+                                width: 15.w,
+                                height: 15.w,
+                                backgroundColor: Colors.transparent,
+                                borderColor: Colors.black54)
+                            : SizedBox(),
                       ],
                     ),
                   ),

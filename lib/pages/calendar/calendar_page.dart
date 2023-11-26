@@ -6,7 +6,7 @@ import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/time_event_item.dart';
+import 'package:hippocamp/widgets/components/timeline/time_event_item.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {

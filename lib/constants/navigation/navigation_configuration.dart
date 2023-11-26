@@ -1,10 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:hippocamp/constants/navigation/routeNames.dart';
 import 'package:hippocamp/constants/storage_keys.dart';
+import 'package:hippocamp/models/responses/categories_response_model.dart';
+import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/pages/home/home_page.dart';
 import 'package:hippocamp/pages/login/login_page.dart';
 import 'package:hippocamp/pages/main_scaffold/main_scaffold.dart';
-import 'package:hippocamp/pages/post_creation/post_creation_page.dart';
+import 'package:hippocamp/pages/memo/memo.dart';
+import 'package:hippocamp/pages/post_creation_and_update/post_creation_and_update_page.dart';
 import 'package:hippocamp/pages/splash_page/splash_page.dart';
 import 'package:hippocamp/storage/local_storage.dart';
 
@@ -12,6 +15,7 @@ import 'package:hippocamp/storage/local_storage.dart';
 
 class NavigationConfiguration {
   static final routes = GoRouter(
+    debugLogDiagnostics: true,
     initialLocation: '/',
     routes: [
       GoRoute(
@@ -45,9 +49,40 @@ class NavigationConfiguration {
         builder: (context, state) => const MainScaffold(),
       ),
       GoRoute(
-        path: '/post-creation-page',
-        name: routeMap[routeNames.postCreation],
-        builder: (context, state) => const PostCreationPage(),
+        path: '/post-creation-and-update-page',
+        name: routeMap[routeNames.postCreationAndUpdate],
+
+        /// TODO: ottimizzare con riverpod?
+
+        builder: (context, state) {
+          if (state.extra.runtimeType == Post && state.extra != null) {
+            return PostCreationAndUpdatePage(post: state.extra as Post);
+          } else if (state.extra.runtimeType == PostCategory &&
+              state.extra != null) {
+            return PostCreationAndUpdatePage(
+                category: state.extra as PostCategory);
+          }
+          return const PostCreationAndUpdatePage();
+        },
+      ),
+      GoRoute(
+        path: '/post-creation-and-update-page',
+        name: routeMap[routeNames.postCreationAndUpdate],
+        builder: (context, state) {
+          if (state.extra.runtimeType == Post && state.extra != null) {
+            return PostCreationAndUpdatePage(post: state.extra as Post);
+          } else if (state.extra.runtimeType == PostCategory &&
+              state.extra != null) {
+            return PostCreationAndUpdatePage(
+                category: state.extra as PostCategory);
+          }
+          return const PostCreationAndUpdatePage();
+        },
+      ),
+      GoRoute(
+        path: '/memo-page',
+        name: routeMap[routeNames.memoPage],
+        builder: (context, state) => const MemoPage(),
       ),
     ],
   );

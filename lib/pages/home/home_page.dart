@@ -9,7 +9,7 @@ import 'package:hippocamp/pages/change_password/change_password.dart';
 import 'package:hippocamp/pages/login/login_page.dart';
 import 'package:hippocamp/pages/memo/create_memo_page.dart';
 import 'package:hippocamp/pages/memo/memo.dart';
-import 'package:hippocamp/pages/post_creation/post_creation_dialog.dart';
+import 'package:hippocamp/widgets/components/post_creation_and_update/select_category_dialog.dart';
 import 'package:hippocamp/pages/timeline/timeline.dart';
 import 'package:hippocamp/providers/auth_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
@@ -277,7 +277,7 @@ class _FinancePageState extends ConsumerState<HomePage> {
           if (_index == 0)
             CustomBottomSheet.showDraggableBottomSheet(
               context,
-              (controller) => PostCreationDialog(
+              (controller) => SelectCategoriesDialog(
                 scrollController: controller,
               ),
             );

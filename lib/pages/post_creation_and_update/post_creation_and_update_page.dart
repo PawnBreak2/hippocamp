@@ -5,11 +5,14 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hippocamp/constants/common.dart';
+import 'package:hippocamp/constants/navigation/routeNames.dart';
 import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocamp/helpers/extensions/int_extensions.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
@@ -20,10 +23,11 @@ import 'package:hippocamp/models/posts-creation/finance_movement_model.dart';
 import 'package:hippocamp/models/responses/categories_response_model.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart' show Post;
 import 'package:hippocamp/models/wallets/wallet_model.dart';
-import 'package:hippocamp/pages/post_creation/partner_dialog.dart';
-import 'package:hippocamp/pages/post_creation/post_creation_dialog.dart';
+import 'package:hippocamp/pages/post_creation_and_update/partner_dialog.dart';
+import 'package:hippocamp/widgets/components/post_creation_and_update/select_category_dialog.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/buttons/delete_x_icon.dart';
@@ -40,35 +44,30 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/posts-creation/partner_model.dart';
 
-class PostCreationPage extends ConsumerStatefulWidget {
+class PostCreationAndUpdatePage extends ConsumerStatefulWidget {
+  /// Widget used when the user wants to create a new post or update an existing one.
+  ///
+  /// If the user wants to update an existing post, the [post] parameter must be passed.
+  ///
+  /// If the user wants to create a new post, the [category] parameter must be passed.
+  ///
+  /// Used in the post creation phase and when opening a timeline item
+
   final PostCategory? category;
   final Post? post;
-  const PostCreationPage({
+  const PostCreationAndUpdatePage({
     this.category,
     this.post,
   });
 
   @override
-  ConsumerState<PostCreationPage> createState() => _PostCreationPageState();
+  ConsumerState<PostCreationAndUpdatePage> createState() =>
+      _PostCreationPageState();
 }
 
-class _PostCreationPageState extends ConsumerState<PostCreationPage> {
+class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
   late PostCategory category;
   PartnerModel? _partnerModel;
-
-  late final FocusNode _focusNode = FocusNode()
-    ..addListener(() {
-      setState(() {});
-    });
-
-  late final FocusNode _focusNode2 = FocusNode()
-    ..addListener(() {
-      setState(() {});
-    });
-
-  final TextEditingController _controllerCategory = TextEditingController();
-  final TextEditingController _controllerLocation = TextEditingController();
-
   DateTime _dateTime = DateTime.now();
   bool _allDay = true;
   TimeOfDay _timeOfDayFrom = TimeOfDay.now();
@@ -79,6 +78,19 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
   final List<Map> _fileAndDocumentsListToSave = [];
 
   bool _loading = false;
+
+  final TextEditingController _controllerCategory = TextEditingController();
+  final TextEditingController _controllerLocation = TextEditingController();
+
+  late final FocusNode _focusNode = FocusNode()
+    ..addListener(() {
+      setState(() {});
+    });
+
+  late final FocusNode _focusNode2 = FocusNode()
+    ..addListener(() {
+      setState(() {});
+    });
 
   @override
   void initState() {
@@ -469,7 +481,6 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
 
             // Appbar
             _AppBarSection(
-              post: widget.post as Post,
               onCategoryTap: (c) async {
                 if (c == null) return;
                 category = c;
@@ -530,13 +541,18 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
                     text: "Post salvato",
                     isError: false,
                   );
-                  Navigator.pop(context);
+                  SchedulerBinding.instance!.addPostFrameCallback((_) {
+                    context.goNamed(routeMap[routeNames.mainScaffold]);
+                  });
                 } else {
                   FlashCustomDialog.showPopUp(
                     context: context,
                     text: "Ops... qualcosa è andato storto, riprova più tardi",
                     isError: true,
                   );
+                  SchedulerBinding.instance!.addPostFrameCallback((_) {
+                    context.pop();
+                  });
                 }
               },
               createPost: postModelToCreate(),
@@ -803,7 +819,6 @@ class _PostCreationPageState extends ConsumerState<PostCreationPage> {
 }
 
 class _AppBarSection extends ConsumerWidget {
-  final Post post;
   final CreatePost createPost;
   final PostCategory category;
   final void Function(PostCategory?) onCategoryTap;
@@ -812,7 +827,6 @@ class _AppBarSection extends ConsumerWidget {
   final PartnerModel? partnerModel;
 
   const _AppBarSection({
-    required this.post,
     required this.createPost,
     required this.category,
     required this.onCategoryTap,
@@ -900,7 +914,7 @@ class _AppBarSection extends ConsumerWidget {
               children: [
                 // Arrow back
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   icon: Icon(
                     Icons.arrow_back,
                     size: 26,
@@ -918,11 +932,24 @@ class _AppBarSection extends ConsumerWidget {
                           final category =
                               await CustomBottomSheet.showDraggableBottomSheet(
                             context,
-                            (controller) => PostCreationDialog(
+                            (controller) => SelectCategoriesDialog(
                               scrollController: controller,
                               selectNewCategory: true,
                             ),
-                          );
+                          ).then((value) {
+                            if (context.mounted) {
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
+                                ref
+                                    .read(uiStateProvider.notifier)
+                                    .setSelectedDomainKey(ref
+                                        .read(appStateProvider)
+                                        .domains[0]
+                                        .key);
+                              });
+                            }
+                          });
+                          ;
 
                           onCategoryTap(category);
                         },
@@ -949,10 +976,8 @@ class _AppBarSection extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            child: Hero(
-                                tag: post.key,
-                                child: GenericCachedIcon(
-                                    imageUrl: category.iconUrl)),
+                            child:
+                                GenericCachedIcon(imageUrl: category.iconUrl),
                           ),
                         ),
                       ),

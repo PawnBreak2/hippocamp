@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hippocamp/styles/colors.dart';
 
 class CustomBottomSheet {
@@ -78,7 +79,7 @@ class CustomBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (_) => GestureDetector(
         onTap: () {
-          Navigator.pop(context);
+          context.pop();
         },
         child: Container(
           decoration: BoxDecoration(

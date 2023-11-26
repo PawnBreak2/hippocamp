@@ -4,7 +4,7 @@ import 'package:hippocamp/models/posts-creation/partner_model.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/partner_box.dart';
+import 'package:hippocamp/widgets/components/timeline/partner_box.dart';
 import 'package:hippocamp/widgets/forms/primary_text_form.dart';
 
 class PartnerDialog extends ConsumerStatefulWidget {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/constants/common.dart';
+import 'package:hippocamp/pages/post_change_category/change_category_dialog.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/bottom_bar/change_category_dialog.dart';
 import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
 
 class PostSelectionBottomBar extends StatelessWidget {
@@ -155,10 +155,19 @@ class PostSelectionBottomBar extends StatelessWidget {
                             scrollController: controller,
                             selectNewCategory: true,
                           ),
-                        ).then((value) => ref
-                                .read(uiStateProvider.notifier)
-                                .setSelectedDomainKey(
-                                    ref.read(appStateProvider).domains[0].key));
+                        ).then((value) {
+                          if (context.mounted) {
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              ref
+                                  .read(uiStateProvider.notifier)
+                                  .setSelectedDomainKey(ref
+                                      .read(appStateProvider)
+                                      .domains[0]
+                                      .key);
+                            });
+                          }
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),

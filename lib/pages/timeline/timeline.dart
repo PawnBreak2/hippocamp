@@ -19,7 +19,7 @@ import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/time_event_item.dart';
+import 'package:hippocamp/widgets/components/timeline/time_event_item.dart';
 import 'package:hippocamp/widgets/components/timeline/month_divider.dart';
 import 'package:hippocamp/widgets/components/timeline/no_posts_in_timeline.dart';
 import 'package:hippocamp/widgets/components/timeline/time_divider.dart';

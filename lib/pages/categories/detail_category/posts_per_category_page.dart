@@ -8,7 +8,7 @@ import 'package:hippocamp/models/responses/posts_response_model.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/time_event_item.dart';
+import 'package:hippocamp/widgets/components/timeline/time_event_item.dart';
 import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 

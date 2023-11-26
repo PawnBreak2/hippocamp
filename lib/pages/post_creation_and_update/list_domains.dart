@@ -8,9 +8,9 @@ import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
 
 import '../../../providers/ui_state_provider.dart';
 
-class ListDomains extends StatelessWidget {
+class ListDomainsForPostCreation extends StatelessWidget {
   final List<Domain> domains;
-  const ListDomains({
+  const ListDomainsForPostCreation({
     super.key,
     required this.domains,
   });
