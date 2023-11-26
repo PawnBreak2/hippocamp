@@ -99,35 +99,41 @@ class PostSelectionBottomBar extends StatelessWidget {
                           1);
                       return InkWell(
                         onTap: () async {
-                          await postsProviderNotifier.duplicatePost(
-                              postKey: selectedPosts
-                                  .map((e) => e.key)
-                                  .toList()
-                                  .single);
+                          if (isThereOnlyOnePostSelected) {
+                            await postsProviderNotifier.duplicatePost(
+                                postKey: selectedPosts
+                                    .map((e) => e.key)
+                                    .toList()
+                                    .single);
+                          } else {
+                            return;
+                          }
                         },
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: isThereOnlyOnePostSelected
-                              ? const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.copy,
-                                      color: textColor,
-                                      size: 20,
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      "Duplica\npost",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox(),
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.copy,
+                                color: isThereOnlyOnePostSelected
+                                    ? textColor
+                                    : CustomColors.darkerGrey,
+                                size: 20,
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "Duplica",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: isThereOnlyOnePostSelected
+                                      ? textColor
+                                      : CustomColors.darkerGrey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -156,7 +162,7 @@ class PostSelectionBottomBar extends StatelessWidget {
                                     ref.read(appStateProvider).domains[0].key));
                       },
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -165,9 +171,9 @@ class PostSelectionBottomBar extends StatelessWidget {
                                     "nav-bar-category.png",
                                 color: textColor,
                                 height: 20),
-                            SizedBox(height: 8),
-                            Text(
-                              "Assegna\ncategoria",
+                            const SizedBox(height: 8),
+                            const Text(
+                              "Cambia categoria",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: textColor,
@@ -181,6 +187,7 @@ class PostSelectionBottomBar extends StatelessWidget {
                   },
                 ),
               ),
+              const SizedBox(width: 12),
               Material(
                 color: Colors.transparent,
                 child: Consumer(
@@ -209,7 +216,7 @@ class PostSelectionBottomBar extends StatelessWidget {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              "Elimina\npost",
+                              "Elimina",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: textColor,
@@ -223,6 +230,7 @@ class PostSelectionBottomBar extends StatelessWidget {
                   },
                 ),
               ),
+              const SizedBox(width: 12),
             ],
           ),
         ],

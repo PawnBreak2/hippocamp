@@ -59,7 +59,7 @@ class _HomePageState extends ConsumerState<MainScaffold> {
       bottomNavigationBar: UnconstrainedBox(
         child: Container(
           width: 100.w,
-          height: 9.h,
+          height: 10.h,
           decoration: const BoxDecoration(
             color: Colors.white,
             boxShadow: [
