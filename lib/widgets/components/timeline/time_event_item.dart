@@ -55,7 +55,6 @@ class TimeEventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    inspect(post);
     final listChips = _chipsBoxList;
     final isPast = post.dateTimeFromString.isBefore(DateTime.now());
 

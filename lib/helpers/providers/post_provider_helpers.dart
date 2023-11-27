@@ -9,10 +9,10 @@ import 'package:hippocamp/providers/posts_provider.dart';
 class PostsProviderHelpers {
   static void manageGetPostsResponseFromAPI(
       {required Either<ErrorCallModel, PostResponse> response,
-      required NotifierProviderRef ref}) async {
+      required NotifierProviderRef ref}) {
     response.fold(
       (error) => null,
-      (body) async {
+      (body) {
         /// TODO: ottimizzare e vedere se è necessario tenere allPosts nello stato
 
         // filters all the posts that are already in the state repository using the unique key
@@ -83,41 +83,32 @@ class PostsProviderHelpers {
   static Map<int, Map<int, List<Post>>> organizePostsByYearAndMonth(
       List<Post> posts) {
     Map<int, Map<int, List<Post>>> postsByDate = {};
-
+    var startTime = DateTime.now();
     // Initialize each year with 12 empty months
     for (var post in posts) {
       int year = post.dateTimeFromString.year;
-      if (!postsByDate.containsKey(year)) {
-        postsByDate[year] = {
-          1: [],
-          2: [],
-          3: [],
-          4: [],
-          5: [],
-          6: [],
-          7: [],
-          8: [],
-          9: [],
-          10: [],
-          11: [],
-          12: []
-        };
-      }
+      postsByDate.putIfAbsent(
+          year,
+          () => Map.fromIterable(List.generate(12, (i) => i + 1),
+              key: (item) => item, value: (item) => []));
     }
 
     // Populate the posts in the respective year and month
     for (var post in posts) {
       DateTime postDate = post.dateTimeFromString;
-      int year = postDate.year;
-      int month = postDate.month;
-
-      postsByDate[year]![month]!.add(post);
-
-      // Sorting the posts in descending order by dateTime
-      postsByDate[year]![month]!
-          .sort((a, b) => b.dateTimeFromString.compareTo(a.dateTimeFromString));
+      postsByDate[postDate.year]![postDate.month]!.add(post);
     }
 
+    // Sort the posts in each month in descending order by dateTime
+    postsByDate.forEach((year, months) {
+      months.forEach((month, postsList) {
+        postsList.sort(
+            (a, b) => b.dateTimeFromString.compareTo(a.dateTimeFromString));
+      });
+    });
+    var endTime = DateTime.now();
+    var duration = endTime.difference(startTime);
+    print('‼️ POSTS ORGANIZED in $duration milliseconds ‼️');
     return postsByDate;
   }
 }

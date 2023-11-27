@@ -12,7 +12,7 @@ import 'package:hippocamp/models/responses/posts_response_model.dart';
 class AppStateNotifier extends Notifier<AppState> {
   @override
   build() {
-    return const AppState();
+    return AppState.initial();
   }
 
   final _appStateClient = AppStateClient();
@@ -41,6 +41,10 @@ class AppStateNotifier extends Notifier<AppState> {
 
   void resetValueToScrollToday() {
     state = state.copyWith(valueToScrollToToday: 0);
+  }
+
+  void setLastDateTimeForRequestingPosts(DateTime dateTime) {
+    state = state.copyWith(lastDateTimeForRequestingPosts: dateTime);
   }
 
   void setValueToScrollToday(int value) {

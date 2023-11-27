@@ -24,10 +24,6 @@ mixin _$PostsRepository {
       throw _privateConstructorUsedError;
   Map<String, List<Post>> get postsMappedByDate =>
       throw _privateConstructorUsedError;
-  DateTime? get datePagination =>
-      throw _privateConstructorUsedError; // Made nullable
-  DateTime? get futureDatePagination =>
-      throw _privateConstructorUsedError; // Made nullable
   bool get endList => throw _privateConstructorUsedError;
   bool get endFutureList => throw _privateConstructorUsedError;
 
@@ -47,8 +43,6 @@ abstract class $PostsRepositoryCopyWith<$Res> {
       List<Post> selectedPosts,
       Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
       Map<String, List<Post>> postsMappedByDate,
-      DateTime? datePagination,
-      DateTime? futureDatePagination,
       bool endList,
       bool endFutureList});
 }
@@ -70,8 +64,6 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
     Object? selectedPosts = null,
     Object? postsMappedByYearAndMonth = null,
     Object? postsMappedByDate = null,
-    Object? datePagination = freezed,
-    Object? futureDatePagination = freezed,
     Object? endList = null,
     Object? endFutureList = null,
   }) {
@@ -92,14 +84,6 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
           ? _value.postsMappedByDate
           : postsMappedByDate // ignore: cast_nullable_to_non_nullable
               as Map<String, List<Post>>,
-      datePagination: freezed == datePagination
-          ? _value.datePagination
-          : datePagination // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      futureDatePagination: freezed == futureDatePagination
-          ? _value.futureDatePagination
-          : futureDatePagination // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       endList: null == endList
           ? _value.endList
           : endList // ignore: cast_nullable_to_non_nullable
@@ -125,8 +109,6 @@ abstract class _$$PostsRepositoryImplCopyWith<$Res>
       List<Post> selectedPosts,
       Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
       Map<String, List<Post>> postsMappedByDate,
-      DateTime? datePagination,
-      DateTime? futureDatePagination,
       bool endList,
       bool endFutureList});
 }
@@ -146,8 +128,6 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
     Object? selectedPosts = null,
     Object? postsMappedByYearAndMonth = null,
     Object? postsMappedByDate = null,
-    Object? datePagination = freezed,
-    Object? futureDatePagination = freezed,
     Object? endList = null,
     Object? endFutureList = null,
   }) {
@@ -168,14 +148,6 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
           ? _value._postsMappedByDate
           : postsMappedByDate // ignore: cast_nullable_to_non_nullable
               as Map<String, List<Post>>,
-      datePagination: freezed == datePagination
-          ? _value.datePagination
-          : datePagination // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      futureDatePagination: freezed == futureDatePagination
-          ? _value.futureDatePagination
-          : futureDatePagination // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       endList: null == endList
           ? _value.endList
           : endList // ignore: cast_nullable_to_non_nullable
@@ -198,8 +170,6 @@ class _$PostsRepositoryImpl
       final List<Post> selectedPosts = const [],
       final Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth = const {},
       final Map<String, List<Post>> postsMappedByDate = const {},
-      this.datePagination,
-      this.futureDatePagination,
       this.endList = false,
       this.endFutureList = false})
       : _allPosts = allPosts,
@@ -250,12 +220,6 @@ class _$PostsRepositoryImpl
   }
 
   @override
-  final DateTime? datePagination;
-// Made nullable
-  @override
-  final DateTime? futureDatePagination;
-// Made nullable
-  @override
   @JsonKey()
   final bool endList;
   @override
@@ -264,7 +228,7 @@ class _$PostsRepositoryImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PostsRepository(allPosts: $allPosts, selectedPosts: $selectedPosts, postsMappedByYearAndMonth: $postsMappedByYearAndMonth, postsMappedByDate: $postsMappedByDate, datePagination: $datePagination, futureDatePagination: $futureDatePagination, endList: $endList, endFutureList: $endFutureList)';
+    return 'PostsRepository(allPosts: $allPosts, selectedPosts: $selectedPosts, postsMappedByYearAndMonth: $postsMappedByYearAndMonth, postsMappedByDate: $postsMappedByDate, endList: $endList, endFutureList: $endFutureList)';
   }
 
   @override
@@ -277,8 +241,6 @@ class _$PostsRepositoryImpl
       ..add(DiagnosticsProperty(
           'postsMappedByYearAndMonth', postsMappedByYearAndMonth))
       ..add(DiagnosticsProperty('postsMappedByDate', postsMappedByDate))
-      ..add(DiagnosticsProperty('datePagination', datePagination))
-      ..add(DiagnosticsProperty('futureDatePagination', futureDatePagination))
       ..add(DiagnosticsProperty('endList', endList))
       ..add(DiagnosticsProperty('endFutureList', endFutureList));
   }
@@ -295,10 +257,6 @@ class _$PostsRepositoryImpl
                 other._postsMappedByYearAndMonth, _postsMappedByYearAndMonth) &&
             const DeepCollectionEquality()
                 .equals(other._postsMappedByDate, _postsMappedByDate) &&
-            (identical(other.datePagination, datePagination) ||
-                other.datePagination == datePagination) &&
-            (identical(other.futureDatePagination, futureDatePagination) ||
-                other.futureDatePagination == futureDatePagination) &&
             (identical(other.endList, endList) || other.endList == endList) &&
             (identical(other.endFutureList, endFutureList) ||
                 other.endFutureList == endFutureList));
@@ -311,8 +269,6 @@ class _$PostsRepositoryImpl
       const DeepCollectionEquality().hash(_selectedPosts),
       const DeepCollectionEquality().hash(_postsMappedByYearAndMonth),
       const DeepCollectionEquality().hash(_postsMappedByDate),
-      datePagination,
-      futureDatePagination,
       endList,
       endFutureList);
 
@@ -330,8 +286,6 @@ abstract class _PostsRepository implements PostsRepository {
       final List<Post> selectedPosts,
       final Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
       final Map<String, List<Post>> postsMappedByDate,
-      final DateTime? datePagination,
-      final DateTime? futureDatePagination,
       final bool endList,
       final bool endFutureList}) = _$PostsRepositoryImpl;
 
@@ -344,10 +298,6 @@ abstract class _PostsRepository implements PostsRepository {
   @override
   Map<String, List<Post>> get postsMappedByDate;
   @override
-  DateTime? get datePagination;
-  @override // Made nullable
-  DateTime? get futureDatePagination;
-  @override // Made nullable
   bool get endList;
   @override
   bool get endFutureList;

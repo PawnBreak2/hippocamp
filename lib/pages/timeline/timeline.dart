@@ -41,7 +41,7 @@ class TimelinePage extends ConsumerStatefulWidget {
 class _TimelinePageState extends ConsumerState<TimelinePage> {
   // used to avoid the repetition of the call to the getFirstPostOfTheYear function saving resources
   bool gotFirstPostOfYear = false;
-
+  String processedYear = '';
   // used to check the previous year of post rendered and activate dividers accordingly
   String previousYearInTimeLinePost = '';
   int indexForMonths = 0;
@@ -57,11 +57,15 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
   late PostsRepository postsProviderState;
   late PostListNotifier postsProviderNotifier;
   bool _showCenterButton = false;
+  Map<int, Map<int, List<Post>>> mappedPosts = {};
 
   @override
   void initState() {
     itemScrollController = ItemScrollController();
     itemPositionsListener = ItemPositionsListener.create();
+    ref.listenManual(postListProvider, (previous, next) {
+      mappedPosts = next.postsMappedByYearAndMonth;
+    }, fireImmediately: true);
 
     super.initState();
     _init().whenComplete(() async {
@@ -107,12 +111,45 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     });
   }
 
+  Future<bool> requestNewPosts(DateTime dateTime) async {
+    await postsProviderNotifier.getNewPosts(
+        past: true, dateTime: dateTime, monthsToGoBack: 2);
+
+    return true;
+  }
+
   void checkScrolling() async {
+    DateTime start = DateTime.now();
+    List orderedIndexes = itemPositionsListener.itemPositions.value
+        .map((e) => e.index)
+        .sorted((a, b) => b.compareTo(a));
+    int itemCountInTimeline = TimelineHelpers.countTotalMonths(ref.read(
+        postListProvider.select((state) => state.postsMappedByYearAndMonth)));
+    orderedIndexes.sort((a, b) => b.compareTo(a));
+    DateTime? lastDateTimeForRequestingPosts =
+        appStateProviderState.lastDateTimeForRequestingPosts;
+    // gets the highest number in orderedIndexes ie the earliest month in the list
+    int firstMonthIndex = orderedIndexes.first;
+
+    var firstMonth = 12 - (firstMonthIndex % 12);
+    var firstYearIndex = (firstMonthIndex / 12).floor();
+    var firstYear =
+        mappedPosts.keys.toList().reversed.toList()[firstYearIndex.toInt()];
+    print(mappedPosts.keys.toList().reversed.toList());
+    DateTime dateTimeForFirstYearMonth = DateTime(firstYear, firstMonth);
+    final dateTimeToTriggerRequestingPosts = DateTime(
+        lastDateTimeForRequestingPosts!.year,
+        lastDateTimeForRequestingPosts!.month - 2);
+
+    if (dateTimeForFirstYearMonth == dateTimeToTriggerRequestingPosts) {
+      print('DO IT');
+    }
+
     final nearTheStart =
         itemPositionsListener.itemPositions.value.first.index < 3;
 
     final nearTheEnd = itemPositionsListener.itemPositions.value.last.index ==
-        (postsProviderState.postsMappedByDate.length - 1);
+        (postsProviderState.postsMappedByDate.length - 2);
 
     final listIndexesVisible =
         itemPositionsListener.itemPositions.value.map((e) => e.index);
@@ -123,7 +160,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                     .where((element) => element.index == valueToScrollToToday)
                     .first
                     .itemLeadingEdge <
-                -0.25);
+                -0.35);
 
     if (showScrollToToday && !_showCenterButton) {
       uiStateProviderNotifier.setShowCenterButtonInTimeline(true);
@@ -143,6 +180,10 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
       //await postsProviderNotifier.getNewPosts(past: true);
       _getNewPosts = false;
     }
+    DateTime end = DateTime.now();
+    Duration duration = end.difference(start);
+
+    // print('checkScrolling executed in ${duration.inMilliseconds} milliseconds');
   }
 
   bool shouldShowTodayDivider(Post processedPost) {
@@ -251,7 +292,9 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
         postListProvider.select((state) => state.postsMappedByYearAndMonth));
 
     //
-
+    print('value to scroll to today');
+    inspect(postsMappedByYearAndMonth);
+    print(appStateProviderState.valueToScrollToToday);
     if (_isLoading) {
       return const LoadingScreen();
     }
@@ -286,10 +329,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
                   var yearIndex = (i / 12).floor();
                   var yearForPost = postsMappedByYearAndMonth.keys
-                      .toList()
-                      .reversed
                       .toList()[yearIndex.toInt()];
-
+                  print(yearForPost);
                   final dateForPost = DateTime(yearForPost, monthForPost);
 
                   if (dateForPost.month == 1) {

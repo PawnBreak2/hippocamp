@@ -152,79 +152,50 @@ class PostListNotifier extends Notifier<PostsRepository> {
     }
   }
 
-  Future<void> getNewPosts({bool past = true}) async {
-    print('getting new post DEBUG');
-    return;
-    /*final resp = await _postsClient.getPosts(
-      dateTime: past ? datePagination : futureDatePagination,
-      past: past,
-    );
+  Future<void> getNewPosts(
+      {required DateTime dateTime,
+      past = true,
+      int monthsToGoBack = 2,
+      yearsToGoForward = 1}) async {
+    DateTime datePaginationForThisGetCall =
+        DateTime(DateTime.now().year, DateTime.now().month);
 
     if (past) {
-      final month = datePagination.month - 1;
-      DateTime newDate = DateTime(datePagination.year, month);
-
-      if (month == 0) newDate = DateTime(datePagination.year - 1, 12);
-
-      datePagination = newDate;
-    } else {
-      final month = futureDatePagination.month + 1;
-      DateTime newDate = DateTime(futureDatePagination.year, month);
-
-      if (month == 13) newDate = DateTime(futureDatePagination.year + 1, 1);
-
-      futureDatePagination = newDate;
-    }
-
-    resp.fold(
-      (error) => null,
-      (body) {
-        List<Post> newPostsFilteredFromDuplicate = body.posts;
-        newPostsFilteredFromDuplicate.removeWhere((Post element) =>
-            state.allPosts.any((Post post) => element.key == post.key));
-
-        newPostsFilteredFromDuplicate.sort((a, b) => b.date.compareTo(a.date));
-        state = state.copyWith(
-            allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
-              ..sort((a, b) => b.date.compareTo(a.date)));
-        state = state.copyWith(
-          postsMappedByDate: {},
+      for (var i = 0; i < monthsToGoBack; i++) {
+        final resp = await _postsClient.getPosts(
+          dateTime: datePaginationForThisGetCall,
+          past: past,
         );
 
-        if (past) {
-          endList = body.end;
-        } else {
-          endFutureList = body.end;
-        }
-        ref.read(appStateProvider.notifier).resetValueToScrollToday();
-        for (Post post in state.allPosts) {
-          ///TODO ottimizzare e mettere entrambi i metodi duplicati in un unico metodo
-          final postsPerDate = state.postsMappedByDate[post.date] ?? [];
-          postsPerDate.add(post);
-          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state = state.copyWith(postsMappedByDate: {
-            ...state.postsMappedByDate,
-            post.date: postsPerDate
-          });
+        PostsProviderHelpers.manageGetPostsResponseFromAPI(
+            response: resp, ref: ref);
 
-          //used to iterate until you find the date of today to scroll to
-          bool gotTodayScrollValue = false;
-          gotTodayScrollValue =
-              ref.read(appStateProvider.notifier).calculateIndexOfTodayInPosts(
-                    post,
-                    gotTodayScrollValue,
-                  );
+        final month = datePaginationForThisGetCall.month - 1;
+        DateTime newDate = DateTime(datePaginationForThisGetCall.year, month);
+
+        if (month == 0) {
+          newDate = DateTime(datePaginationForThisGetCall.year - 1, 12);
         }
 
-        Map<int, Map<int, List<Post>>> postsByYearAndMonth =
-            organizePostsByYearAndMonth(state.allPosts);
+        datePaginationForThisGetCall = newDate;
+      }
+    } else {
+      for (var i = 0; i < yearsToGoForward; i++) {
+        final resp = await _postsClient.getPosts(
+          dateTime: datePaginationForThisGetCall,
+          past: past,
+        );
 
-        state = state.copyWith(postsMappedByYearAndMonth: {
-          ...state.postsMappedByYearAndMonth,
-          ...postsByYearAndMonth
-        });
-      },
-    );*/
+        PostsProviderHelpers.manageGetPostsResponseFromAPI(
+            response: resp, ref: ref);
+
+        final year = datePaginationForThisGetCall.year + 1;
+        final month = datePaginationForThisGetCall.month;
+        DateTime newDate = DateTime(year, month);
+
+        datePaginationForThisGetCall = newDate;
+      }
+    }
   }
 
   Future<Map<String, List<Post>>> getPostsFromCategory({

@@ -29,6 +29,8 @@ mixin _$AppState {
       throw _privateConstructorUsedError;
   List<PostCategory> get categoriesInDomainsInactive =>
       throw _privateConstructorUsedError;
+  DateTime? get lastDateTimeForRequestingPosts =>
+      throw _privateConstructorUsedError;
   bool get isSelectingPosts => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -51,6 +53,7 @@ abstract class $AppStateCopyWith<$Res> {
       List<Domain> domainsInCategoriesInactive,
       List<PostCategory> categoriesInDomains,
       List<PostCategory> categoriesInDomainsInactive,
+      DateTime? lastDateTimeForRequestingPosts,
       bool isSelectingPosts});
 }
 
@@ -76,6 +79,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? domainsInCategoriesInactive = null,
     Object? categoriesInDomains = null,
     Object? categoriesInDomainsInactive = null,
+    Object? lastDateTimeForRequestingPosts = freezed,
     Object? isSelectingPosts = null,
   }) {
     return _then(_value.copyWith(
@@ -115,6 +119,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.categoriesInDomainsInactive
           : categoriesInDomainsInactive // ignore: cast_nullable_to_non_nullable
               as List<PostCategory>,
+      lastDateTimeForRequestingPosts: freezed == lastDateTimeForRequestingPosts
+          ? _value.lastDateTimeForRequestingPosts
+          : lastDateTimeForRequestingPosts // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       isSelectingPosts: null == isSelectingPosts
           ? _value.isSelectingPosts
           : isSelectingPosts // ignore: cast_nullable_to_non_nullable
@@ -141,6 +149,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
       List<Domain> domainsInCategoriesInactive,
       List<PostCategory> categoriesInDomains,
       List<PostCategory> categoriesInDomainsInactive,
+      DateTime? lastDateTimeForRequestingPosts,
       bool isSelectingPosts});
 }
 
@@ -164,6 +173,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? domainsInCategoriesInactive = null,
     Object? categoriesInDomains = null,
     Object? categoriesInDomainsInactive = null,
+    Object? lastDateTimeForRequestingPosts = freezed,
     Object? isSelectingPosts = null,
   }) {
     return _then(_$AppStateImpl(
@@ -203,6 +213,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value._categoriesInDomainsInactive
           : categoriesInDomainsInactive // ignore: cast_nullable_to_non_nullable
               as List<PostCategory>,
+      lastDateTimeForRequestingPosts: freezed == lastDateTimeForRequestingPosts
+          ? _value.lastDateTimeForRequestingPosts
+          : lastDateTimeForRequestingPosts // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       isSelectingPosts: null == isSelectingPosts
           ? _value.isSelectingPosts
           : isSelectingPosts // ignore: cast_nullable_to_non_nullable
@@ -224,6 +238,7 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       final List<Domain> domainsInCategoriesInactive = const [],
       final List<PostCategory> categoriesInDomains = const [],
       final List<PostCategory> categoriesInDomainsInactive = const [],
+      this.lastDateTimeForRequestingPosts,
       this.isSelectingPosts = false})
       : _attachmentTypes = attachmentTypes,
         _categories = categories,
@@ -315,12 +330,14 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
   }
 
   @override
+  final DateTime? lastDateTimeForRequestingPosts;
+  @override
   @JsonKey()
   final bool isSelectingPosts;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppState(attachmentTypes: $attachmentTypes, categories: $categories, domains: $domains, businessPartners: $businessPartners, valueToScrollToToday: $valueToScrollToToday, domainsInCategories: $domainsInCategories, domainsInCategoriesInactive: $domainsInCategoriesInactive, categoriesInDomains: $categoriesInDomains, categoriesInDomainsInactive: $categoriesInDomainsInactive, isSelectingPosts: $isSelectingPosts)';
+    return 'AppState(attachmentTypes: $attachmentTypes, categories: $categories, domains: $domains, businessPartners: $businessPartners, valueToScrollToToday: $valueToScrollToToday, domainsInCategories: $domainsInCategories, domainsInCategoriesInactive: $domainsInCategoriesInactive, categoriesInDomains: $categoriesInDomains, categoriesInDomainsInactive: $categoriesInDomainsInactive, lastDateTimeForRequestingPosts: $lastDateTimeForRequestingPosts, isSelectingPosts: $isSelectingPosts)';
   }
 
   @override
@@ -339,6 +356,8 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       ..add(DiagnosticsProperty('categoriesInDomains', categoriesInDomains))
       ..add(DiagnosticsProperty(
           'categoriesInDomainsInactive', categoriesInDomainsInactive))
+      ..add(DiagnosticsProperty(
+          'lastDateTimeForRequestingPosts', lastDateTimeForRequestingPosts))
       ..add(DiagnosticsProperty('isSelectingPosts', isSelectingPosts));
   }
 
@@ -366,6 +385,10 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
             const DeepCollectionEquality().equals(
                 other._categoriesInDomainsInactive,
                 _categoriesInDomainsInactive) &&
+            (identical(other.lastDateTimeForRequestingPosts,
+                    lastDateTimeForRequestingPosts) ||
+                other.lastDateTimeForRequestingPosts ==
+                    lastDateTimeForRequestingPosts) &&
             (identical(other.isSelectingPosts, isSelectingPosts) ||
                 other.isSelectingPosts == isSelectingPosts));
   }
@@ -382,6 +405,7 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       const DeepCollectionEquality().hash(_domainsInCategoriesInactive),
       const DeepCollectionEquality().hash(_categoriesInDomains),
       const DeepCollectionEquality().hash(_categoriesInDomainsInactive),
+      lastDateTimeForRequestingPosts,
       isSelectingPosts);
 
   @JsonKey(ignore: true)
@@ -402,6 +426,7 @@ abstract class _AppState implements AppState {
       final List<Domain> domainsInCategoriesInactive,
       final List<PostCategory> categoriesInDomains,
       final List<PostCategory> categoriesInDomainsInactive,
+      final DateTime? lastDateTimeForRequestingPosts,
       final bool isSelectingPosts}) = _$AppStateImpl;
 
   @override
@@ -422,6 +447,8 @@ abstract class _AppState implements AppState {
   List<PostCategory> get categoriesInDomains;
   @override
   List<PostCategory> get categoriesInDomainsInactive;
+  @override
+  DateTime? get lastDateTimeForRequestingPosts;
   @override
   bool get isSelectingPosts;
   @override

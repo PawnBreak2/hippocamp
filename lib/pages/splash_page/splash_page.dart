@@ -82,10 +82,13 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   int findIndexOfMonth(
       List<DateTime> listOfMonths, DateTime currentYearAndMonth) {
+    var list = listOfMonths.map((e) => e.toString()).toList();
+    print(list);
+
     // Finding the index of the month that matches currentYearAndMonth
     return listOfMonths.indexWhere((date) =>
-        date.year == currentYearAndMonth.year &&
-        date.month == currentYearAndMonth.month);
+        (date.year == currentYearAndMonth.year &&
+            date.month == currentYearAndMonth.month));
   }
 
   void setValueToScrollToToday() {
@@ -93,16 +96,18 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     Map<int, Map<int, List<Post>>> postsMappedByDateAndMonth =
         ref.read(postListProvider).postsMappedByYearAndMonth;
     List<DateTime> listOfMonths = getListOfMonths(postsMappedByDateAndMonth);
+
     int valueToScrollTo = findIndexOfMonth(listOfMonths, currentDate);
     appStateNotifier.setValueToScrollToday(valueToScrollTo);
   }
 
   Future<void> _getAllPosts() async {
     var startTime = DateTime.now();
-
+    print('GET ALL POSTS FIRED');
     var posts = ref.read(postListProvider.notifier);
-    // gets the posts for the previous two months
-    await posts.getPosts(past: true, monthsToGoBack: 2);
+    // gets the posts for the previous months
+    print('calling getPosts at ${DateTime.now().millisecond}');
+    await posts.getPosts(past: true, monthsToGoBack: 12);
     await posts.getPosts(past: false, yearsToGoForward: 2);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
@@ -196,10 +201,10 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: LoadingAnimationWidget.fourRotatingDots(
-            color: CustomColors.primaryRed, size: 80),
-      ),
+      body: Center(child: SizedBox()
+          /*LoadingAnimationWidget.fourRotatingDots(
+            color: CustomColors.primaryRed, size: 80),*/
+          ),
     );
   }
 }

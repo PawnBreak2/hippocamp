@@ -18,5 +18,12 @@ class AppState with _$AppState {
       @Default([]) List<Domain> domainsInCategoriesInactive,
       @Default([]) List<PostCategory> categoriesInDomains,
       @Default([]) List<PostCategory> categoriesInDomainsInactive,
+      DateTime? lastDateTimeForRequestingPosts,
       @Default(false) bool isSelectingPosts}) = _AppState;
+
+  factory AppState.initial() {
+    return AppState(
+      lastDateTimeForRequestingPosts: DateTime.now(),
+    );
+  }
 }
