@@ -18,7 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$PostsRepository {
 // this is a list of all posts
   List<Post> get allPosts => throw _privateConstructorUsedError;
-  List<Post> get selectedPosts =>
+  List<Post> get selectedPosts => throw _privateConstructorUsedError;
+  List<Post> get searchedPosts =>
       throw _privateConstructorUsedError; // this is a list of posts grouped by date
   Map<int, Map<int, List<Post>>> get postsMappedByYearAndMonth =>
       throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $PostsRepositoryCopyWith<$Res> {
   $Res call(
       {List<Post> allPosts,
       List<Post> selectedPosts,
+      List<Post> searchedPosts,
       Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
       Map<String, List<Post>> postsMappedByDate,
       bool endList,
@@ -62,6 +64,7 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
   $Res call({
     Object? allPosts = null,
     Object? selectedPosts = null,
+    Object? searchedPosts = null,
     Object? postsMappedByYearAndMonth = null,
     Object? postsMappedByDate = null,
     Object? endList = null,
@@ -75,6 +78,10 @@ class _$PostsRepositoryCopyWithImpl<$Res, $Val extends PostsRepository>
       selectedPosts: null == selectedPosts
           ? _value.selectedPosts
           : selectedPosts // ignore: cast_nullable_to_non_nullable
+              as List<Post>,
+      searchedPosts: null == searchedPosts
+          ? _value.searchedPosts
+          : searchedPosts // ignore: cast_nullable_to_non_nullable
               as List<Post>,
       postsMappedByYearAndMonth: null == postsMappedByYearAndMonth
           ? _value.postsMappedByYearAndMonth
@@ -107,6 +114,7 @@ abstract class _$$PostsRepositoryImplCopyWith<$Res>
   $Res call(
       {List<Post> allPosts,
       List<Post> selectedPosts,
+      List<Post> searchedPosts,
       Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
       Map<String, List<Post>> postsMappedByDate,
       bool endList,
@@ -126,6 +134,7 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
   $Res call({
     Object? allPosts = null,
     Object? selectedPosts = null,
+    Object? searchedPosts = null,
     Object? postsMappedByYearAndMonth = null,
     Object? postsMappedByDate = null,
     Object? endList = null,
@@ -139,6 +148,10 @@ class __$$PostsRepositoryImplCopyWithImpl<$Res>
       selectedPosts: null == selectedPosts
           ? _value._selectedPosts
           : selectedPosts // ignore: cast_nullable_to_non_nullable
+              as List<Post>,
+      searchedPosts: null == searchedPosts
+          ? _value._searchedPosts
+          : searchedPosts // ignore: cast_nullable_to_non_nullable
               as List<Post>,
       postsMappedByYearAndMonth: null == postsMappedByYearAndMonth
           ? _value._postsMappedByYearAndMonth
@@ -168,12 +181,14 @@ class _$PostsRepositoryImpl
   const _$PostsRepositoryImpl(
       {final List<Post> allPosts = const [],
       final List<Post> selectedPosts = const [],
+      final List<Post> searchedPosts = const [],
       final Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth = const {},
       final Map<String, List<Post>> postsMappedByDate = const {},
       this.endList = false,
       this.endFutureList = false})
       : _allPosts = allPosts,
         _selectedPosts = selectedPosts,
+        _searchedPosts = searchedPosts,
         _postsMappedByYearAndMonth = postsMappedByYearAndMonth,
         _postsMappedByDate = postsMappedByDate;
 
@@ -195,6 +210,15 @@ class _$PostsRepositoryImpl
     if (_selectedPosts is EqualUnmodifiableListView) return _selectedPosts;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_selectedPosts);
+  }
+
+  final List<Post> _searchedPosts;
+  @override
+  @JsonKey()
+  List<Post> get searchedPosts {
+    if (_searchedPosts is EqualUnmodifiableListView) return _searchedPosts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searchedPosts);
   }
 
 // this is a list of posts grouped by date
@@ -228,7 +252,7 @@ class _$PostsRepositoryImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PostsRepository(allPosts: $allPosts, selectedPosts: $selectedPosts, postsMappedByYearAndMonth: $postsMappedByYearAndMonth, postsMappedByDate: $postsMappedByDate, endList: $endList, endFutureList: $endFutureList)';
+    return 'PostsRepository(allPosts: $allPosts, selectedPosts: $selectedPosts, searchedPosts: $searchedPosts, postsMappedByYearAndMonth: $postsMappedByYearAndMonth, postsMappedByDate: $postsMappedByDate, endList: $endList, endFutureList: $endFutureList)';
   }
 
   @override
@@ -238,6 +262,7 @@ class _$PostsRepositoryImpl
       ..add(DiagnosticsProperty('type', 'PostsRepository'))
       ..add(DiagnosticsProperty('allPosts', allPosts))
       ..add(DiagnosticsProperty('selectedPosts', selectedPosts))
+      ..add(DiagnosticsProperty('searchedPosts', searchedPosts))
       ..add(DiagnosticsProperty(
           'postsMappedByYearAndMonth', postsMappedByYearAndMonth))
       ..add(DiagnosticsProperty('postsMappedByDate', postsMappedByDate))
@@ -253,6 +278,8 @@ class _$PostsRepositoryImpl
             const DeepCollectionEquality().equals(other._allPosts, _allPosts) &&
             const DeepCollectionEquality()
                 .equals(other._selectedPosts, _selectedPosts) &&
+            const DeepCollectionEquality()
+                .equals(other._searchedPosts, _searchedPosts) &&
             const DeepCollectionEquality().equals(
                 other._postsMappedByYearAndMonth, _postsMappedByYearAndMonth) &&
             const DeepCollectionEquality()
@@ -267,6 +294,7 @@ class _$PostsRepositoryImpl
       runtimeType,
       const DeepCollectionEquality().hash(_allPosts),
       const DeepCollectionEquality().hash(_selectedPosts),
+      const DeepCollectionEquality().hash(_searchedPosts),
       const DeepCollectionEquality().hash(_postsMappedByYearAndMonth),
       const DeepCollectionEquality().hash(_postsMappedByDate),
       endList,
@@ -284,6 +312,7 @@ abstract class _PostsRepository implements PostsRepository {
   const factory _PostsRepository(
       {final List<Post> allPosts,
       final List<Post> selectedPosts,
+      final List<Post> searchedPosts,
       final Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
       final Map<String, List<Post>> postsMappedByDate,
       final bool endList,
@@ -293,6 +322,8 @@ abstract class _PostsRepository implements PostsRepository {
   List<Post> get allPosts;
   @override
   List<Post> get selectedPosts;
+  @override
+  List<Post> get searchedPosts;
   @override // this is a list of posts grouped by date
   Map<int, Map<int, List<Post>>> get postsMappedByYearAndMonth;
   @override

@@ -135,7 +135,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     var firstYearIndex = (firstMonthIndex / 12).floor();
     var firstYear =
         mappedPosts.keys.toList().reversed.toList()[firstYearIndex.toInt()];
-    print(mappedPosts.keys.toList().reversed.toList());
     DateTime dateTimeForFirstYearMonth = DateTime(firstYear, firstMonth);
     final dateTimeToTriggerRequestingPosts = DateTime(
         lastDateTimeForRequestingPosts!.year,
@@ -291,6 +290,9 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final postsMappedByYearAndMonth = ref.watch(
         postListProvider.select((state) => state.postsMappedByYearAndMonth));
 
+    final isSearchingPosts =
+        ref.watch(appStateProvider.select((state) => state.isSearchingPosts));
+
     //
     print('value to scroll to today');
     inspect(postsMappedByYearAndMonth);
@@ -312,40 +314,60 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                   const NoPostsInTimelineSection(),
                 ],
               )
-            : ScrollablePositionedList.builder(
-                shrinkWrap: true,
-                itemScrollController: itemScrollController,
-                itemPositionsListener: itemPositionsListener,
-                physics: const ClampingScrollPhysics(),
-                itemCount:
-                    TimelineHelpers.countTotalMonths(postsMappedByYearAndMonth),
-                padding: const EdgeInsets.only(bottom: 80),
-                itemBuilder: (_, i) {
-                  bool shouldShowYearDivider = false;
+            : isSearchingPosts
+                ? ListView.builder(
+                    itemCount: ref.watch(postListProvider
+                        .select((state) => state.searchedPosts.length)),
+                    itemBuilder: (_, i) {
+                      List searchedPosts = ref.watch(postListProvider
+                          .select((state) => state.searchedPosts));
+                      if (searchedPosts.isEmpty) {
+                        print('is empty');
+                        return const SizedBox();
+                      }
+                      return TimeEventItem(
+                        post: searchedPosts[i],
+                        isSelectedItem: false,
+                        showSelectionCircle: false,
+                        onTap: null,
+                        onLongPress: null,
+                      );
+                    },
+                  )
+                : ScrollablePositionedList.builder(
+                    shrinkWrap: true,
+                    itemScrollController: itemScrollController,
+                    itemPositionsListener: itemPositionsListener,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: TimelineHelpers.countTotalMonths(
+                        postsMappedByYearAndMonth),
+                    padding: const EdgeInsets.only(bottom: 80),
+                    itemBuilder: (_, i) {
+                      bool shouldShowYearDivider = false;
 
-                  // these are reversed to show the most recent posts first
+                      // these are reversed to show the most recent posts first
 
-                  var monthForPost = 12 - (i % 12);
+                      var monthForPost = 12 - (i % 12);
 
-                  var yearIndex = (i / 12).floor();
-                  var yearForPost = postsMappedByYearAndMonth.keys
-                      .toList()[yearIndex.toInt()];
-                  print(yearForPost);
-                  final dateForPost = DateTime(yearForPost, monthForPost);
+                      var yearIndex = (i / 12).floor();
+                      var yearForPost = postsMappedByYearAndMonth.keys
+                          .toList()[yearIndex.toInt()];
+                      print(yearForPost);
+                      final dateForPost = DateTime(yearForPost, monthForPost);
 
-                  if (dateForPost.month == 1) {
-                    shouldShowYearDivider = true;
-                  }
+                      if (dateForPost.month == 1) {
+                        shouldShowYearDivider = true;
+                      }
 
-                  return Column(
-                    key: ValueKey(dateForPost),
-                    children: [
-                      // Month divider
-                      MonthDivider(
-                          month: dateForPost.month.monthFromInt,
-                          year: dateForPost.year.toString()),
+                      return Column(
+                        key: ValueKey(dateForPost),
+                        children: [
+                          // Month divider
+                          MonthDivider(
+                              month: dateForPost.month.monthFromInt,
+                              year: dateForPost.year.toString()),
 
-                      /*(i == appStateProviderState.valueToScrollToToday)
+                          /*(i == appStateProviderState.valueToScrollToToday)
                         ?
                         // Date divider
                         _timeDivider(
@@ -353,87 +375,91 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                             isToday: true,
                           )
                         : SizedBox(),*/
+                          // Posts per date (sorted by time)
+                          for (var post in postsMappedByYearAndMonth[
+                              dateForPost.year]![dateForPost.month]!
+                            ..sort((a, b) => b.dateTimeFromString
+                                .compareTo(a.dateTimeFromString)))
+                            Builder(builder: (context) {
+                              String today =
+                                  DateFormat.yMd().format(DateTime.now());
+                              String dayOfPost = DateFormat.yMd()
+                                  .format(post.dateTimeFromString);
+                              return Column(
+                                children: [
+                                  /// TODO: spostare nello stato tutta questa roba?
+                                  (DateTime.now().month == dateForPost.month &&
+                                          shouldShowTodayDivider(post))
+                                      ? _timeDivider(
+                                          date: DateTime.now(), isToday: true)
+                                      : const SizedBox(),
+                                  (shouldShowTimeDivider(post) &&
+                                          today != dayOfPost)
+                                      ? TimelineTimeDivider(
+                                          date: post.dateTimeFromString,
+                                          isToday: false)
+                                      : const SizedBox(),
+                                  Consumer(
+                                    builder: (context, ref, child) {
+                                      final bool isSelectingPosts = ref.watch(
+                                          appStateProvider.select((state) =>
+                                              state.isSelectingPosts));
+                                      bool isThereOnlyThisPostSelected =
+                                          (ref.watch(postListProvider.select(
+                                              (state) =>
+                                                  state.selectedPosts.length ==
+                                                      1 &&
+                                                  state.selectedPosts
+                                                      .contains(post))));
 
-                      // Posts per date (sorted by time)
-                      for (var post in postsMappedByYearAndMonth[
-                          dateForPost.year]![dateForPost.month]!
-                        ..sort((a, b) => b.dateTimeFromString
-                            .compareTo(a.dateTimeFromString)))
-                        Builder(builder: (context) {
-                          String today =
-                              DateFormat.yMd().format(DateTime.now());
-                          String dayOfPost =
-                              DateFormat.yMd().format(post.dateTimeFromString);
-                          return Column(
-                            children: [
-                              /// TODO: spostare nello stato tutta questa roba?
-                              (DateTime.now().month == dateForPost.month &&
-                                      shouldShowTodayDivider(post))
-                                  ? _timeDivider(
-                                      date: DateTime.now(), isToday: true)
-                                  : const SizedBox(),
-                              (shouldShowTimeDivider(post) &&
-                                      today != dayOfPost)
-                                  ? TimelineTimeDivider(
-                                      date: post.dateTimeFromString,
-                                      isToday: false)
-                                  : const SizedBox(),
-                              Consumer(
-                                builder: (context, ref, child) {
-                                  final bool isSelectingPosts = ref.watch(
-                                      appStateProvider.select(
-                                          (state) => state.isSelectingPosts));
-                                  bool isThereOnlyThisPostSelected = (ref.watch(
-                                      postListProvider.select((state) =>
-                                          state.selectedPosts.length == 1 &&
-                                          state.selectedPosts.contains(post))));
-
-                                  return TimeEventItem(
-                                    post: post,
-                                    isSelectedItem: postsProviderNotifier
-                                        .postIsSelected(post),
-                                    showSelectionCircle: isSelectingPosts,
-                                    onTap: isSelectingPosts
-                                        ? () {
+                                      return TimeEventItem(
+                                        post: post,
+                                        isSelectedItem: postsProviderNotifier
+                                            .postIsSelected(post),
+                                        showSelectionCircle: isSelectingPosts,
+                                        onTap: isSelectingPosts
+                                            ? () {
+                                                postsProviderNotifier
+                                                    .addOrRemoveSelectedPost(
+                                                        post: post);
+                                                if (isThereOnlyThisPostSelected) {
+                                                  appStateProviderNotifier
+                                                      .setIsSelectingPosts(
+                                                          false);
+                                                }
+                                              }
+                                            : null,
+                                        onLongPress: () {
+                                          if (isSelectingPosts) {
+                                            appStateProviderNotifier
+                                                .setIsSelectingPosts(false);
                                             postsProviderNotifier
-                                                .addOrRemoveSelectedPost(
-                                                    post: post);
-                                            if (isThereOnlyThisPostSelected) {
-                                              appStateProviderNotifier
-                                                  .setIsSelectingPosts(false);
-                                            }
+                                                .addOrRemoveSelectedPost();
+                                            setState(() {});
+
+                                            return;
                                           }
-                                        : null,
-                                    onLongPress: () {
-                                      if (isSelectingPosts) {
-                                        appStateProviderNotifier
-                                            .setIsSelectingPosts(false);
-                                        postsProviderNotifier
-                                            .addOrRemoveSelectedPost();
-                                        setState(() {});
 
-                                        return;
-                                      }
-
-                                      appStateProviderNotifier
-                                          .setIsSelectingPosts(true);
-                                      postsProviderNotifier
-                                          .addOrRemoveSelectedPost(post: post);
-                                      setState(() {});
+                                          appStateProviderNotifier
+                                              .setIsSelectingPosts(true);
+                                          postsProviderNotifier
+                                              .addOrRemoveSelectedPost(
+                                                  post: post);
+                                          setState(() {});
+                                        },
+                                      );
                                     },
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        }),
-                      shouldShowYearDivider
-                          ? YearDivider(year: dateForPost.year.toString())
-                          : const SizedBox(),
-                    ],
-                  );
-                },
-              ),
+                                  ),
+                                ],
+                              );
+                            }),
+                          shouldShowYearDivider
+                              ? YearDivider(year: dateForPost.year.toString())
+                              : const SizedBox(),
+                        ],
+                      );
+                    },
+                  ),
         floatingActionButton: Consumer(
           builder: (context, ref, child) {
             bool showCenterButton = ref.watch(uiStateProvider

@@ -84,28 +84,26 @@ class PostsProviderHelpers {
       List<Post> posts) {
     Map<int, Map<int, List<Post>>> postsByDate = {};
     var startTime = DateTime.now();
-    // Initialize each year with 12 empty months
-    for (var post in posts) {
-      int year = post.dateTimeFromString.year;
-      postsByDate.putIfAbsent(
-          year,
-          () => Map.fromIterable(List.generate(12, (i) => i + 1),
-              key: (item) => item, value: (item) => []));
-    }
-
-    // Populate the posts in the respective year and month
     for (var post in posts) {
       DateTime postDate = post.dateTimeFromString;
-      postsByDate[postDate.year]![postDate.month]!.add(post);
+      int year = postDate.year;
+      int month = postDate.month;
+
+      // Initialize year and month if not already present
+      var yearMap = postsByDate.putIfAbsent(year, () => {});
+      var monthList = yearMap.putIfAbsent(month, () => []);
+
+      // Add the post to the corresponding month list
+      monthList.add(post);
     }
 
     // Sort the posts in each month in descending order by dateTime
-    postsByDate.forEach((year, months) {
-      months.forEach((month, postsList) {
+    for (var monthsMap in postsByDate.values) {
+      for (var postsList in monthsMap.values) {
         postsList.sort(
             (a, b) => b.dateTimeFromString.compareTo(a.dateTimeFromString));
-      });
-    });
+      }
+    }
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
     print('‼️ POSTS ORGANIZED in $duration milliseconds ‼️');

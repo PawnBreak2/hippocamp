@@ -10,8 +10,9 @@ part 'ui_state_repository.freezed.dart';
 class UIState with _$UIState {
   const factory UIState({
     @Default(false) bool showCenterButtonInTimeline,
+    @Default(false) bool showSearchFieldForPosts,
 
-    // used for cases in which we need to know if the user is selecting a domain or not
+    // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
     @Default('') String currentlySelectedDomainKey,
   }) = _UIState;
 }

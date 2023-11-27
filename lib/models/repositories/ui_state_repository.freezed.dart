@@ -16,8 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$UIState {
-  bool get showCenterButtonInTimeline =>
-      throw _privateConstructorUsedError; // used for cases in which we need to know if the user is selecting a domain or not
+  bool get showCenterButtonInTimeline => throw _privateConstructorUsedError;
+  bool get showSearchFieldForPosts =>
+      throw _privateConstructorUsedError; // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   String get currentlySelectedDomainKey => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +31,9 @@ abstract class $UIStateCopyWith<$Res> {
       _$UIStateCopyWithImpl<$Res, UIState>;
   @useResult
   $Res call(
-      {bool showCenterButtonInTimeline, String currentlySelectedDomainKey});
+      {bool showCenterButtonInTimeline,
+      bool showSearchFieldForPosts,
+      String currentlySelectedDomainKey});
 }
 
 /// @nodoc
@@ -47,12 +50,17 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
   @override
   $Res call({
     Object? showCenterButtonInTimeline = null,
+    Object? showSearchFieldForPosts = null,
     Object? currentlySelectedDomainKey = null,
   }) {
     return _then(_value.copyWith(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
           ? _value.showCenterButtonInTimeline
           : showCenterButtonInTimeline // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showSearchFieldForPosts: null == showSearchFieldForPosts
+          ? _value.showSearchFieldForPosts
+          : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
               as bool,
       currentlySelectedDomainKey: null == currentlySelectedDomainKey
           ? _value.currentlySelectedDomainKey
@@ -70,7 +78,9 @@ abstract class _$$UIStateImplCopyWith<$Res> implements $UIStateCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {bool showCenterButtonInTimeline, String currentlySelectedDomainKey});
+      {bool showCenterButtonInTimeline,
+      bool showSearchFieldForPosts,
+      String currentlySelectedDomainKey});
 }
 
 /// @nodoc
@@ -85,12 +95,17 @@ class __$$UIStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? showCenterButtonInTimeline = null,
+    Object? showSearchFieldForPosts = null,
     Object? currentlySelectedDomainKey = null,
   }) {
     return _then(_$UIStateImpl(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
           ? _value.showCenterButtonInTimeline
           : showCenterButtonInTimeline // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showSearchFieldForPosts: null == showSearchFieldForPosts
+          ? _value.showSearchFieldForPosts
+          : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
               as bool,
       currentlySelectedDomainKey: null == currentlySelectedDomainKey
           ? _value.currentlySelectedDomainKey
@@ -105,19 +120,23 @@ class __$$UIStateImplCopyWithImpl<$Res>
 class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   const _$UIStateImpl(
       {this.showCenterButtonInTimeline = false,
+      this.showSearchFieldForPosts = false,
       this.currentlySelectedDomainKey = ''});
 
   @override
   @JsonKey()
   final bool showCenterButtonInTimeline;
-// used for cases in which we need to know if the user is selecting a domain or not
+  @override
+  @JsonKey()
+  final bool showSearchFieldForPosts;
+// used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   @override
   @JsonKey()
   final String currentlySelectedDomainKey;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
+    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
   }
 
   @override
@@ -127,6 +146,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
       ..add(DiagnosticsProperty('type', 'UIState'))
       ..add(DiagnosticsProperty(
           'showCenterButtonInTimeline', showCenterButtonInTimeline))
+      ..add(DiagnosticsProperty(
+          'showSearchFieldForPosts', showSearchFieldForPosts))
       ..add(DiagnosticsProperty(
           'currentlySelectedDomainKey', currentlySelectedDomainKey));
   }
@@ -140,6 +161,9 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
                     showCenterButtonInTimeline) ||
                 other.showCenterButtonInTimeline ==
                     showCenterButtonInTimeline) &&
+            (identical(
+                    other.showSearchFieldForPosts, showSearchFieldForPosts) ||
+                other.showSearchFieldForPosts == showSearchFieldForPosts) &&
             (identical(other.currentlySelectedDomainKey,
                     currentlySelectedDomainKey) ||
                 other.currentlySelectedDomainKey ==
@@ -147,8 +171,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, showCenterButtonInTimeline, currentlySelectedDomainKey);
+  int get hashCode => Object.hash(runtimeType, showCenterButtonInTimeline,
+      showSearchFieldForPosts, currentlySelectedDomainKey);
 
   @JsonKey(ignore: true)
   @override
@@ -160,11 +184,14 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
 abstract class _UIState implements UIState {
   const factory _UIState(
       {final bool showCenterButtonInTimeline,
+      final bool showSearchFieldForPosts,
       final String currentlySelectedDomainKey}) = _$UIStateImpl;
 
   @override
   bool get showCenterButtonInTimeline;
-  @override // used for cases in which we need to know if the user is selecting a domain or not
+  @override
+  bool get showSearchFieldForPosts;
+  @override // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   String get currentlySelectedDomainKey;
   @override
   @JsonKey(ignore: true)

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hippocamp/constants/common.dart';
 import 'package:hippocamp/pages/attachments/attachments_page.dart';
 import 'package:hippocamp/pages/calendar/calendar_page.dart';
 import 'package:hippocamp/pages/categories/categories_page.dart';
@@ -36,7 +37,7 @@ class _HomePageState extends ConsumerState<MainScaffold> {
     {
       "name": "Moduli",
       "page": const FinancePage(),
-      "icon": "assets/icons/nav-bar-category.png",
+      "icon": "${Constants.iconAssetsPath}nav-bar-category.png",
     },
   ];
 

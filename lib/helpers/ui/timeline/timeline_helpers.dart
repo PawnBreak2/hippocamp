@@ -65,4 +65,16 @@ class TimelineHelpers {
 
     return totalMonths;
   }
+
+  static int countTotalPosts(Map<int, Map<int, List<Post>>> postsByDate) {
+    int totalPosts = 0;
+
+    postsByDate.forEach((year, months) {
+      months.forEach((month, postsList) {
+        totalPosts += postsList.length; // Add the number of posts in this month
+      });
+    });
+
+    return totalPosts;
+  }
 }

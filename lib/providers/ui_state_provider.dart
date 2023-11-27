@@ -11,6 +11,10 @@ class UIStateNotifier extends Notifier<UIState> {
     state = state.copyWith(showCenterButtonInTimeline: v);
   }
 
+  void setShowSearchFieldForPosts(bool v) {
+    state = state.copyWith(showSearchFieldForPosts: v);
+  }
+
   void setSelectedDomainKey(String key) {
     state = state.copyWith(currentlySelectedDomainKey: key);
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/clients/posts_client.dart';
@@ -110,46 +112,44 @@ class PostListNotifier extends Notifier<PostsRepository> {
   }
 
   Future<void> getPosts(
-      {bool past = true, monthsToGoBack = 1, yearsToGoForward = 1}) async {
+      {bool past = true,
+      int monthsToGoBack = 1,
+      int yearsToGoForward = 1}) async {
+    List<Future> apiCalls = [];
+
     DateTime datePaginationForThisGetCall =
         DateTime(DateTime.now().year, DateTime.now().month);
 
     if (past) {
       for (var i = 0; i < monthsToGoBack; i++) {
-        final resp = await _postsClient.getPosts(
-          dateTime: datePaginationForThisGetCall,
-          past: past,
-        );
-
-        PostsProviderHelpers.manageGetPostsResponseFromAPI(
-            response: resp, ref: ref);
-
-        final month = datePaginationForThisGetCall.month - 1;
-        DateTime newDate = DateTime(datePaginationForThisGetCall.year, month);
-
-        if (month == 0) {
-          newDate = DateTime(datePaginationForThisGetCall.year - 1, 12);
+        DateTime requestDate = DateTime(datePaginationForThisGetCall.year,
+            datePaginationForThisGetCall.month - i);
+        if (requestDate.month == 0) {
+          requestDate = DateTime(requestDate.year - 1, 12);
         }
 
-        datePaginationForThisGetCall = newDate;
+        apiCalls.add(
+          _postsClient.getPosts(dateTime: requestDate, past: past).then(
+                (resp) => PostsProviderHelpers.manageGetPostsResponseFromAPI(
+                    response: resp, ref: ref),
+              ),
+        );
       }
     } else {
       for (var i = 0; i < yearsToGoForward; i++) {
-        final resp = await _postsClient.getPosts(
-          dateTime: datePaginationForThisGetCall,
-          past: past,
+        DateTime requestDate = DateTime(datePaginationForThisGetCall.year + i,
+            datePaginationForThisGetCall.month);
+
+        apiCalls.add(
+          _postsClient.getPosts(dateTime: requestDate, past: past).then(
+                (resp) => PostsProviderHelpers.manageGetPostsResponseFromAPI(
+                    response: resp, ref: ref),
+              ),
         );
-
-        PostsProviderHelpers.manageGetPostsResponseFromAPI(
-            response: resp, ref: ref);
-
-        final year = datePaginationForThisGetCall.year + 1;
-        final month = datePaginationForThisGetCall.month;
-        DateTime newDate = DateTime(year, month);
-
-        datePaginationForThisGetCall = newDate;
       }
     }
+
+    await Future.wait(apiCalls);
   }
 
   Future<void> getNewPosts(
@@ -266,23 +266,10 @@ class PostListNotifier extends Notifier<PostsRepository> {
     resp.fold(
       (l) => false,
       (r) {
-        state = state.copyWith(
-          allPosts: [],
-          postsMappedByDate: {},
-        );
-
-        state = state.copyWith(
-          allPosts: [...state.allPosts, ...r.posts],
-        );
-
-        state = state.copyWith(endList: r.end);
-
-        for (var i in state.allPosts) {
-          final postsPerDate = state.postsMappedByDate[i.date] ?? [];
-          postsPerDate.add(i);
-          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state.postsMappedByDate[i.date] = postsPerDate;
-        }
+        inspect(r.posts);
+        state = state.copyWith(searchedPosts: []);
+        state = state.copyWith(searchedPosts: r.posts);
+        print(state.searchedPosts);
       },
     );
   }

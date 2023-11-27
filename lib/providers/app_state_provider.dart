@@ -55,6 +55,10 @@ class AppStateNotifier extends Notifier<AppState> {
     state = state.copyWith(isSelectingPosts: v);
   }
 
+  void setIsSearchingPosts(bool v) {
+    state = state.copyWith(isSearchingPosts: v);
+  }
+
   // ATTACHMENTS
 
   Future<List<AttachmentType>> getAttachmentTypes() async {

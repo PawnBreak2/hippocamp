@@ -107,7 +107,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     var posts = ref.read(postListProvider.notifier);
     // gets the posts for the previous months
     print('calling getPosts at ${DateTime.now().millisecond}');
-    await posts.getPosts(past: true, monthsToGoBack: 12);
+    await posts.getPosts(past: true, monthsToGoBack: 4);
     await posts.getPosts(past: false, yearsToGoForward: 2);
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
@@ -181,6 +181,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }) async {
     for (dynamic element in elements) {
       if ((element.iconUrl as String).isNotEmpty) {
+        print('caching image ${element.iconUrl}');
         await cacheManager.getSingleFile(element.iconUrl);
         //print('precaching image ${element.iconUrl}');
         try {} catch (e) {
@@ -201,10 +202,10 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(child: SizedBox()
-          /*LoadingAnimationWidget.fourRotatingDots(
-            color: CustomColors.primaryRed, size: 80),*/
-          ),
+      body: Center(
+        child: LoadingAnimationWidget.fourRotatingDots(
+            color: CustomColors.primaryRed, size: 80),
+      ),
     );
   }
 }

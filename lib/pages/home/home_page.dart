@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hippocamp/constants/common.dart';
 import 'package:hippocamp/constants/navigation/routeNames.dart';
 import 'package:hippocamp/pages/change_password/change_password.dart';
 import 'package:hippocamp/pages/login/login_page.dart';
 import 'package:hippocamp/pages/memo/create_memo_page.dart';
 import 'package:hippocamp/pages/memo/memo.dart';
+import 'package:hippocamp/providers/app_state_provider.dart';
+import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/widgets/components/post_creation_and_update/select_category_dialog.dart';
 import 'package:hippocamp/pages/timeline/timeline.dart';
 import 'package:hippocamp/providers/auth_provider.dart';
@@ -24,12 +27,13 @@ class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _FinancePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _FinancePageState extends ConsumerState<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   late final postProvider = ref.read(postListProvider.notifier);
-
+  late final appStateNotifier = ref.read(appStateProvider.notifier);
+  late final uiNotifier = ref.read(uiStateProvider.notifier);
   int _index = 0;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   final PageController _pageController = PageController();
@@ -48,7 +52,9 @@ class _FinancePageState extends ConsumerState<HomePage> {
       onTap: () {
         _index = i;
         _pageController.jumpToPage(i);
-        setState(() {});
+        setState(() {
+          print('setState');
+        });
       },
       child: Container(
         width: 90,
@@ -88,7 +94,9 @@ class _FinancePageState extends ConsumerState<HomePage> {
     _pageController.addListener(() {
       if (_pageController.page!.round() != _index) {
         _index = _pageController.page!.round();
-        setState(() {});
+        setState(() {
+          print('setState');
+        });
       }
     });
   }
@@ -102,16 +110,14 @@ class _FinancePageState extends ConsumerState<HomePage> {
     _timerForSearching = Timer.periodic(
       Duration(milliseconds: 500),
       (timer) async {
-        if (_textEditingController.text.isEmpty)
-          await postProvider.getPosts();
-        else {
-          await postProvider.searchPosts(_textEditingController.text);
-          _timerForSearching = null;
-          timer.cancel();
-        }
+        await postProvider.searchPosts(_textEditingController.text);
+        _timerForSearching = null;
+        timer.cancel();
       },
     );
-    setState(() {});
+    setState(() {
+      print('setState');
+    });
   }
 
   @override
@@ -130,132 +136,164 @@ class _FinancePageState extends ConsumerState<HomePage> {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (!_searchFieldActive)
-                    Row(
-                      children: [
-                        // TIMELINE Section button
-                        _sectionButton(
-                          i: 0,
-                          text: "Timeline",
-                          icon:
-                              "https://hippocapp-assets.s3.eu-central-1.amazonaws.com/icons/icone-sistema/home/top-nav-bar/top-nav-bar-timeline-active.svg",
-                        ),
-                        SizedBox(width: 14),
-                        // MEMO Section button
-                        _sectionButton(
-                          i: 1,
-                          text: "Memo",
-                          icon:
-                              "https://hippocapp-assets.s3.eu-central-1.amazonaws.com/icons/icone-sistema/home/top-nav-bar/top-nav-bar-memo-inactive.svg",
-                        ),
-                      ],
-                    ),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  bool isSearchFieldActive = ref.watch(uiStateProvider
+                      .select((state) => state.showSearchFieldForPosts));
 
-                  // Icon back & search field
-                  if (_searchFieldActive)
-                    Expanded(
-                      child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              postProvider.getPosts();
-                              _searchFieldActive = false;
-                              setState(() {});
-                            },
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (!isSearchFieldActive)
+                        Row(
+                          children: [
+                            // TIMELINE Section button
+                            _sectionButton(
+                              i: 0,
+                              text: "Timeline",
+                              icon:
+                                  "https://hippocapp-assets.s3.eu-central-1.amazonaws.com/icons/icone-sistema/home/top-nav-bar/top-nav-bar-timeline-active.svg",
                             ),
-                          ),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: PrimaryTextFormField(
-                              controller: _textEditingController,
-                              hintText: "Cerca",
-                              focusNode: _focusNode,
-                              backgroundColor: Colors.white,
-                              action: TextInputAction.search,
-                              onChange: (_) {
-                                searchTextInPosts();
-                              },
-                              suffixIcon: InkWell(
-                                onTap: () {
-                                  if (_textEditingController.text.isNotEmpty) {
-                                    _textEditingController.clear();
-                                    postProvider.getPosts();
-                                    setState(() {});
-                                  }
-                                },
-                                child: _textEditingController.text.isNotEmpty
-                                    ? Icon(Icons.clear)
-                                    : Icon(Icons.search),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  // Last actions
-                  if (!_searchFieldActive)
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _searchFieldActive = true;
-                            _focusNode.requestFocus();
-                            setState(() {});
-                          },
-                          icon: SvgPicture.network(
-                            "https://hippocapp-assets.s3.eu-central-1.amazonaws.com/icons/icone-sistema/home/top-nav-bar/lente-search.svg",
-                            height: 28,
-                            width: 28,
-                          ),
-                          splashRadius: 26,
-                          iconSize: 26,
-                        ),
-                        PopupMenuButton(
-                          icon: Icon(
-                            Icons.more_vert,
-                            color: Colors.black,
-                          ),
-                          onSelected: (c) {
-                            switch (c) {
-                              case "0":
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => ChangePasswordPage(),
-                                  ),
-                                );
-                                break;
-                              case "1":
-                                ref
-                                    .read(authProvider.notifier)
-                                    .logout()
-                                    .whenComplete(() => context
-                                        .goNamed(routeMap[routeNames.login]));
-                                break;
-                            }
-                          },
-                          itemBuilder: (_) => [
-                            PopupMenuItem(
-                              value: "0",
-                              child: Text("Cambia password"),
-                            ),
-                            PopupMenuItem(
-                              value: "1",
-                              child: Text("Logout"),
+                            SizedBox(width: 14),
+                            // MEMO Section button
+                            _sectionButton(
+                              i: 1,
+                              text: "Memo",
+                              icon:
+                                  "https://hippocapp-assets.s3.eu-central-1.amazonaws.com/icons/icone-sistema/home/top-nav-bar/top-nav-bar-memo-inactive.svg",
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                ],
+
+                      // Icon back & search field
+                      if (isSearchFieldActive)
+                        Expanded(
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  appStateNotifier.setIsSearchingPosts(false);
+                                  uiNotifier.setShowSearchFieldForPosts(false);
+                                  _textEditingController.clear();
+                                },
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: PrimaryTextFormField(
+                                  controller: _textEditingController,
+                                  hintText: "Cerca",
+                                  focusNode: _focusNode,
+                                  backgroundColor: Colors.white,
+                                  action: TextInputAction.search,
+                                  onChange: (_) async {
+                                    print('change');
+                                    if (_textEditingController
+                                        .text.isNotEmpty) {
+                                      print('search');
+                                      await searchTextInPosts();
+                                      appStateNotifier
+                                          .setIsSearchingPosts(true);
+                                    } else {
+                                      appStateNotifier
+                                          .setIsSearchingPosts(false);
+                                    }
+                                  },
+                                  suffixIcon: InkWell(
+                                    onTap: () {
+                                      if (_textEditingController
+                                          .text.isNotEmpty) {
+                                        _textEditingController.clear();
+                                      }
+                                    },
+                                    child:
+                                        _textEditingController.text.isNotEmpty
+                                            ? Icon(Icons.clear)
+                                            : Icon(Icons.search),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                      // Last actions
+                      if (!isSearchFieldActive)
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: SvgPicture.asset(
+                                '${Constants.iconAssetsPath}top-nav-bar-post-spot.svg',
+                                height: 36,
+                                width: 36,
+                              ),
+                              splashRadius: 26,
+                              iconSize: 26,
+                            ),
+                            Consumer(
+                              builder: (context, ref, child) {
+                                return IconButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(uiStateProvider.notifier)
+                                        .setShowSearchFieldForPosts(true);
+                                    _focusNode.requestFocus();
+                                  },
+                                  icon: SvgPicture.network(
+                                    "https://hippocapp-assets.s3.eu-central-1.amazonaws.com/icons/icone-sistema/home/top-nav-bar/lente-search.svg",
+                                    height: 28,
+                                    width: 28,
+                                  ),
+                                  splashRadius: 26,
+                                  iconSize: 26,
+                                );
+                              },
+                            ),
+                            PopupMenuButton(
+                              icon: Icon(
+                                Icons.more_vert,
+                                color: Colors.black,
+                              ),
+                              onSelected: (c) {
+                                switch (c) {
+                                  case "0":
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ChangePasswordPage(),
+                                      ),
+                                    );
+                                    break;
+                                  case "1":
+                                    ref
+                                        .read(authProvider.notifier)
+                                        .logout()
+                                        .whenComplete(() => context.goNamed(
+                                            routeMap[routeNames.login]));
+                                    break;
+                                }
+                              },
+                              itemBuilder: (_) => [
+                                PopupMenuItem(
+                                  value: "0",
+                                  child: Text("Cambia password"),
+                                ),
+                                PopupMenuItem(
+                                  value: "1",
+                                  child: Text("Logout"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
