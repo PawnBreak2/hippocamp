@@ -82,8 +82,28 @@ class PostsProviderHelpers {
 
   static Map<int, Map<int, List<Post>>> organizePostsByYearAndMonth(
       List<Post> posts) {
-    Map<int, Map<int, List<Post>>> postsByDate = {};
     var startTime = DateTime.now();
+    Map<int, Map<int, List<Post>>> postsByDate = {};
+    for (var post in posts) {
+      int year = post.dateTimeFromString.year;
+      if (!postsByDate.containsKey(year)) {
+        postsByDate[year] = {
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: [],
+          9: [],
+          10: [],
+          11: [],
+          12: []
+        };
+      }
+    }
+
     for (var post in posts) {
       DateTime postDate = post.dateTimeFromString;
       int year = postDate.year;

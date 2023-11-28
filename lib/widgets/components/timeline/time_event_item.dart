@@ -33,6 +33,7 @@ class TimeEventItem extends StatelessWidget {
     this.showSelectionCircle = false,
   });
 
+/*
   List<Widget> get _chipsBoxList {
     List<Widget> data = [];
 
@@ -52,18 +53,15 @@ class TimeEventItem extends StatelessWidget {
 
     return data;
   }
+*/
 
   @override
   Widget build(BuildContext context) {
-    final listChips = _chipsBoxList;
-    final isPast = post.dateTimeFromString.isBefore(DateTime.now());
+    // final listChips = _chipsBoxList;
+    // final isPast = post.dateTimeFromString.isBefore(DateTime.now());
 
     return Material(
-      color: isSelectedItem
-          ? CustomColors.mediumRed
-          : isPast
-              ? Colors.white
-              : CustomColors.primaryLightBlue,
+      color: isSelectedItem ? CustomColors.mediumRed : Colors.white,
       child: InkWell(
         overlayColor: MaterialStateProperty.all(CustomColors.mediumRed),
         splashColor: CustomColors.mediumRed,
@@ -113,7 +111,7 @@ class TimeEventItem extends StatelessWidget {
                   /// TODO: cosa sono?
 
                   // Data 2 -> List chips data
-                  if (_chipsBoxList.isNotEmpty)
+                  /*if (_chipsBoxList.isNotEmpty)
                     Container(
                       height: 30,
                       margin: const EdgeInsets.only(
@@ -130,7 +128,7 @@ class TimeEventItem extends StatelessWidget {
                         itemCount: listChips.length,
                         separatorBuilder: (_, __) => const SizedBox(width: 8),
                       ),
-                    ),
+                    ),*/
                 ],
               ),
             ),
@@ -144,6 +142,7 @@ class TimeEventItem extends StatelessWidget {
     );
   }
 
+/*
   Widget _chipBox({required String name, required String icon}) {
     return Container(
       width: 110,
@@ -182,6 +181,7 @@ class TimeEventItem extends StatelessWidget {
       ),
     );
   }
+*/
 }
 
 class TimeEventItemSelectionCircle extends StatelessWidget {

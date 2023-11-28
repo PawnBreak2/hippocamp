@@ -16,13 +16,9 @@ class TimelineTimeDivider extends StatelessWidget {
     final day = date.weekday.dayFromInt.substring(0, 3).toUpperCase();
     final month = date.month.monthFromInt.substring(0, 3).toUpperCase();
     final dayNumber = date.day;
-    final isPast = date.isBefore(DateTime.now());
+    // final isPast = date.isBefore(DateTime.now());
     return Container(
-      color: isToday
-          ? CustomColors.primaryLightBlue
-          : isPast
-              ? Colors.white
-              : CustomColors.primaryLightBlue,
+      color: isToday ? Color.fromRGBO(241, 245, 223, 1) : Colors.white,
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [

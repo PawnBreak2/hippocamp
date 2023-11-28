@@ -246,14 +246,10 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     final day = date.weekday.dayFromInt.substring(0, 3).toUpperCase();
     final month = date.month.monthFromInt.substring(0, 3).toUpperCase();
     final dayNumber = date.day;
-    final isPast = date.isBefore(DateTime.now());
+    // final isPast = date.isBefore(DateTime.now());
 
     return Container(
-      color: isToday
-          ? Color.fromRGBO(241, 245, 223, 1)
-          : isPast
-              ? Colors.white
-              : CustomColors.primaryLightBlue,
+      color: isToday ? Color.fromRGBO(241, 245, 223, 1) : Colors.white,
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
@@ -351,8 +347,10 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
                       var yearIndex = (i / 12).floor();
                       var yearForPost = postsMappedByYearAndMonth.keys
+                          .toList()
+                          .reversed
                           .toList()[yearIndex.toInt()];
-                      print(yearForPost);
+
                       final dateForPost = DateTime(yearForPost, monthForPost);
 
                       if (dateForPost.month == 1) {
@@ -390,7 +388,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
                                   /// TODO: spostare nello stato tutta questa roba?
                                   (DateTime.now().month == dateForPost.month &&
                                           shouldShowTodayDivider(post))
-                                      ? _timeDivider(
+                                      ? TimelineTimeDivider(
                                           date: DateTime.now(), isToday: true)
                                       : const SizedBox(),
                                   (shouldShowTimeDivider(post) &&
