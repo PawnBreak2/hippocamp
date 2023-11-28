@@ -28,17 +28,6 @@ class PostsProviderHelpers {
             allPosts: [...state.allPosts, ...newPostsFilteredFromDuplicate]
               ..sort((a, b) => b.date.compareTo(a.date)));
 
-        for (Post post in state.allPosts) {
-          // maps posts by date & puts them into the post repository
-          final postsPerDate = state.postsMappedByDate[post.date] ?? [];
-          postsPerDate.add(post);
-          postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-          state = state.copyWith(postsMappedByDate: {
-            ...state.postsMappedByDate,
-            post.date: postsPerDate
-          });
-        }
-
         Map<int, Map<int, List<Post>>> postsByYearAndMonth =
             organizePostsByYearAndMonth(state.allPosts);
 
@@ -54,20 +43,9 @@ class PostsProviderHelpers {
 
   static void reorganizePostsAfterUpdate(
       {required NotifierProviderRef ref}) async {
-    /// TODO: ottimizzare e vedere se è necessario tenere allPosts nello stato
+    /// TODO: funzione inutile
 
     var state = ref.read(postListProvider.notifier).state;
-
-    for (Post post in state.allPosts) {
-      // maps posts by date & puts them into the post repository
-      final postsPerDate = state.postsMappedByDate[post.date] ?? [];
-      postsPerDate.add(post);
-      postsPerDate.sort((a, b) => b.timePost.compareTo(a.timePost));
-      state = state.copyWith(postsMappedByDate: {
-        ...state.postsMappedByDate,
-        post.date: postsPerDate
-      });
-    }
 
     Map<int, Map<int, List<Post>>> postsByYearAndMonth =
         organizePostsByYearAndMonth(state.allPosts);

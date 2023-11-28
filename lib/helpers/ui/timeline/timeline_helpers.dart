@@ -33,10 +33,10 @@ class TimelineHelpers {
     }
   }
 
-  static bool shouldShowTimeDivider(
-      {required Post post,
-      required Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
-      required Map<String, List<Post>> postsMappedByDate}) {
+  static bool shouldShowTimeDivider({
+    required Post post,
+    required Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
+  }) {
     final currentDate = post.dateTimeFromString;
     final currentMonth = currentDate.month;
     final currentYear = currentDate.year;

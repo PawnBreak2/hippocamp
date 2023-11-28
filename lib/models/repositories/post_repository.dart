@@ -14,7 +14,6 @@ class PostsRepository with _$PostsRepository {
     @Default([]) List<Post> searchedPosts,
     // this is a list of posts grouped by date
     @Default({}) Map<int, Map<int, List<Post>>> postsMappedByYearAndMonth,
-    @Default({}) Map<String, List<Post>> postsMappedByDate,
     @Default(false) bool endList,
     @Default(false) bool endFutureList,
   }) = _PostsRepository;

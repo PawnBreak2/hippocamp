@@ -148,7 +148,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
         itemPositionsListener.itemPositions.value.first.index < 3;
 
     final nearTheEnd = itemPositionsListener.itemPositions.value.last.index ==
-        (postsProviderState.postsMappedByDate.length - 2);
+        (postsProviderState.allPosts.length - 2);
 
     final listIndexesVisible =
         itemPositionsListener.itemPositions.value.map((e) => e.index);
@@ -239,55 +239,15 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
   }
 
-  Widget _timeDivider({
-    required DateTime date,
-    bool isToday = false,
-  }) {
-    final day = date.weekday.dayFromInt.substring(0, 3).toUpperCase();
-    final month = date.month.monthFromInt.substring(0, 3).toUpperCase();
-    final dayNumber = date.day;
-    // final isPast = date.isBefore(DateTime.now());
-
-    return Container(
-      color: isToday ? Color.fromRGBO(241, 245, 223, 1) : Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              height: .5,
-              color: const Color.fromARGB(255, 100, 100, 100),
-              margin: EdgeInsets.symmetric(horizontal: 12),
-            ),
-          ),
-          Text(
-            "$day $dayNumber $month".toLowerCase(),
-            style: TextStyle(
-              color: CustomColors.blue,
-              fontSize: 14,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              height: .5,
-              color: const Color.fromARGB(255, 100, 100, 100),
-              margin: EdgeInsets.symmetric(horizontal: 12),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final postsMappedByDate =
         ref.watch(postListProvider.select((state) => state.postsMappedByDate));
     final postsMappedByYearAndMonth = ref.watch(
         postListProvider.select((state) => state.postsMappedByYearAndMonth));
-
     final isSearchingPosts =
         ref.watch(appStateProvider.select((state) => state.isSearchingPosts));
+    final bool isPostListEmpty = postsMappedByYearAndMonth.entries.isEmpty;
 
     //
     print('value to scroll to today');
@@ -298,10 +258,10 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     }
 
     return Scaffold(
-        backgroundColor: postsMappedByDate.entries.isEmpty
+        backgroundColor: isPostListEmpty
             ? const Color.fromRGBO(227, 218, 210, 1)
             : Colors.white,
-        body: postsMappedByDate.isEmpty
+        body: isPostListEmpty
             ? Column(
                 children: [
                   // Date divider
