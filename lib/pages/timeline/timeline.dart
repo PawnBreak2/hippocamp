@@ -241,8 +241,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
 
   @override
   Widget build(BuildContext context) {
-    final postsMappedByDate =
-        ref.watch(postListProvider.select((state) => state.postsMappedByDate));
     final postsMappedByYearAndMonth = ref.watch(
         postListProvider.select((state) => state.postsMappedByYearAndMonth));
     final isSearchingPosts =
