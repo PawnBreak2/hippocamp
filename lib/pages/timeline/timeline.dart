@@ -38,7 +38,8 @@ class TimelinePage extends ConsumerStatefulWidget {
   ConsumerState<TimelinePage> createState() => _TimelinePageState();
 }
 
-class _TimelinePageState extends ConsumerState<TimelinePage> {
+class _TimelinePageState extends ConsumerState<TimelinePage>
+    with AutomaticKeepAliveClientMixin {
   // used to avoid the repetition of the call to the getFirstPostOfTheYear function saving resources
   bool gotFirstPostOfYear = false;
   String processedYear = '';
@@ -81,6 +82,9 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     itemPositionsListener.itemPositions.removeListener(checkScrolling);
   }
 
+  @override
+  bool get wantKeepAlive => true;
+
   Future<void> _init() async {
     uiStateProviderState = ref.read(uiStateProvider);
     uiStateProviderNotifier = ref.read(uiStateProvider.notifier);
@@ -89,8 +93,6 @@ class _TimelinePageState extends ConsumerState<TimelinePage> {
     postsProviderState = ref.read(postListProvider);
     postsProviderNotifier = ref.read(postListProvider.notifier);
     valueToScrollToToday = ref.read(appStateProvider).valueToScrollToToday;
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {});
 
     final walletsProviderNotifier = ref.read(walletsProvider.notifier);
     if (postsProviderState.allPosts.isEmpty) {

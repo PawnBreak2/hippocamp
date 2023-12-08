@@ -12,6 +12,9 @@ class UIState with _$UIState {
     @Default(false) bool showCenterButtonInTimeline,
     @Default(false) bool showSearchFieldForPosts,
 
+    // used to manage navigation between pages in home page
+    @Default(0) int indexForHomePageAppBar,
+
     // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
     @Default('') String currentlySelectedDomainKey,
   }) = _UIState;

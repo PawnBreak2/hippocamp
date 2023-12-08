@@ -18,6 +18,10 @@ class UIStateNotifier extends Notifier<UIState> {
   void setSelectedDomainKey(String key) {
     state = state.copyWith(currentlySelectedDomainKey: key);
   }
+
+  void setIndexForHomePageAppBar(int index) {
+    state = state.copyWith(indexForHomePageAppBar: index);
+  }
 }
 
 final uiStateProvider =

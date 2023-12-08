@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$UIState {
   bool get showCenterButtonInTimeline => throw _privateConstructorUsedError;
   bool get showSearchFieldForPosts =>
+      throw _privateConstructorUsedError; // used to manage navigation between pages in home page
+  int get indexForHomePageAppBar =>
       throw _privateConstructorUsedError; // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   String get currentlySelectedDomainKey => throw _privateConstructorUsedError;
 
@@ -33,6 +35,7 @@ abstract class $UIStateCopyWith<$Res> {
   $Res call(
       {bool showCenterButtonInTimeline,
       bool showSearchFieldForPosts,
+      int indexForHomePageAppBar,
       String currentlySelectedDomainKey});
 }
 
@@ -51,6 +54,7 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
   $Res call({
     Object? showCenterButtonInTimeline = null,
     Object? showSearchFieldForPosts = null,
+    Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
   }) {
     return _then(_value.copyWith(
@@ -62,6 +66,10 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
           ? _value.showSearchFieldForPosts
           : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
               as bool,
+      indexForHomePageAppBar: null == indexForHomePageAppBar
+          ? _value.indexForHomePageAppBar
+          : indexForHomePageAppBar // ignore: cast_nullable_to_non_nullable
+              as int,
       currentlySelectedDomainKey: null == currentlySelectedDomainKey
           ? _value.currentlySelectedDomainKey
           : currentlySelectedDomainKey // ignore: cast_nullable_to_non_nullable
@@ -80,6 +88,7 @@ abstract class _$$UIStateImplCopyWith<$Res> implements $UIStateCopyWith<$Res> {
   $Res call(
       {bool showCenterButtonInTimeline,
       bool showSearchFieldForPosts,
+      int indexForHomePageAppBar,
       String currentlySelectedDomainKey});
 }
 
@@ -96,6 +105,7 @@ class __$$UIStateImplCopyWithImpl<$Res>
   $Res call({
     Object? showCenterButtonInTimeline = null,
     Object? showSearchFieldForPosts = null,
+    Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
   }) {
     return _then(_$UIStateImpl(
@@ -107,6 +117,10 @@ class __$$UIStateImplCopyWithImpl<$Res>
           ? _value.showSearchFieldForPosts
           : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
               as bool,
+      indexForHomePageAppBar: null == indexForHomePageAppBar
+          ? _value.indexForHomePageAppBar
+          : indexForHomePageAppBar // ignore: cast_nullable_to_non_nullable
+              as int,
       currentlySelectedDomainKey: null == currentlySelectedDomainKey
           ? _value.currentlySelectedDomainKey
           : currentlySelectedDomainKey // ignore: cast_nullable_to_non_nullable
@@ -121,6 +135,7 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   const _$UIStateImpl(
       {this.showCenterButtonInTimeline = false,
       this.showSearchFieldForPosts = false,
+      this.indexForHomePageAppBar = 0,
       this.currentlySelectedDomainKey = ''});
 
   @override
@@ -129,6 +144,10 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   @override
   @JsonKey()
   final bool showSearchFieldForPosts;
+// used to manage navigation between pages in home page
+  @override
+  @JsonKey()
+  final int indexForHomePageAppBar;
 // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   @override
   @JsonKey()
@@ -136,7 +155,7 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
+    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, indexForHomePageAppBar: $indexForHomePageAppBar, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
   }
 
   @override
@@ -148,6 +167,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
           'showCenterButtonInTimeline', showCenterButtonInTimeline))
       ..add(DiagnosticsProperty(
           'showSearchFieldForPosts', showSearchFieldForPosts))
+      ..add(
+          DiagnosticsProperty('indexForHomePageAppBar', indexForHomePageAppBar))
       ..add(DiagnosticsProperty(
           'currentlySelectedDomainKey', currentlySelectedDomainKey));
   }
@@ -164,6 +185,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
             (identical(
                     other.showSearchFieldForPosts, showSearchFieldForPosts) ||
                 other.showSearchFieldForPosts == showSearchFieldForPosts) &&
+            (identical(other.indexForHomePageAppBar, indexForHomePageAppBar) ||
+                other.indexForHomePageAppBar == indexForHomePageAppBar) &&
             (identical(other.currentlySelectedDomainKey,
                     currentlySelectedDomainKey) ||
                 other.currentlySelectedDomainKey ==
@@ -171,8 +194,12 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, showCenterButtonInTimeline,
-      showSearchFieldForPosts, currentlySelectedDomainKey);
+  int get hashCode => Object.hash(
+      runtimeType,
+      showCenterButtonInTimeline,
+      showSearchFieldForPosts,
+      indexForHomePageAppBar,
+      currentlySelectedDomainKey);
 
   @JsonKey(ignore: true)
   @override
@@ -185,12 +212,15 @@ abstract class _UIState implements UIState {
   const factory _UIState(
       {final bool showCenterButtonInTimeline,
       final bool showSearchFieldForPosts,
+      final int indexForHomePageAppBar,
       final String currentlySelectedDomainKey}) = _$UIStateImpl;
 
   @override
   bool get showCenterButtonInTimeline;
   @override
   bool get showSearchFieldForPosts;
+  @override // used to manage navigation between pages in home page
+  int get indexForHomePageAppBar;
   @override // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   String get currentlySelectedDomainKey;
   @override
