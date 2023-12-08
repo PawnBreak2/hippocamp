@@ -17,13 +17,17 @@ import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocamp/helpers/extensions/int_extensions.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/helpers/service/permission_handler.dart';
-import 'package:hippocamp/models/body/create_post.dart';
+import 'package:hippocamp/models/body/attachments_for_created_post.dart';
+import 'package:hippocamp/models/body/created_post.dart';
+import 'package:hippocamp/models/body/multi_party_transaction_for_created_post.dart';
+import 'package:hippocamp/models/body/single_party_transaction_for_created_post.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:hippocamp/models/posts-creation/finance_movement_model.dart';
 import 'package:hippocamp/models/responses/categories_response_model.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart' show Post;
 import 'package:hippocamp/models/wallets/wallet_model.dart';
 import 'package:hippocamp/pages/post_creation_and_update/widgets/partner_dialog.dart';
+import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_section.dart';
 import 'package:hippocamp/pages/select_categories/select_category_dialog.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
@@ -153,9 +157,10 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
     }
   }
 
-  CreatePost postModelToCreate({List<Map> attachments = const []}) {
-    List<SinglePartyTransaction>? _singleTrxs;
-    MultiPartyTransaction? _multiTrxs;
+  NewCreatedPost postModelToCreate(
+      {List<Map<String, dynamic>> attachments = const []}) {
+    List<SinglePartyTransactionForCreatedPost>? _singleTrxs;
+    MultiPartyTransactionForCreatedPost? _multiTrxs;
 
     if (_financeMovementListToSave.isNotEmpty) {
       for (var i in _financeMovementListToSave) {
@@ -170,7 +175,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
           _singleTrxs ??= [];
 
           _singleTrxs.add(
-            SinglePartyTransaction(
+            SinglePartyTransactionForCreatedPost(
               amount: double.tryParse(amountValue) ?? 0,
               date: _dateTime.toUtc().toIso8601String(),
               type: i["inOrOut"] ? "INFLOW" : "OUTFLOW",
@@ -178,7 +183,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
             ),
           );
         } else {
-          _multiTrxs ??= MultiPartyTransaction(
+          _multiTrxs ??= MultiPartyTransactionForCreatedPost(
             date: _dateTime.toUtc().toIso8601String(),
             type: category.type,
             categoryKey: category.key,
@@ -191,7 +196,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
       }
     }
 
-    return CreatePost(
+    return NewCreatedPost(
       title: _controllerCategory.text,
       description: "",
       categoryKey: category.key,
@@ -217,7 +222,8 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
       afternoon: false,
       evening: false,
       wholeDay: _allDay,
-      attachments: attachments.map((e) => Attachments.fromJson(e)).toList(),
+      attachments:
+          attachments.map((e) => AttachmentForCreatedPost.fromJson(e)).toList(),
       notificationsActive: false,
       notificationsUnit: "",
       singlePartyTransactions: _singleTrxs,
@@ -241,325 +247,313 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
         onTap: () {
           SystemChannels.textInput.invokeMethod('TextInput.hide');
         },
-        child: Stack(
-          children: [
-            ListView(
-              padding: EdgeInsets.only(top: 90),
-              physics: ClampingScrollPhysics(),
-              children: [
-                ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TopBarSectionForCreatePost(
+                onCategoryTap: (c) async {
+                  if (c == null) return;
+                  category = c;
+
+                  if (widget.post == null)
+                    _controllerCategory.text = category.name;
+                  setState(() {});
+                },
+                onPartnerTap: () async {
+                  final resp = await CustomBottomSheet.showDraggableBottomSheet(
+                    context,
+                    (controller) => PartnerDialog(scrollController: controller),
+                    appBarColor: CustomColors.pinkWhite,
+                  );
+
+                  if (resp is PartnerModel) {
+                    _partnerModel = resp;
+                    setState(() {});
+                  }
+                },
+                onSave: () async {
+                  if (_loading) return;
+
+                  _loading = true;
+                  setState(() {});
+
+                  List<Map<String, dynamic>> attachmentsToAdd = [];
+
+                  for (var i in _fileAndDocumentsListToSave)
+                    attachmentsToAdd.add({
+                      "localizedName": (i["attachment"] as AttachmentType).name,
+                      "type": (i["attachment"] as AttachmentType).key,
+                      "content": "", //base64Encode(i["value"])
+                      "contentType": "application/pdf",
+                    });
+
+                  bool resp = false;
+
+                  if (widget.post != null) {
+                    resp = await ref.read(postListProvider.notifier).updatePost(
+                          key: widget.post?.key ?? "",
+                          postBody:
+                              postModelToCreate(attachments: attachmentsToAdd),
+                        );
+                  } else {
+                    resp = await ref.read(postListProvider.notifier).createPost(
+                          postBody:
+                              postModelToCreate(attachments: attachmentsToAdd),
+                        );
+                  }
+
+                  _loading = false;
+                  setState(() {});
+
+                  if (resp) {
+                    FlashCustomDialog.showPopUp(
+                      context: context,
+                      text: "Post salvato",
+                      isError: false,
+                    );
+                    SchedulerBinding.instance!.addPostFrameCallback((_) {
+                      context.goNamed(routeMap[routeNames.mainScaffold]);
+                    });
+                  } else {
+                    FlashCustomDialog.showPopUp(
+                      context: context,
+                      text:
+                          "Ops... qualcosa è andato storto, riprova più tardi",
+                      isError: true,
+                    );
+                    SchedulerBinding.instance!.addPostFrameCallback((_) {
+                      context.pop();
+                    });
+                  }
+                },
+                createPost: postModelToCreate(),
+                category: category,
+                partnerModel: _partnerModel,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: PrimaryTextFormField(
+                  controller: _controllerCategory,
+                  focusNode: _focusNode,
+                  hintText: "Nome categoria",
+                  textCapitalization: TextCapitalization.sentences,
+                  action: TextInputAction.next,
+                  onChange: (_) => setState(() {}),
+                ),
+              ),
+              SizedBox(height: 14),
+
+              // Location
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
                   children: [
-                    // Name category
-                    PrimaryTextFormField(
-                      controller: _controllerCategory,
-                      focusNode: _focusNode,
-                      hintText: "Nome categoria",
-                      textCapitalization: TextCapitalization.sentences,
-                      action: TextInputAction.next,
-                      onChange: (_) => setState(() {}),
-                    ),
-                    SizedBox(height: 14),
-
-                    // Location
-                    Row(
-                      children: [
-                        Expanded(
-                          child: PrimaryTextFormField(
-                            controller: _controllerLocation,
-                            focusNode: _focusNode2,
-                            hintText: "Indirizzo / Posizione",
-                            action: TextInputAction.next,
-                            suffixIcon: Icon(
-                              Icons.gps_fixed,
-                            ),
-                            onChange: (_) => setState(() {}),
-                          ),
+                    Expanded(
+                      child: PrimaryTextFormField(
+                        controller: _controllerLocation,
+                        focusNode: _focusNode2,
+                        hintText: "Indirizzo / Posizione",
+                        action: TextInputAction.next,
+                        suffixIcon: Icon(
+                          Icons.gps_fixed,
                         ),
-                        SizedBox(width: 8),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: CustomColors.primaryLightGreen,
-                            border: Border.all(color: Colors.black26),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          width: 50,
-                          child: TextButton(
-                            onPressed: () async {
-                              if (await canLaunchUrl(
-                                  Uri.parse("comgooglemaps://")))
-                                await launchUrl(Uri.parse("comgooglemaps://"));
-                              else
-                                await launchUrl(
-                                    Uri.parse("https://maps.apple.com"));
-                            },
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                              ),
-                            ),
-                            child: Image.asset(
-                              "assets/images/google_maps_icon.png",
-                              width: 28,
-                              height: 28,
-                            ),
-                          ),
-                        ),
-                      ],
+                        onChange: (_) => setState(() {}),
+                      ),
                     ),
-                    SizedBox(height: 14),
-
-                    // Location All day / Time
-                    _SelectLocationAndTimeSection(
-                      allDaySelected: _allDay,
-                      onTapTimeSelection: (c) async {
-                        _allDay = c == "0";
-                        setState(() {});
-                      },
-                      timeFrom: TextEditingController(
-                        text: _timeOfDayFrom.timeToString,
+                    SizedBox(width: 8),
+                    /*Container(
+                      decoration: BoxDecoration(
+                        color: CustomColors.primaryLightGreen,
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      onTapTimeFrom: () async {
-                        final timeOfDay = await showTimePicker(
-                          context: context,
-                          initialTime: _timeOfDayFrom,
-                        );
-                        _timeOfDayFrom = timeOfDay ?? _timeOfDayFrom;
-
-                        if (_timeOfDayFrom.hour > _timeOfDayTo.hour ||
-                            (_timeOfDayFrom.hour == _timeOfDayTo.hour &&
-                                _timeOfDayFrom.minute > _timeOfDayTo.minute))
-                          _timeOfDayTo = _timeOfDayFrom;
-
-                        setState(() {});
-                      },
-                      timeTo: TextEditingController(
-                        text: _timeOfDayTo.timeToString,
-                      ),
-                      onTapTimeTo: () async {
-                        final timeOfDay = await showTimePicker(
-                          context: context,
-                          initialTime: _timeOfDayTo,
-                        );
-
-                        if (timeOfDay == null) return;
-
-                        _timeOfDayTo = timeOfDay;
-                        setState(() {});
-                      },
-                      onTapDateSelection: () async {
-                        final dateTime = await showDatePicker(
-                          context: context,
-                          initialDate: _dateTime,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2050),
-                        );
-                        _dateTime = dateTime ?? _dateTime;
-                        setState(() {});
-                      },
-                      controllerDate: TextEditingController(
-                        text:
-                            "${_dateTime.day} ${_dateTime.month.monthFromInt.substring(0, 3).toLowerCase()} ${_dateTime.year}",
-                      ),
-                      setChange: (_) => setState(() {}),
-                    ),
-
-                    // Finance Movements
-                    if (_financeMovementListToSave.isNotEmpty)
-                      ListView.separated(
-                        itemCount: _financeMovementListToSave.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.only(top: 16),
-                        separatorBuilder: (_, __) => SizedBox(height: 28),
-                        itemBuilder: (_, i) {
-                          final _financeToSave = _financeMovementListToSave[i];
-                          final typeFinance = _financeToSave["typeNotStandard"];
-                          final typeMovement = _financeToSave[
-                              typeFinance != null ? "walletFROM" : "wallet"];
-
-                          return FinanceMovementItem(
-                            typeFinance: typeFinance,
-                            typeMovement: typeMovement,
-                            typeMovementSecond: _financeToSave["walletTO"],
-                            isInOrOut: _financeToSave["inOrOut"] ?? false,
-                            value: _financeToSave["value"] ?? "",
-                            valueSecond: _financeToSave["valueEntered"],
-                            onValueChange: (s) {
-                              _financeToSave["value"] = s;
-                              setState(() {});
-                            },
-                            onSecondValueChange: (s) {
-                              _financeToSave["valueEntered"] = s;
-                              setState(() {});
-                            },
-                            onTypeTap: (s) {
-                              _financeToSave[typeFinance != null
-                                  ? "walletFROM"
-                                  : "wallet"] = s;
-                              setState(() {});
-                            },
-                            onSecondTypeTap: (s) {
-                              _financeToSave["walletTO"] = s;
-                              setState(() {});
-                            },
-                            onInOrOutTap: (v) {
-                              _financeToSave["inOrOut"] = v;
-                              setState(() {});
-                            },
-                            onDelete: () async {
-                              // Update list values
-                              final cacheItems = _financeMovementListToSave
-                                  .map((e) => e)
-                                  .toList();
-                              cacheItems.removeAt(i);
-
-                              _financeMovementListToSave.clear();
-                              setState(() {});
-
-                              await Future.delayed(Duration(milliseconds: 100));
-
-                              _financeMovementListToSave.addAll(cacheItems);
-                              setState(() {});
-                            },
-                          );
+                      width: 50,
+                      child: TextButton(
+                        onPressed: () async {
+                          if (await canLaunchUrl(Uri.parse("comgooglemaps://")))
+                            await launchUrl(Uri.parse("comgooglemaps://"));
+                          else
+                            await launchUrl(
+                                Uri.parse("https://maps.apple.com"));
                         },
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                        child: Image.asset(
+                          "assets/images/google_maps_icon.png",
+                          width: 28,
+                          height: 28,
+                        ),
                       ),
-
-                    // File & Documents
-                    ListView.separated(
-                      itemCount: _fileAndDocumentsListToSave.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.only(top: 16),
-                      separatorBuilder: (_, __) => SizedBox(height: 28),
-                      itemBuilder: (_, i) {
-                        final _fileToSave = _fileAndDocumentsListToSave[i];
-
-                        return _DocumentItem(
-                          attachmentType: _fileToSave["attachment"],
-                          onTypeTap: (s) {
-                            _fileToSave["attachment"] = s;
-                            setState(() {});
-                          },
-                          value: _fileToSave["value"],
-                          onValueChange: (s) {
-                            _fileToSave["value"] = s;
-                            setState(() {});
-                          },
-                          onDelete: () async {
-                            // Update list values
-                            final cacheItems = _fileAndDocumentsListToSave
-                                .map((e) => e)
-                                .toList();
-                            cacheItems.removeAt(i);
-
-                            _fileAndDocumentsListToSave.clear();
-                            setState(() {});
-
-                            await Future.delayed(Duration(milliseconds: 100));
-
-                            _fileAndDocumentsListToSave.addAll(cacheItems);
-                            setState(() {});
-                          },
-                        );
-                      },
-                    ),
-
-                    SizedBox(height: 150),
+                    ),ß*/
                   ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 14),
 
-            // Appbar
-            _AppBarSection(
-              onCategoryTap: (c) async {
-                if (c == null) return;
-                category = c;
-
-                if (widget.post == null)
-                  _controllerCategory.text = category.name;
-                setState(() {});
-              },
-              onPartnerTap: () async {
-                final resp = await CustomBottomSheet.showDraggableBottomSheet(
-                  context,
-                  (controller) => PartnerDialog(scrollController: controller),
-                  appBarColor: CustomColors.pinkWhite,
-                );
-
-                if (resp is PartnerModel) {
-                  _partnerModel = resp;
+              // Location All day / Time
+              _SelectLocationAndTimeSection(
+                allDaySelected: _allDay,
+                onTapTimeSelection: (c) async {
+                  _allDay = c == "0";
                   setState(() {});
-                }
-              },
-              onSave: () async {
-                if (_loading) return;
-
-                _loading = true;
-                setState(() {});
-
-                List<Map> attachmentsToAdd = [];
-
-                for (var i in _fileAndDocumentsListToSave)
-                  attachmentsToAdd.add({
-                    "localizedName": (i["attachment"] as AttachmentType).name,
-                    "type": (i["attachment"] as AttachmentType).key,
-                    "content": "", //base64Encode(i["value"])
-                    "contentType": "application/pdf",
-                  });
-
-                bool resp = false;
-
-                if (widget.post != null) {
-                  resp = await ref.read(postListProvider.notifier).updatePost(
-                        key: widget.post?.key ?? "",
-                        postBody:
-                            postModelToCreate(attachments: attachmentsToAdd),
-                      );
-                } else {
-                  resp = await ref.read(postListProvider.notifier).createPost(
-                        postBody:
-                            postModelToCreate(attachments: attachmentsToAdd),
-                      );
-                }
-
-                _loading = false;
-                setState(() {});
-
-                if (resp) {
-                  FlashCustomDialog.showPopUp(
+                },
+                timeFrom: TextEditingController(
+                  text: _timeOfDayFrom.timeToString,
+                ),
+                onTapTimeFrom: () async {
+                  final timeOfDay = await showTimePicker(
                     context: context,
-                    text: "Post salvato",
-                    isError: false,
+                    initialTime: _timeOfDayFrom,
                   );
-                  SchedulerBinding.instance!.addPostFrameCallback((_) {
-                    context.goNamed(routeMap[routeNames.mainScaffold]);
-                  });
-                } else {
-                  FlashCustomDialog.showPopUp(
+                  _timeOfDayFrom = timeOfDay ?? _timeOfDayFrom;
+
+                  if (_timeOfDayFrom.hour > _timeOfDayTo.hour ||
+                      (_timeOfDayFrom.hour == _timeOfDayTo.hour &&
+                          _timeOfDayFrom.minute > _timeOfDayTo.minute))
+                    _timeOfDayTo = _timeOfDayFrom;
+
+                  setState(() {});
+                },
+                timeTo: TextEditingController(
+                  text: _timeOfDayTo.timeToString,
+                ),
+                onTapTimeTo: () async {
+                  final timeOfDay = await showTimePicker(
                     context: context,
-                    text: "Ops... qualcosa è andato storto, riprova più tardi",
-                    isError: true,
+                    initialTime: _timeOfDayTo,
                   );
-                  SchedulerBinding.instance!.addPostFrameCallback((_) {
-                    context.pop();
-                  });
-                }
-              },
-              createPost: postModelToCreate(),
-              category: category,
-              partnerModel: _partnerModel,
-            ),
-          ],
+
+                  if (timeOfDay == null) return;
+
+                  _timeOfDayTo = timeOfDay;
+                  setState(() {});
+                },
+                onTapDateSelection: () async {
+                  final dateTime = await showDatePicker(
+                    context: context,
+                    initialDate: _dateTime,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2050),
+                  );
+                  _dateTime = dateTime ?? _dateTime;
+                  setState(() {});
+                },
+                controllerDate: TextEditingController(
+                  text:
+                      "${_dateTime.day} ${_dateTime.month.monthFromInt.substring(0, 3).toLowerCase()} ${_dateTime.year}",
+                ),
+                setChange: (_) => setState(() {}),
+              ),
+
+              // Finance Movements
+              if (_financeMovementListToSave.isNotEmpty)
+                ListView.separated(
+                  itemCount: _financeMovementListToSave.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(top: 16),
+                  separatorBuilder: (_, __) => SizedBox(height: 28),
+                  itemBuilder: (_, i) {
+                    final _financeToSave = _financeMovementListToSave[i];
+                    final typeFinance = _financeToSave["typeNotStandard"];
+                    final typeMovement = _financeToSave[
+                        typeFinance != null ? "walletFROM" : "wallet"];
+
+                    return FinanceMovementItem(
+                      typeFinance: typeFinance,
+                      typeMovement: typeMovement,
+                      typeMovementSecond: _financeToSave["walletTO"],
+                      isInOrOut: _financeToSave["inOrOut"] ?? false,
+                      value: _financeToSave["value"] ?? "",
+                      valueSecond: _financeToSave["valueEntered"],
+                      onValueChange: (s) {
+                        _financeToSave["value"] = s;
+                        setState(() {});
+                      },
+                      onSecondValueChange: (s) {
+                        _financeToSave["valueEntered"] = s;
+                        setState(() {});
+                      },
+                      onTypeTap: (s) {
+                        _financeToSave[
+                            typeFinance != null ? "walletFROM" : "wallet"] = s;
+                        setState(() {});
+                      },
+                      onSecondTypeTap: (s) {
+                        _financeToSave["walletTO"] = s;
+                        setState(() {});
+                      },
+                      onInOrOutTap: (v) {
+                        _financeToSave["inOrOut"] = v;
+                        setState(() {});
+                      },
+                      onDelete: () async {
+                        // Update list values
+                        final cacheItems =
+                            _financeMovementListToSave.map((e) => e).toList();
+                        cacheItems.removeAt(i);
+
+                        _financeMovementListToSave.clear();
+                        setState(() {});
+
+                        await Future.delayed(Duration(milliseconds: 100));
+
+                        _financeMovementListToSave.addAll(cacheItems);
+                        setState(() {});
+                      },
+                    );
+                  },
+                ),
+
+              // File & Documents
+              ListView.separated(
+                itemCount: _fileAndDocumentsListToSave.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.only(top: 16),
+                separatorBuilder: (_, __) => SizedBox(height: 28),
+                itemBuilder: (_, i) {
+                  final _fileToSave = _fileAndDocumentsListToSave[i];
+
+                  return _DocumentItem(
+                    attachmentType: _fileToSave["attachment"],
+                    onTypeTap: (s) {
+                      _fileToSave["attachment"] = s;
+                      setState(() {});
+                    },
+                    value: _fileToSave["value"],
+                    onValueChange: (s) {
+                      _fileToSave["value"] = s;
+                      setState(() {});
+                    },
+                    onDelete: () async {
+                      // Update list values
+                      final cacheItems =
+                          _fileAndDocumentsListToSave.map((e) => e).toList();
+                      cacheItems.removeAt(i);
+
+                      _fileAndDocumentsListToSave.clear();
+                      setState(() {});
+
+                      await Future.delayed(Duration(milliseconds: 100));
+
+                      _fileAndDocumentsListToSave.addAll(cacheItems);
+                      setState(() {});
+                    },
+                  );
+                },
+              ),
+
+              SizedBox(height: 150),
+
+              // Appbar
+            ],
+          ),
         ),
       ),
       floatingActionButton: SpeedDial(
@@ -814,252 +808,6 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
 
     return await _picker.pickMultiImage(
       requestFullMetadata: false,
-    );
-  }
-}
-
-class _AppBarSection extends ConsumerWidget {
-  final CreatePost createPost;
-  final PostCategory category;
-  final void Function(PostCategory?) onCategoryTap;
-  final void Function()? onPartnerTap;
-  final void Function() onSave;
-  final PartnerModel? partnerModel;
-
-  const _AppBarSection({
-    required this.createPost,
-    required this.category,
-    required this.onCategoryTap,
-    required this.onPartnerTap,
-    required this.onSave,
-    required this.partnerModel,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: CustomColors.pinkWhite,
-      height: 100,
-      child: Stack(
-        children: [
-          // Setting app bar fixed
-          // Container with options
-          Container(
-            color: CustomColors.pinkWhiteDeep,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Last buttons
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: onSave,
-                      child: Text(
-                        "Salva",
-                        style: TextStyle(
-                          color: Color.fromRGBO(0, 84, 147, 1),
-                          fontSize: 16,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                    PopupMenuButton(
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: Colors.black,
-                      ),
-                      onSelected: (c) async {
-                        if (c != "0") return;
-
-                        final response = await ref
-                            .read(postListProvider.notifier)
-                            .saveTemplate(
-                              category.key,
-                              createPost,
-                            );
-
-                        if (response)
-                          FlashCustomDialog.showPopUp(
-                            context: context,
-                            text:
-                                "Questo post è stato salvato come modello predefinito della Categoria \"${category.name}\"",
-                            isError: false,
-                          );
-                        else
-                          FlashCustomDialog.showPopUp(
-                            context: context,
-                            text:
-                                "Ops... qualcosa è andato storto, ti preghiamo di riprovare",
-                            isError: true,
-                          );
-                      },
-                      itemBuilder: (_) => [
-                        PopupMenuItem(
-                          value: "0",
-                          child: Text("Salva come predefinito"),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // All data
-          Padding(
-            padding: EdgeInsets.only(left: 6),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Arrow back
-                IconButton(
-                  onPressed: () => context.canPop()
-                      ? context.pop()
-                      : context.pushReplacementNamed(
-                          routeMap[routeNames.mainScaffold]),
-                  icon: Icon(
-                    Icons.arrow_back,
-                    size: 26,
-                  ),
-                ),
-
-                // Image + other
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Image circle
-                      InkWell(
-                        onTap: () async {
-                          final category =
-                              await CustomBottomSheet.showDraggableBottomSheet(
-                            context,
-                            (controller) => SelectCategoriesDialog(
-                              scrollController: controller,
-                              selectNewCategory: true,
-                            ),
-                          ).then((value) {
-                            if (context.mounted) {
-                              Future.delayed(const Duration(milliseconds: 500),
-                                  () {
-                                ref
-                                    .read(uiStateProvider.notifier)
-                                    .setSelectedDomainKey(ref
-                                        .read(appStateProvider)
-                                        .domains[0]
-                                        .key);
-                              });
-                            }
-                          });
-                          ;
-
-                          onCategoryTap(category);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Color.fromRGBO(239, 230, 222, 1),
-                              width: 12,
-                            ),
-                          ),
-                          width: 100,
-                          height: 100,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: category
-                                  .domainBackgroundColorHex.colorFromHex,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  color: Colors.black12,
-                                ),
-                              ],
-                            ),
-                            child: Hero(
-                                tag: category.key,
-                                child: GenericCachedIcon(
-                                    imageUrl: category.iconUrl)),
-                          ),
-                        ),
-                      ),
-
-                      // Partner + title
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Partner upload
-                              Padding(
-                                padding: EdgeInsets.only(left: 8),
-                                child: GestureDetector(
-                                  onTap: onPartnerTap,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: SizedBox(
-                                      width: 70,
-                                      height: 35,
-                                      child: partnerModel == null
-                                          ? Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color: CustomColors
-                                                    .primaryLightGreen,
-                                                border: Border.all(
-                                                  color: Colors.black26,
-                                                ),
-                                              ),
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                "Partner",
-                                                style: TextStyle(
-                                                  color: Colors.black26,
-                                                ),
-                                              ),
-                                            )
-                                          : SvgPicture.network(
-                                              partnerModel!.iconUrl,
-                                              fit: BoxFit.contain,
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 18),
-
-                              // Title
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      category.name,
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        color: Color.fromRGBO(51, 51, 51, 1),
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

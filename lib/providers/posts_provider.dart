@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/clients/posts_client.dart';
 import 'package:hippocamp/helpers/providers/post_provider_helpers.dart';
-import 'package:hippocamp/models/body/create_post.dart';
+import 'package:hippocamp/models/body/created_post.dart';
 import 'package:hippocamp/models/error_call_model.dart';
 import 'package:hippocamp/models/repositories/post_repository.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart';
@@ -274,7 +274,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
     );
   }
 
-  Future<bool> saveTemplate(String categoryKey, CreatePost post) async {
+  Future<bool> saveTemplate(String categoryKey, NewCreatedPost post) async {
     final resp = await _postsClient.saveTemplatePost(
       key: categoryKey,
       body: post.toJson(),
@@ -286,7 +286,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
     );
   }
 
-  Future<bool> createPost({required CreatePost postBody}) async {
+  Future<bool> createPost({required NewCreatedPost postBody}) async {
     final resp = await _postsClient.createPost(
       createPost: postBody,
     );
@@ -304,7 +304,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
   /// TODO: implementare con SQLite
 
   Future<bool> updatePost(
-      {required String key, required CreatePost postBody}) async {
+      {required String key, required NewCreatedPost postBody}) async {
     final resp = await _postsClient.updatePost(
       key: key,
       createPost: postBody,

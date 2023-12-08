@@ -67,6 +67,7 @@ dependencies:
   flutter_draggable_gridview: ^0.0.8
   flutter_cache_manager: ^3.3.1
   awesome_dialog: ^3.1.0
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,8 @@ dev_dependencies:
   build_runner: ^2.4.6
   freezed: ^2.4.5
   floor_generator: ^1.4.2
+  json_serializable: ^6.7.1
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

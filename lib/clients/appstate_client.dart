@@ -3,7 +3,7 @@ import 'package:hippocamp/clients/main_client.dart';
 import 'package:hippocamp/constants/storage_keys.dart';
 import 'package:hippocamp/constants/urls.dart';
 import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocamp/models/body/create_post.dart';
+import 'package:hippocamp/models/body/created_post.dart';
 import 'package:hippocamp/models/error_call_model.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:hippocamp/models/posts-creation/partner_model.dart';
