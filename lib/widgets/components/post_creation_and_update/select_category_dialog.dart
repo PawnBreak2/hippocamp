@@ -31,8 +31,15 @@ class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
   void initState() {
     super.initState();
     _textEditingController.addListener(() {
+      print('fff');
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
   }
 
   void init() {
@@ -47,8 +54,6 @@ class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
         child: CircularProgressIndicator(),
       );
     }
-
-    final domains = ref.watch(appStateProvider).domains;
 
     return Stack(
       children: [
@@ -93,13 +98,11 @@ class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
           ],
         ),
         // List domains
-        Positioned(
+        const Positioned(
           right: 8,
           top: 100,
           bottom: 20,
-          child: ListDomainsForPostCreation(
-            domains: domains,
-          ),
+          child: ListDomainsForPostCreation(),
         ),
       ],
     );

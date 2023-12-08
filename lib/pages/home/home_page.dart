@@ -40,7 +40,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   late final UIState _uiState;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   late PageController _pageController;
-  final FocusNode _focusNode = FocusNode();
 
   /// Widget that represents the button for accessing the Timeline / Memo sections on home page.
 
@@ -50,19 +49,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     _pageController = ref.read(homepagePageControllerProvider);
     _uiStateNotifier = ref.read(uiStateProvider.notifier);
     _uiState = ref.read(uiStateProvider);
-    _pageController.addListener(() {
-      if (_pageController.page!.round() != _uiState.indexForHomePageAppBar) {
-        _uiStateNotifier
-            .setIndexForHomePageAppBar(_pageController.page!.round());
-      }
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    int _index = ref
-        .watch(uiStateProvider.select((value) => value.indexForHomePageAppBar));
     return Scaffold(
       key: scaffoldKey,
       appBar: PreferredSize(
@@ -73,34 +64,44 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       body: PageView(
         controller: _pageController,
+        onPageChanged: (index) {
+          _uiStateNotifier.setIndexForHomePageAppBar(index);
+        },
         children: [
           TimelinePage(isSearching: _appState.isSearchingPosts),
           MemoPage(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-        heroTag: "FloatingActionButton_timeline",
-        onPressed: () {
-          if (_index == 0)
-            CustomBottomSheet.showDraggableBottomSheet(
-              context,
-              (controller) => SelectCategoriesDialog(
-                scrollController: controller,
+      floatingActionButton: Consumer(
+        builder: (context, ref, child) {
+          int _index = ref.watch(
+              uiStateProvider.select((value) => value.indexForHomePageAppBar));
+
+          return FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
               ),
-            );
-          else
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => CreateMemoPage(),
-              ),
-            );
+              heroTag: "FloatingActionButton_timeline",
+              onPressed: () {
+                if (_index == 0)
+                  CustomBottomSheet.showDraggableBottomSheet(
+                    context,
+                    (controller) => SelectCategoriesDialog(
+                      scrollController: controller,
+                    ),
+                  );
+                else
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CreateMemoPage(),
+                    ),
+                  );
+              },
+              backgroundColor: Colors.white,
+              child: child);
         },
-        backgroundColor: Colors.white,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: CustomColors.lightRed,
           size: 32,

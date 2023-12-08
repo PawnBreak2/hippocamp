@@ -3,16 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocamp/helpers/extensions/string_extensions.dart';
 import 'package:hippocamp/models/responses/domains_response_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
 
 import '../../../providers/ui_state_provider.dart';
 
 class ListDomainsForPostCreation extends StatelessWidget {
-  final List<Domain> domains;
   const ListDomainsForPostCreation({
     super.key,
-    required this.domains,
   });
 
   @override
@@ -30,18 +29,23 @@ class ListDomainsForPostCreation extends StatelessWidget {
           BoxShadow(spreadRadius: 1, blurRadius: 10, color: Colors.black12),
         ],
       ),
-      child: ListView.separated(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 8,
-        ),
-        itemBuilder: (_, i) => Consumer(
-            builder: (context, ref, child) {
+      child: Consumer(
+        builder: (context, ref, child) {
+          final domains = ref.watch(appStateProvider).domains;
+
+          return ListView.separated(
+            addAutomaticKeepAlives: false,
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 8,
+            ),
+            itemBuilder: (_, i) {
               final uiStateNotifier = ref.read(uiStateProvider.notifier);
               final isDomainSelected = ref.watch(uiStateProvider.select(
                   (state) =>
                       state.currentlySelectedDomainKey == domains[i].key));
+
               return InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: () =>
@@ -59,13 +63,15 @@ class ListDomainsForPostCreation extends StatelessWidget {
                       ),
                     ),
                     alignment: Alignment.center,
-                    child: child),
+                    child: GenericCachedIcon(imageUrl: domains[i].iconUrl)),
               );
             },
-            child: GenericCachedIcon(imageUrl: domains[i].iconUrl)),
-        itemCount: domains.length,
-        separatorBuilder: (_, i) =>
-            i == domains.length ? const SizedBox() : const SizedBox(height: 16),
+            itemCount: domains.length,
+            separatorBuilder: (_, i) => i == domains.length
+                ? const SizedBox()
+                : const SizedBox(height: 16),
+          );
+        },
       ),
     );
   }

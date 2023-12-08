@@ -20,10 +20,11 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('rebuild');
     final selectedDomainKey = ref.watch(
         uiStateProvider.select((state) => state.currentlySelectedDomainKey));
     final categories = categoriesFilter(ref
-        .watch(appStateProvider)
+        .read(appStateProvider)
         .categories
         .where((element) => element.domainKey == selectedDomainKey)
         .toList());
