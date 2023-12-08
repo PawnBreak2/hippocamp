@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/pages/post_creation_and_update/list_categories_for_post_creation.dart';
-import 'package:hippocamp/pages/post_creation_and_update/list_domains.dart';
+import 'package:hippocamp/pages/select_categories/widgets/list_categories_for_post_creation.dart';
+import 'package:hippocamp/pages/select_categories/widgets/list_domains.dart';
 
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';

@@ -16,7 +16,7 @@ import 'package:hippocamp/pages/memo/memo.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/page_controller_provider.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/widgets/components/post_creation_and_update/select_category_dialog.dart';
+import 'package:hippocamp/pages/select_categories/select_category_dialog.dart';
 import 'package:hippocamp/pages/timeline/timeline.dart';
 import 'package:hippocamp/providers/auth_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';

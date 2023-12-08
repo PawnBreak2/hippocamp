@@ -7,7 +7,7 @@ import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
 
-import '../../../providers/ui_state_provider.dart';
+import '../../../../providers/ui_state_provider.dart';
 
 class ListDomainsForPostCreation extends StatelessWidget {
   const ListDomainsForPostCreation({
