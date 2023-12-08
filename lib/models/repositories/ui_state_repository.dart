@@ -11,6 +11,8 @@ class UIState with _$UIState {
   const factory UIState({
     @Default(false) bool showCenterButtonInTimeline,
     @Default(false) bool showSearchFieldForPosts,
+    @Default(false) bool isLongPressingCategory,
+    @Default('') String longPressedCategoryKey,
 
     // used to manage navigation between pages in home page
     @Default(0) int indexForHomePageAppBar,

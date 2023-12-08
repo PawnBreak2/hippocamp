@@ -19,6 +19,14 @@ class UIStateNotifier extends Notifier<UIState> {
     state = state.copyWith(currentlySelectedDomainKey: key);
   }
 
+  setIsLongPressingCategory(bool v) {
+    state = state.copyWith(isLongPressingCategory: v);
+  }
+
+  setLongPressedCategoryKey(String key) {
+    state = state.copyWith(longPressedCategoryKey: key);
+  }
+
   void setIndexForHomePageAppBar(int index) {
     state = state.copyWith(indexForHomePageAppBar: index);
   }

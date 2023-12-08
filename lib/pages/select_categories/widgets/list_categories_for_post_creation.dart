@@ -8,6 +8,7 @@ import 'package:hippocamp/pages/post_creation_and_update/post_creation_and_updat
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:collection/collection.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';
+import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
 
 class ListCategoriesForPostCreation extends ConsumerWidget {
@@ -37,6 +38,8 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
             .where((element) => element.domainKey == selectedDomainKey)
             .toList(),
         ref);
+    final uiStateNotifier = ref.read(uiStateProvider.notifier);
+    final uiState = ref.watch(uiStateProvider);
 
     // used to hide the title of the domain when the user searchs in all the categories
 
@@ -75,46 +78,102 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
               physics: const BouncingScrollPhysics(),
               itemBuilder: (_, i) {
                 return InkWell(
+                  onLongPress: () {
+                    if (!uiState.isLongPressingCategory) {
+                      uiStateNotifier.setIsLongPressingCategory(true);
+                      uiStateNotifier.setLongPressedCategoryKey(
+                          categoriesForSelectedDomain[i].key);
+                    } else {
+                      uiStateNotifier.setIsLongPressingCategory(false);
+                      uiStateNotifier.setLongPressedCategoryKey('');
+                    }
+                  },
                   onTap: () {
-                    context.pushNamed(
-                        routeMap[routeNames.postCreationAndUpdate],
-                        extra: categoriesForSelectedDomain[i]);
+                    // if is not selecting (long-pressing) a new category, it pushes the post creation page
+
+                    ///TODO: refactor per includere tutto in un unica var?
+
+                    if (!(uiState.isLongPressingCategory &&
+                        uiState.longPressedCategoryKey ==
+                            categoriesForSelectedDomain[i].key)) {
+                      context.pushNamed(
+                          routeMap[routeNames.postCreationAndUpdate],
+                          extra: categoriesForSelectedDomain[i]);
+                    } else {
+                      return;
+                    }
 
                     if (!selectNewCategory) {}
                   },
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: categoriesForSelectedDomain[i]
-                              .domainBackgroundColorHex
-                              .colorFromHex,
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        width: 50,
-                        height: 50,
-                        margin: EdgeInsets.only(
-                            left: 12,
-                            right: 8,
-                            // used to add extra margin to the first element
-                            top: (i == 0) ? 12 : 6,
-                            bottom: 6),
-                        child: Hero(
-                          tag: categoriesForSelectedDomain[i].key,
-                          child: GenericCachedIcon(
-                              imageUrl: categoriesForSelectedDomain[i].iconUrl),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          categoriesForSelectedDomain[i].name,
-                          style: const TextStyle(
-                            fontSize: 16,
+                  child: Container(
+                    decoration: (uiState.isLongPressingCategory &&
+                            uiState.longPressedCategoryKey ==
+                                categoriesForSelectedDomain[i].key)
+                        ? const BoxDecoration(
+                            color: CustomColors.backgroundGrey,
+                          )
+                        : null,
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: categoriesForSelectedDomain[i]
+                                .domainBackgroundColorHex
+                                .colorFromHex,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          width: 50,
+                          height: 50,
+                          margin: EdgeInsets.only(
+                              left: 12,
+                              right: 8,
+                              // used to add extra margin to the first element
+                              top: (i == 0) ? 12 : 6,
+                              bottom: 6),
+                          child: Hero(
+                            tag: categoriesForSelectedDomain[i].key,
+                            child: GenericCachedIcon(
+                                imageUrl:
+                                    categoriesForSelectedDomain[i].iconUrl),
                           ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                categoriesForSelectedDomain[i].name,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              (uiState.isLongPressingCategory &&
+                                      uiState.longPressedCategoryKey ==
+                                          categoriesForSelectedDomain[i].key)
+                                  ? Text('Imposta come preferita',
+                                      style: const TextStyle(
+                                          fontSize: 10,
+                                          color: CustomColors.primaryRed))
+                                  : const SizedBox(height: 0),
+                            ],
+                          ),
+                        ),
+                        (uiState.isLongPressingCategory &&
+                                uiState.longPressedCategoryKey ==
+                                    categoriesForSelectedDomain[i].key)
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: const Icon(
+                                  Icons.favorite,
+                                  color: CustomColors.primaryRed,
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
                   ),
                 );
               },

@@ -17,7 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$UIState {
   bool get showCenterButtonInTimeline => throw _privateConstructorUsedError;
-  bool get showSearchFieldForPosts =>
+  bool get showSearchFieldForPosts => throw _privateConstructorUsedError;
+  bool get isLongPressingCategory => throw _privateConstructorUsedError;
+  String get longPressedCategoryKey =>
       throw _privateConstructorUsedError; // used to manage navigation between pages in home page
   int get indexForHomePageAppBar =>
       throw _privateConstructorUsedError; // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
@@ -35,6 +37,8 @@ abstract class $UIStateCopyWith<$Res> {
   $Res call(
       {bool showCenterButtonInTimeline,
       bool showSearchFieldForPosts,
+      bool isLongPressingCategory,
+      String longPressedCategoryKey,
       int indexForHomePageAppBar,
       String currentlySelectedDomainKey});
 }
@@ -54,6 +58,8 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
   $Res call({
     Object? showCenterButtonInTimeline = null,
     Object? showSearchFieldForPosts = null,
+    Object? isLongPressingCategory = null,
+    Object? longPressedCategoryKey = null,
     Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
   }) {
@@ -66,6 +72,14 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
           ? _value.showSearchFieldForPosts
           : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLongPressingCategory: null == isLongPressingCategory
+          ? _value.isLongPressingCategory
+          : isLongPressingCategory // ignore: cast_nullable_to_non_nullable
+              as bool,
+      longPressedCategoryKey: null == longPressedCategoryKey
+          ? _value.longPressedCategoryKey
+          : longPressedCategoryKey // ignore: cast_nullable_to_non_nullable
+              as String,
       indexForHomePageAppBar: null == indexForHomePageAppBar
           ? _value.indexForHomePageAppBar
           : indexForHomePageAppBar // ignore: cast_nullable_to_non_nullable
@@ -88,6 +102,8 @@ abstract class _$$UIStateImplCopyWith<$Res> implements $UIStateCopyWith<$Res> {
   $Res call(
       {bool showCenterButtonInTimeline,
       bool showSearchFieldForPosts,
+      bool isLongPressingCategory,
+      String longPressedCategoryKey,
       int indexForHomePageAppBar,
       String currentlySelectedDomainKey});
 }
@@ -105,6 +121,8 @@ class __$$UIStateImplCopyWithImpl<$Res>
   $Res call({
     Object? showCenterButtonInTimeline = null,
     Object? showSearchFieldForPosts = null,
+    Object? isLongPressingCategory = null,
+    Object? longPressedCategoryKey = null,
     Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
   }) {
@@ -117,6 +135,14 @@ class __$$UIStateImplCopyWithImpl<$Res>
           ? _value.showSearchFieldForPosts
           : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLongPressingCategory: null == isLongPressingCategory
+          ? _value.isLongPressingCategory
+          : isLongPressingCategory // ignore: cast_nullable_to_non_nullable
+              as bool,
+      longPressedCategoryKey: null == longPressedCategoryKey
+          ? _value.longPressedCategoryKey
+          : longPressedCategoryKey // ignore: cast_nullable_to_non_nullable
+              as String,
       indexForHomePageAppBar: null == indexForHomePageAppBar
           ? _value.indexForHomePageAppBar
           : indexForHomePageAppBar // ignore: cast_nullable_to_non_nullable
@@ -135,6 +161,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   const _$UIStateImpl(
       {this.showCenterButtonInTimeline = false,
       this.showSearchFieldForPosts = false,
+      this.isLongPressingCategory = false,
+      this.longPressedCategoryKey = '',
       this.indexForHomePageAppBar = 0,
       this.currentlySelectedDomainKey = ''});
 
@@ -144,6 +172,12 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   @override
   @JsonKey()
   final bool showSearchFieldForPosts;
+  @override
+  @JsonKey()
+  final bool isLongPressingCategory;
+  @override
+  @JsonKey()
+  final String longPressedCategoryKey;
 // used to manage navigation between pages in home page
   @override
   @JsonKey()
@@ -155,7 +189,7 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, indexForHomePageAppBar: $indexForHomePageAppBar, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
+    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, isLongPressingCategory: $isLongPressingCategory, longPressedCategoryKey: $longPressedCategoryKey, indexForHomePageAppBar: $indexForHomePageAppBar, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
   }
 
   @override
@@ -167,6 +201,10 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
           'showCenterButtonInTimeline', showCenterButtonInTimeline))
       ..add(DiagnosticsProperty(
           'showSearchFieldForPosts', showSearchFieldForPosts))
+      ..add(
+          DiagnosticsProperty('isLongPressingCategory', isLongPressingCategory))
+      ..add(
+          DiagnosticsProperty('longPressedCategoryKey', longPressedCategoryKey))
       ..add(
           DiagnosticsProperty('indexForHomePageAppBar', indexForHomePageAppBar))
       ..add(DiagnosticsProperty(
@@ -185,6 +223,10 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
             (identical(
                     other.showSearchFieldForPosts, showSearchFieldForPosts) ||
                 other.showSearchFieldForPosts == showSearchFieldForPosts) &&
+            (identical(other.isLongPressingCategory, isLongPressingCategory) ||
+                other.isLongPressingCategory == isLongPressingCategory) &&
+            (identical(other.longPressedCategoryKey, longPressedCategoryKey) ||
+                other.longPressedCategoryKey == longPressedCategoryKey) &&
             (identical(other.indexForHomePageAppBar, indexForHomePageAppBar) ||
                 other.indexForHomePageAppBar == indexForHomePageAppBar) &&
             (identical(other.currentlySelectedDomainKey,
@@ -198,6 +240,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
       runtimeType,
       showCenterButtonInTimeline,
       showSearchFieldForPosts,
+      isLongPressingCategory,
+      longPressedCategoryKey,
       indexForHomePageAppBar,
       currentlySelectedDomainKey);
 
@@ -212,6 +256,8 @@ abstract class _UIState implements UIState {
   const factory _UIState(
       {final bool showCenterButtonInTimeline,
       final bool showSearchFieldForPosts,
+      final bool isLongPressingCategory,
+      final String longPressedCategoryKey,
       final int indexForHomePageAppBar,
       final String currentlySelectedDomainKey}) = _$UIStateImpl;
 
@@ -219,6 +265,10 @@ abstract class _UIState implements UIState {
   bool get showCenterButtonInTimeline;
   @override
   bool get showSearchFieldForPosts;
+  @override
+  bool get isLongPressingCategory;
+  @override
+  String get longPressedCategoryKey;
   @override // used to manage navigation between pages in home page
   int get indexForHomePageAppBar;
   @override // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories

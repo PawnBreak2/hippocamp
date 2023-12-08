@@ -229,9 +229,9 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(239, 230, 222, 1),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(204, 196, 190, 1),
+        backgroundColor: CustomColors.backgroundGrey,
         elevation: 0,
         leading: Container(),
         toolbarHeight: 10,
