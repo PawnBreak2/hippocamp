@@ -10,69 +10,88 @@ import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
 import '../../../../providers/ui_state_provider.dart';
 
 class ListDomainsForPostCreation extends StatelessWidget {
+  final TextEditingController _textController;
   const ListDomainsForPostCreation({
     super.key,
-  });
+    required textController,
+  }) : _textController = textController;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.black26,
-          width: 1,
-        ),
-        boxShadow: const [
-          BoxShadow(spreadRadius: 1, blurRadius: 10, color: Colors.black12),
-        ],
-      ),
-      child: Consumer(
-        builder: (context, ref, child) {
-          final domains = ref.watch(appStateProvider).domains;
-
-          return ListView.separated(
-            addAutomaticKeepAlives: false,
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 8,
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            width: 80,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Colors.black26,
+                width: 1,
+              ),
+              boxShadow: const [
+                BoxShadow(
+                    spreadRadius: 1, blurRadius: 10, color: Colors.black12),
+              ],
             ),
-            itemBuilder: (_, i) {
-              final uiStateNotifier = ref.read(uiStateProvider.notifier);
-              final isDomainSelected = ref.watch(uiStateProvider.select(
-                  (state) =>
-                      state.currentlySelectedDomainKey == domains[i].key));
+            child: Consumer(
+              builder: (context, ref, child) {
+                final domains = ref.watch(appStateProvider).domains;
 
-              return InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () =>
-                    uiStateNotifier.setSelectedDomainKey(domains[i].key),
-                child: Container(
-                    height: 60,
-                    decoration: BoxDecoration(
+                return ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
+                  itemBuilder: (_, i) {
+                    final uiStateNotifier = ref.read(uiStateProvider.notifier);
+                    final isDomainSelected = ref.watch(uiStateProvider.select(
+                        (state) =>
+                            state.currentlySelectedDomainKey ==
+                            domains[i].key));
+
+                    return InkWell(
                       borderRadius: BorderRadius.circular(16),
-                      color: domains[i].backgroundColorHex.colorFromHex,
-                      border: Border.all(
-                        width: isDomainSelected ? 4 : 1,
-                        color: isDomainSelected
-                            ? CustomColors.primaryRed
-                            : Colors.grey,
+                      onTap: () {
+                        _textController.clear();
+                        uiStateNotifier.setSelectedDomainKey(domains[i].key);
+                      },
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: domains[i].backgroundColorHex.colorFromHex,
+                              border: Border.all(
+                                width: isDomainSelected ? 4 : 1,
+                                color: isDomainSelected
+                                    ? CustomColors.primaryRed
+                                    : Colors.grey,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: GenericCachedIcon(
+                                imageUrl: domains[i].iconUrl)),
                       ),
-                    ),
-                    alignment: Alignment.center,
-                    child: GenericCachedIcon(imageUrl: domains[i].iconUrl)),
-              );
-            },
-            itemCount: domains.length,
-            separatorBuilder: (_, i) => i == domains.length
-                ? const SizedBox()
-                : const SizedBox(height: 16),
-          );
-        },
-      ),
+                    );
+                  },
+                  itemCount: domains.length,
+                  separatorBuilder: (_, i) => i == domains.length
+                      ? const SizedBox()
+                      : const SizedBox(height: 16),
+                );
+              },
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 24,
+        )
+      ],
     );
   }
 }

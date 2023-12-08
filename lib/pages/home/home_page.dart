@@ -83,20 +83,29 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               heroTag: "FloatingActionButton_timeline",
               onPressed: () {
-                if (_index == 0)
+                if (_index == 0) {
                   CustomBottomSheet.showDraggableBottomSheet(
                     context,
                     (controller) => SelectCategoriesDialog(
                       scrollController: controller,
                     ),
-                  );
-                else
+                  ).whenComplete(
+
+                      // reset the domains to always show the first one after the user closes and reopens the bottom sheet
+                      () => Future.delayed(Duration(milliseconds: 500), () {
+                            ref
+                                .read(uiStateProvider.notifier)
+                                .setSelectedDomainKey(
+                                    ref.read(appStateProvider).domains[0].key);
+                          }));
+                } else {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => CreateMemoPage(),
                     ),
                   );
+                }
               },
               backgroundColor: Colors.white,
               child: child);

@@ -5,6 +5,7 @@ import 'package:hippocamp/pages/select_categories/widgets/list_domains.dart';
 
 import 'package:hippocamp/providers/app_state_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocamp/providers/ui_state_provider.dart';
 
 import 'package:hippocamp/widgets/forms/primary_text_form.dart';
 
@@ -31,7 +32,14 @@ class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
   void initState() {
     super.initState();
     _textEditingController.addListener(() {
-      print('fff');
+      bool isSearchingCategories =
+          ref.read(appStateProvider).isSearchingCategories;
+      if (isSearchingCategories && _textEditingController.text.isEmpty) {
+        ref.read(appStateProvider.notifier).setIsSearchingCategories(false);
+      } else if (!isSearchingCategories &&
+          _textEditingController.text.isNotEmpty) {
+        ref.read(appStateProvider.notifier).setIsSearchingCategories(true);
+      }
       setState(() {});
     });
   }
@@ -55,56 +63,76 @@ class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
       );
     }
 
-    return Stack(
-      children: [
-        ListView(
-          controller: widget.scrollController,
-          padding: const EdgeInsets.only(bottom: 16, top: 16),
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  const Text(
-                    "In quale categoria vuoi inserire il tuo post?",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  PrimaryTextFormField(
-                    controller: _textEditingController,
-                    action: TextInputAction.done,
-                    backgroundColor: Colors.white,
-                    hintText: "Cerca nelle categorie",
-                    suffixIcon: const Icon(Icons.search),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // List Categories
-            _loadingCategories
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ListCategoriesForPostCreation(
+    return Column(children: [
+      TitleText(),
+      SearchInCategoriesTextField(
+          textEditingController: _textEditingController),
+      _loadingCategories
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Expanded(
+              child: Row(children: [
+                Expanded(
+                  flex: 8,
+                  child: ListCategoriesForPostCreation(
                     controller: _textEditingController,
                     selectNewCategory: widget.selectNewCategory,
                   ),
-          ],
+                ),
+                Expanded(
+                  flex: 2,
+                  child: ListDomainsForPostCreation(
+                      textController: _textEditingController),
+                ),
+              ]),
+            )
+    ]);
+  }
+}
+
+class SearchInCategoriesTextField extends StatelessWidget {
+  const SearchInCategoriesTextField({
+    super.key,
+    required TextEditingController textEditingController,
+  }) : _textEditingController = textEditingController;
+
+  final TextEditingController _textEditingController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: PrimaryTextFormField(
+        controller: _textEditingController,
+        action: TextInputAction.done,
+        backgroundColor: Colors.white,
+        hintText: "Cerca nelle categorie",
+        suffixIcon: const Icon(Icons.search),
+      ),
+    );
+  }
+}
+
+class TitleText extends StatelessWidget {
+  const TitleText({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16),
+        child: const Text(
+          "Seleziona la categoria per il post",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
         ),
-        // List domains
-        const Positioned(
-          right: 8,
-          top: 100,
-          bottom: 20,
-          child: ListDomainsForPostCreation(),
-        ),
-      ],
+      ),
     );
   }
 }

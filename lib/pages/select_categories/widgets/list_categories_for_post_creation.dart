@@ -23,65 +23,137 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
     print('rebuild');
     final selectedDomainKey = ref.watch(
         uiStateProvider.select((state) => state.currentlySelectedDomainKey));
-    final categories = categoriesFilter(ref
+    String selectedDomainName = ref
         .read(appStateProvider)
-        .categories
-        .where((element) => element.domainKey == selectedDomainKey)
-        .toList());
-    return ListView.separated(
-      shrinkWrap: true,
-      itemCount: categories.length > 100 ? 100 : categories.length,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (_, i) {
-        return InkWell(
-          onTap: () {
-            context.pushReplacementNamed(
-                routeMap[routeNames.postCreationAndUpdate],
-                extra: categories[i]);
+        .domains
+        .firstWhere((element) =>
+            element.key ==
+            ref.watch(uiStateProvider).currentlySelectedDomainKey)
+        .localizedName;
+    final categoriesForSelectedDomain = categoriesFilter(
+        ref
+            .read(appStateProvider)
+            .categories
+            .where((element) => element.domainKey == selectedDomainKey)
+            .toList(),
+        ref);
 
-            if (!selectNewCategory) {}
-          },
-          child: Row(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: categories[i].domainBackgroundColorHex.colorFromHex,
-                  border: Border.all(color: Colors.grey),
-                ),
-                width: 50,
-                height: 50,
-                margin: const EdgeInsets.only(
-                    left: 16, right: 8, top: 4, bottom: 4),
-                child: GenericCachedIcon(imageUrl: categories[i].iconUrl),
-              ),
-              Expanded(
-                child: Text(
-                  categories[i].name,
-                  style: const TextStyle(
-                    fontSize: 16,
+    // used to hide the title of the domain when the user searchs in all the categories
+
+    final isSearchingCategories = ref
+        .watch(appStateProvider.select((state) => state.isSearchingCategories));
+    return Column(
+      children: [
+        !isSearchingCategories
+            ? Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                  child: Text(
+                    selectedDomainName,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              )
+            : const SizedBox(),
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.only(left: 8, right: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: categoriesForSelectedDomain.length > 100
+                  ? 100
+                  : categoriesForSelectedDomain.length,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (_, i) {
+                return InkWell(
+                  onTap: () {
+                    context.pushNamed(
+                        routeMap[routeNames.postCreationAndUpdate],
+                        extra: categoriesForSelectedDomain[i]);
+
+                    if (!selectNewCategory) {}
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: categoriesForSelectedDomain[i]
+                              .domainBackgroundColorHex
+                              .colorFromHex,
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        width: 50,
+                        height: 50,
+                        margin: EdgeInsets.only(
+                            left: 12,
+                            right: 8,
+                            // used to add extra margin to the first element
+                            top: (i == 0) ? 12 : 6,
+                            bottom: 6),
+                        child: Hero(
+                          tag: categoriesForSelectedDomain[i].key,
+                          child: GenericCachedIcon(
+                              imageUrl: categoriesForSelectedDomain[i].iconUrl),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          categoriesForSelectedDomain[i].name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (_, i) =>
+                  i == categoriesForSelectedDomain.length
+                      ? const SizedBox()
+                      : const SizedBox(height: 4),
+            ),
           ),
-        );
-      },
-      separatorBuilder: (_, i) =>
-          i == categories.length ? const SizedBox() : const SizedBox(height: 4),
+        ),
+        SizedBox(
+          height: 24,
+        )
+      ],
     );
   }
 
   // HELPERS
 
-  List<PostCategory> categoriesFilter(List<PostCategory> categories) {
+  /// Works with text controller to filter results based on search.
+  ///
+  /// The search happens in all categories.
+  ///
+  /// If the text is empty, it returns all the categories for the selected domain.
+
+  List<PostCategory> categoriesFilter(
+      List<PostCategory> categoriesForSelectedDomain, WidgetRef ref) {
     final text = controller.text.toLowerCase();
 
-    if (text.isEmpty)
-      return categories.sorted((a, b) => a.name.compareTo(b.name));
-
-    return categories
-        .where((e) => e.name.toLowerCase().contains(text))
-        .toList();
+    if (text.isEmpty) {
+      return categoriesForSelectedDomain
+          .sorted((a, b) => a.name.compareTo(b.name));
+    } else {
+      // returns a list of categories that contains the text, in all the categories active and available
+      return ref
+          .read(appStateProvider)
+          .categories
+          .where((e) => e.name.toLowerCase().contains(text))
+          .toList();
+    }
   }
 }

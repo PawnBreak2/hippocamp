@@ -979,8 +979,10 @@ class _AppBarSection extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            child:
-                                GenericCachedIcon(imageUrl: category.iconUrl),
+                            child: Hero(
+                                tag: category.key,
+                                child: GenericCachedIcon(
+                                    imageUrl: category.iconUrl)),
                           ),
                         ),
                       ),

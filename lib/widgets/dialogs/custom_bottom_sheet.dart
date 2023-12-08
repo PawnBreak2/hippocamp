@@ -26,7 +26,7 @@ class CustomBottomSheet {
         minChildSize: minChildSize,
         builder: (_, controller) => Container(
           decoration: BoxDecoration(
-            color: appBarColor ?? CustomColors.pinkWhite,
+            color: appBarColor ?? CustomColors.backgroundGrey,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24),
               topRight: Radius.circular(24),

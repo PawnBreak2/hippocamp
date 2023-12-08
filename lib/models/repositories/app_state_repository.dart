@@ -21,6 +21,7 @@ class AppState with _$AppState {
     DateTime? lastDateTimeForRequestingPosts,
     @Default(false) bool isSelectingPosts,
     @Default(false) bool isSearchingPosts,
+    @Default(false) bool isSearchingCategories,
   }) = _AppState;
 
   factory AppState.initial() {
