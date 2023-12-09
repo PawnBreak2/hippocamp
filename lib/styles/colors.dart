@@ -33,6 +33,6 @@ class CustomColors {
   static const Color mediumRed = Color.fromRGBO(192, 141, 133, 1);
   static const Color backgroundGrey = Color.fromRGBO(232, 232, 232, 1);
   static const Color lightGrey = Color(0xFFEEEEEE);
-
+  static const Color lightBackGroundColor = Color(0xFFf7f7f7);
   //208 232
 }

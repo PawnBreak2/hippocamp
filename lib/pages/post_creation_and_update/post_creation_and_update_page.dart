@@ -26,10 +26,12 @@ import 'package:hippocamp/models/posts-creation/finance_movement_model.dart';
 import 'package:hippocamp/models/responses/categories_response_model.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart' show Post;
 import 'package:hippocamp/models/wallets/wallet_model.dart';
+import 'package:hippocamp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
 import 'package:hippocamp/pages/post_creation_and_update/widgets/partner_dialog.dart';
 import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_section.dart';
 import 'package:hippocamp/pages/select_categories/select_category_dialog.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
+import 'package:hippocamp/providers/post_creation_provider.dart';
 import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
@@ -85,33 +87,64 @@ class PostCreationAndUpdatePage extends ConsumerStatefulWidget {
 
 class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
   late PostCategory category;
+  late TextEditingController _titleTextController;
+  late TextEditingController _locationTextController;
+  late TextEditingController _descriptionTextController;
+  late PostCreationNotifier _postCreationNotifier;
   PartnerModel? _partnerModel;
   DateTime _dateTime = DateTime.now();
   bool _allDay = true;
   TimeOfDay _timeOfDayFrom = TimeOfDay.now();
   TimeOfDay _timeOfDayTo = TimeOfDay.now();
-
+  late UIStateNotifier uiNotifier;
   final List<Map> _financeMovementListToSave = [];
 
   final List<Map> _fileAndDocumentsListToSave = [];
 
   bool _loading = false;
 
-  final TextEditingController _controllerCategory = TextEditingController();
-  final TextEditingController _controllerLocation = TextEditingController();
-
-  late final FocusNode _focusNode = FocusNode()
+  late final FocusNode _focusNodeTitle = FocusNode()
     ..addListener(() {
       setState(() {});
     });
 
-  late final FocusNode _focusNode2 = FocusNode()
+  late final FocusNode _focusNodeLocation = FocusNode()
+    ..addListener(() {
+      setState(() {});
+    });
+
+  late final FocusNode _focusNodeDescription = FocusNode()
     ..addListener(() {
       setState(() {});
     });
 
   @override
   void initState() {
+    uiNotifier = ref.read(uiStateProvider.notifier);
+
+    _titleTextController = TextEditingController()
+      ..addListener(() {
+        // sets the title of the post in the post creation provider state
+        _postCreationNotifier.setTitle(_titleTextController.text);
+      });
+    _locationTextController = TextEditingController()..addListener(() {});
+    _descriptionTextController = TextEditingController()
+      ..addListener(() {
+        // sets the description of the post in the post creation provider state
+        _postCreationNotifier.setDescription(_descriptionTextController.text);
+        if (_descriptionTextController.text.isNotEmpty) {
+          uiNotifier.updateDescriptionButtonState(
+              isDescriptionEmpty: false,
+              showDescription: true,
+              isFromListener: true);
+        } else {
+          uiNotifier.updateDescriptionButtonState(
+              isDescriptionEmpty: true,
+              showDescription: true,
+              isFromListener: true);
+        }
+      });
+    _postCreationNotifier = ref.read(postCreationProvider.notifier);
     super.initState();
     initPost();
   }
@@ -122,7 +155,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
 
     category = widget.category ??
         PostCategory.fromCategoryModel(widget.post!.category);
-    _controllerCategory.text = category.name;
+    _titleTextController.text = category.name;
 
     if (widget.post == null) return;
 
@@ -130,8 +163,8 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
       _partnerModel =
           PartnerModel.fromPostPartner(widget.post!.businessPartners.first);
 
-    _controllerCategory.text = widget.post!.title;
-    _controllerLocation.text = widget.post!.address;
+    _titleTextController.text = widget.post!.title;
+    _locationTextController.text = widget.post!.address;
 
     _dateTime = widget.post!.dateTimeFromString;
 
@@ -211,14 +244,14 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
     }
 
     return NewCreatedPost(
-      title: _controllerCategory.text,
+      title: _titleTextController.text,
       description: "",
       categoryKey: category.key,
       contacts: [],
       businessPartners: _partnerModel == null ? [] : [_partnerModel!.key],
       latitude: "",
       longitude: "",
-      address: _controllerLocation.text,
+      address: _locationTextController.text,
       important: false,
       canceled: false,
       uncertain: false,
@@ -270,7 +303,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                   category = c;
 
                   if (widget.post == null)
-                    _controllerCategory.text = category.name;
+                    _titleTextController.text = category.name;
                   setState(() {});
                 },
                 onPartnerTap: () async {
@@ -346,26 +379,104 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: PrimaryTextFormField(
-                  controller: _controllerCategory,
-                  focusNode: _focusNode,
-                  hintText: "Nome categoria",
-                  textCapitalization: TextCapitalization.sentences,
-                  action: TextInputAction.next,
-                  onChange: (_) => setState(() {}),
-                ),
-              ),
-              SizedBox(height: 14),
-
-              // Location
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
                     Expanded(
                       child: PrimaryTextFormField(
-                        controller: _controllerLocation,
-                        focusNode: _focusNode2,
+                        controller: _titleTextController,
+                        focusNode: _focusNodeTitle,
+                        hintText: "Titolo",
+                        textCapitalization: TextCapitalization.sentences,
+                        action: TextInputAction.next,
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+
+                    // button to show/hide the description field
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final descriptionButtonState = ref.watch(
+                            uiStateProvider.select((state) =>
+                                state.descriptionButtonStateInPostCreation));
+                        final showDescription = ref.watch(
+                            uiStateProvider.select((value) =>
+                                value.showDescriptionFieldInPostCreation));
+                        final isDescriptionEmpty =
+                            _descriptionTextController.text.isEmpty;
+
+                        return InkWell(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: CustomColors.lightBackGroundColor,
+                              border: Border.all(color: Colors.black26),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            width: 11.w,
+                            height: 11.w,
+                            alignment: Alignment.center,
+                            child: insertDescriptionButtonStateMap[
+                                descriptionButtonState],
+                          ),
+                          onTap: () {
+                            ref
+                                .read(uiStateProvider.notifier)
+                                .updateDescriptionButtonState(
+                                  isDescriptionEmpty: isDescriptionEmpty,
+                                  showDescription: showDescription,
+                                );
+                          },
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 2.h),
+
+              // description field
+
+              Consumer(
+                builder: (context, ref, child) {
+                  final shouldShowDescriptionField = ref.watch(
+                      uiStateProvider.select(
+                          (value) => value.showDescriptionFieldInPostCreation));
+                  if (shouldShowDescriptionField) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: PrimaryTextFormField(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 12),
+                              maxLines: 5,
+                              controller: _descriptionTextController,
+                              focusNode: _focusNodeDescription,
+                              hintText: "Descrizione",
+                              textCapitalization: TextCapitalization.sentences,
+                              action: TextInputAction.next,
+                              onChange: (_) => setState(() {}),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
+              SizedBox(height: 2.h),
+              // Location
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: PrimaryTextFormField(
+                        controller: _locationTextController,
+                        focusNode: _focusNodeLocation,
                         hintText: "Indirizzo / Posizione",
                         action: TextInputAction.next,
                         suffixIcon: Icon(
@@ -374,7 +485,11 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                         onChange: (_) => setState(() {}),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    Container(
+                      color: Colors.red,
+                      width: 10.w,
+                      height: 10.w,
+                    ),
                     /*Container(
                       decoration: BoxDecoration(
                         color: CustomColors.primaryLightGreen,
@@ -407,7 +522,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 14),
+              SizedBox(height: 2.h),
 
               // Location All day / Time
               _SelectLocationAndTimeSection(

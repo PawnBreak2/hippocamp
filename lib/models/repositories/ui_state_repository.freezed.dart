@@ -18,12 +18,17 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$UIState {
   bool get showCenterButtonInTimeline => throw _privateConstructorUsedError;
   bool get showSearchFieldForPosts => throw _privateConstructorUsedError;
-  bool get isLongPressingCategory => throw _privateConstructorUsedError;
+  bool get showDescriptionFieldInPostCreation =>
+      throw _privateConstructorUsedError; // used to know if the user has long pressed a category in the list of categories
+  bool get isLongPressingCategory =>
+      throw _privateConstructorUsedError; // used to know which category is being long pressed when selecting categories for a post
   String get longPressedCategoryKey =>
       throw _privateConstructorUsedError; // used to manage navigation between pages in home page
   int get indexForHomePageAppBar =>
       throw _privateConstructorUsedError; // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   String get currentlySelectedDomainKey => throw _privateConstructorUsedError;
+  InsertDescriptionButtonState get descriptionButtonStateInPostCreation =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UIStateCopyWith<UIState> get copyWith => throw _privateConstructorUsedError;
@@ -37,10 +42,12 @@ abstract class $UIStateCopyWith<$Res> {
   $Res call(
       {bool showCenterButtonInTimeline,
       bool showSearchFieldForPosts,
+      bool showDescriptionFieldInPostCreation,
       bool isLongPressingCategory,
       String longPressedCategoryKey,
       int indexForHomePageAppBar,
-      String currentlySelectedDomainKey});
+      String currentlySelectedDomainKey,
+      InsertDescriptionButtonState descriptionButtonStateInPostCreation});
 }
 
 /// @nodoc
@@ -58,10 +65,12 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
   $Res call({
     Object? showCenterButtonInTimeline = null,
     Object? showSearchFieldForPosts = null,
+    Object? showDescriptionFieldInPostCreation = null,
     Object? isLongPressingCategory = null,
     Object? longPressedCategoryKey = null,
     Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
+    Object? descriptionButtonStateInPostCreation = null,
   }) {
     return _then(_value.copyWith(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
@@ -71,6 +80,11 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
       showSearchFieldForPosts: null == showSearchFieldForPosts
           ? _value.showSearchFieldForPosts
           : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showDescriptionFieldInPostCreation: null ==
+              showDescriptionFieldInPostCreation
+          ? _value.showDescriptionFieldInPostCreation
+          : showDescriptionFieldInPostCreation // ignore: cast_nullable_to_non_nullable
               as bool,
       isLongPressingCategory: null == isLongPressingCategory
           ? _value.isLongPressingCategory
@@ -88,6 +102,11 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
           ? _value.currentlySelectedDomainKey
           : currentlySelectedDomainKey // ignore: cast_nullable_to_non_nullable
               as String,
+      descriptionButtonStateInPostCreation: null ==
+              descriptionButtonStateInPostCreation
+          ? _value.descriptionButtonStateInPostCreation
+          : descriptionButtonStateInPostCreation // ignore: cast_nullable_to_non_nullable
+              as InsertDescriptionButtonState,
     ) as $Val);
   }
 }
@@ -102,10 +121,12 @@ abstract class _$$UIStateImplCopyWith<$Res> implements $UIStateCopyWith<$Res> {
   $Res call(
       {bool showCenterButtonInTimeline,
       bool showSearchFieldForPosts,
+      bool showDescriptionFieldInPostCreation,
       bool isLongPressingCategory,
       String longPressedCategoryKey,
       int indexForHomePageAppBar,
-      String currentlySelectedDomainKey});
+      String currentlySelectedDomainKey,
+      InsertDescriptionButtonState descriptionButtonStateInPostCreation});
 }
 
 /// @nodoc
@@ -121,10 +142,12 @@ class __$$UIStateImplCopyWithImpl<$Res>
   $Res call({
     Object? showCenterButtonInTimeline = null,
     Object? showSearchFieldForPosts = null,
+    Object? showDescriptionFieldInPostCreation = null,
     Object? isLongPressingCategory = null,
     Object? longPressedCategoryKey = null,
     Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
+    Object? descriptionButtonStateInPostCreation = null,
   }) {
     return _then(_$UIStateImpl(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
@@ -134,6 +157,11 @@ class __$$UIStateImplCopyWithImpl<$Res>
       showSearchFieldForPosts: null == showSearchFieldForPosts
           ? _value.showSearchFieldForPosts
           : showSearchFieldForPosts // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showDescriptionFieldInPostCreation: null ==
+              showDescriptionFieldInPostCreation
+          ? _value.showDescriptionFieldInPostCreation
+          : showDescriptionFieldInPostCreation // ignore: cast_nullable_to_non_nullable
               as bool,
       isLongPressingCategory: null == isLongPressingCategory
           ? _value.isLongPressingCategory
@@ -151,6 +179,11 @@ class __$$UIStateImplCopyWithImpl<$Res>
           ? _value.currentlySelectedDomainKey
           : currentlySelectedDomainKey // ignore: cast_nullable_to_non_nullable
               as String,
+      descriptionButtonStateInPostCreation: null ==
+              descriptionButtonStateInPostCreation
+          ? _value.descriptionButtonStateInPostCreation
+          : descriptionButtonStateInPostCreation // ignore: cast_nullable_to_non_nullable
+              as InsertDescriptionButtonState,
     ));
   }
 }
@@ -161,10 +194,13 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   const _$UIStateImpl(
       {this.showCenterButtonInTimeline = false,
       this.showSearchFieldForPosts = false,
+      this.showDescriptionFieldInPostCreation = false,
       this.isLongPressingCategory = false,
       this.longPressedCategoryKey = '',
       this.indexForHomePageAppBar = 0,
-      this.currentlySelectedDomainKey = ''});
+      this.currentlySelectedDomainKey = '',
+      this.descriptionButtonStateInPostCreation =
+          InsertDescriptionButtonState.closedWithoutText});
 
   @override
   @JsonKey()
@@ -174,7 +210,12 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   final bool showSearchFieldForPosts;
   @override
   @JsonKey()
+  final bool showDescriptionFieldInPostCreation;
+// used to know if the user has long pressed a category in the list of categories
+  @override
+  @JsonKey()
   final bool isLongPressingCategory;
+// used to know which category is being long pressed when selecting categories for a post
   @override
   @JsonKey()
   final String longPressedCategoryKey;
@@ -186,10 +227,13 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   @override
   @JsonKey()
   final String currentlySelectedDomainKey;
+  @override
+  @JsonKey()
+  final InsertDescriptionButtonState descriptionButtonStateInPostCreation;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, isLongPressingCategory: $isLongPressingCategory, longPressedCategoryKey: $longPressedCategoryKey, indexForHomePageAppBar: $indexForHomePageAppBar, currentlySelectedDomainKey: $currentlySelectedDomainKey)';
+    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, showDescriptionFieldInPostCreation: $showDescriptionFieldInPostCreation, isLongPressingCategory: $isLongPressingCategory, longPressedCategoryKey: $longPressedCategoryKey, indexForHomePageAppBar: $indexForHomePageAppBar, currentlySelectedDomainKey: $currentlySelectedDomainKey, descriptionButtonStateInPostCreation: $descriptionButtonStateInPostCreation)';
   }
 
   @override
@@ -201,6 +245,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
           'showCenterButtonInTimeline', showCenterButtonInTimeline))
       ..add(DiagnosticsProperty(
           'showSearchFieldForPosts', showSearchFieldForPosts))
+      ..add(DiagnosticsProperty('showDescriptionFieldInPostCreation',
+          showDescriptionFieldInPostCreation))
       ..add(
           DiagnosticsProperty('isLongPressingCategory', isLongPressingCategory))
       ..add(
@@ -208,7 +254,9 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
       ..add(
           DiagnosticsProperty('indexForHomePageAppBar', indexForHomePageAppBar))
       ..add(DiagnosticsProperty(
-          'currentlySelectedDomainKey', currentlySelectedDomainKey));
+          'currentlySelectedDomainKey', currentlySelectedDomainKey))
+      ..add(DiagnosticsProperty('descriptionButtonStateInPostCreation',
+          descriptionButtonStateInPostCreation));
   }
 
   @override
@@ -223,6 +271,10 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
             (identical(
                     other.showSearchFieldForPosts, showSearchFieldForPosts) ||
                 other.showSearchFieldForPosts == showSearchFieldForPosts) &&
+            (identical(other.showDescriptionFieldInPostCreation,
+                    showDescriptionFieldInPostCreation) ||
+                other.showDescriptionFieldInPostCreation ==
+                    showDescriptionFieldInPostCreation) &&
             (identical(other.isLongPressingCategory, isLongPressingCategory) ||
                 other.isLongPressingCategory == isLongPressingCategory) &&
             (identical(other.longPressedCategoryKey, longPressedCategoryKey) ||
@@ -232,7 +284,11 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
             (identical(other.currentlySelectedDomainKey,
                     currentlySelectedDomainKey) ||
                 other.currentlySelectedDomainKey ==
-                    currentlySelectedDomainKey));
+                    currentlySelectedDomainKey) &&
+            (identical(other.descriptionButtonStateInPostCreation,
+                    descriptionButtonStateInPostCreation) ||
+                other.descriptionButtonStateInPostCreation ==
+                    descriptionButtonStateInPostCreation));
   }
 
   @override
@@ -240,10 +296,12 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
       runtimeType,
       showCenterButtonInTimeline,
       showSearchFieldForPosts,
+      showDescriptionFieldInPostCreation,
       isLongPressingCategory,
       longPressedCategoryKey,
       indexForHomePageAppBar,
-      currentlySelectedDomainKey);
+      currentlySelectedDomainKey,
+      descriptionButtonStateInPostCreation);
 
   @JsonKey(ignore: true)
   @override
@@ -256,23 +314,30 @@ abstract class _UIState implements UIState {
   const factory _UIState(
       {final bool showCenterButtonInTimeline,
       final bool showSearchFieldForPosts,
+      final bool showDescriptionFieldInPostCreation,
       final bool isLongPressingCategory,
       final String longPressedCategoryKey,
       final int indexForHomePageAppBar,
-      final String currentlySelectedDomainKey}) = _$UIStateImpl;
+      final String currentlySelectedDomainKey,
+      final InsertDescriptionButtonState
+          descriptionButtonStateInPostCreation}) = _$UIStateImpl;
 
   @override
   bool get showCenterButtonInTimeline;
   @override
   bool get showSearchFieldForPosts;
   @override
+  bool get showDescriptionFieldInPostCreation;
+  @override // used to know if the user has long pressed a category in the list of categories
   bool get isLongPressingCategory;
-  @override
+  @override // used to know which category is being long pressed when selecting categories for a post
   String get longPressedCategoryKey;
   @override // used to manage navigation between pages in home page
   int get indexForHomePageAppBar;
   @override // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   String get currentlySelectedDomainKey;
+  @override
+  InsertDescriptionButtonState get descriptionButtonStateInPostCreation;
   @override
   @JsonKey(ignore: true)
   _$$UIStateImplCopyWith<_$UIStateImpl> get copyWith =>

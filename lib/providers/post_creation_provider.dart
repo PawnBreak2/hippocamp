@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Used to create/edit a post before creation, abstracting the logic from the widget
 
-class CreatePostNotifier extends Notifier<NewCreatedPost> {
+class PostCreationNotifier extends Notifier<NewCreatedPost> {
   @override
   build() {
     return NewCreatedPost();
@@ -70,5 +70,6 @@ class CreatePostNotifier extends Notifier<NewCreatedPost> {
   }
 }
 
-final createPostProvider = NotifierProvider<CreatePostNotifier, NewCreatedPost>(
-    () => CreatePostNotifier());
+final postCreationProvider =
+    NotifierProvider<PostCreationNotifier, NewCreatedPost>(
+        () => PostCreationNotifier());

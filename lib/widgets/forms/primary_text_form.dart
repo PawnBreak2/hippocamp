@@ -26,11 +26,14 @@ class PrimaryTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onChange;
+  final int maxLines;
+  final int maxLength;
+  final MaxLengthEnforcement maxLengthEnforcement;
   const PrimaryTextFormField({
     this.focusNode,
     required this.controller,
     required this.hintText,
-    this.backgroundColor,
+    this.backgroundColor = CustomColors.lightBackGroundColor,
     this.validator,
     this.borderRadius = 12,
     this.height,
@@ -48,75 +51,74 @@ class PrimaryTextFormField extends StatelessWidget {
     this.action = TextInputAction.next,
     this.textCapitalization = TextCapitalization.none,
     this.onChange,
+    this.maxLines = 1,
+    this.maxLength = 20,
+    this.maxLengthEnforcement =
+        MaxLengthEnforcement.truncateAfterCompositionEnds,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height ?? 30.sp,
-      width: width,
-      child: StatefulBuilder(
-        builder: (_, setState) => FocusScope(
-          child: Focus(
-            child: Stack(
-              children: [
-                TextFormField(
-                  focusNode: focusNode,
-                  controller: controller,
-                  textInputAction: action,
-                  obscureText: obscureText,
-                  validator: validator,
-                  enabled: enabled,
-                  textAlign: textAlign,
-                  keyboardType: textInputType,
-                  onChanged: onChange,
-                  inputFormatters: amountFormat
-                      ? TextAmountFormat.formatAmountValues()
-                      : inputFormatters,
-                  textCapitalization: textCapitalization,
-                  decoration: InputDecoration(
-                    fillColor: (focusNode?.hasFocus ?? false)
-                        ? Colors.white
-                        : (backgroundColor ?? CustomColors.primaryLightGreen),
-                    filled: true,
-                    hintText: hintText,
-                    prefixIcon: prefixIcon,
-                    suffixIcon: suffixIcon,
-                    contentPadding:
-                        padding ?? EdgeInsets.symmetric(horizontal: 12),
-                    hintStyle: TextStyle(color: Colors.grey),
-                    focusColor: Colors.white,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(52, 52, 52, .3),
-                      ),
+    return StatefulBuilder(
+      builder: (_, setState) => FocusScope(
+        child: Focus(
+          child: Stack(
+            children: [
+              TextFormField(
+                focusNode: focusNode,
+                controller: controller,
+                textInputAction: action,
+                obscureText: obscureText,
+                validator: validator,
+                enabled: enabled,
+                textAlign: textAlign,
+                keyboardType: textInputType,
+                maxLines: maxLines,
+                maxLength: maxLength,
+                maxLengthEnforcement: maxLengthEnforcement,
+                onChanged: onChange,
+                inputFormatters: amountFormat
+                    ? TextAmountFormat.formatAmountValues()
+                    : inputFormatters,
+                textCapitalization: textCapitalization,
+                decoration: InputDecoration(
+                  counterText: '',
+                  fillColor: (focusNode?.hasFocus ?? false)
+                      ? Colors.white
+                      : (backgroundColor ?? CustomColors.primaryLightGreen),
+                  filled: true,
+                  hintText: hintText,
+                  prefixIcon: prefixIcon,
+                  suffixIcon: suffixIcon,
+                  contentPadding:
+                      padding ?? EdgeInsets.symmetric(horizontal: 12),
+                  hintStyle: TextStyle(color: Colors.grey),
+                  focusColor: Colors.white,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(52, 52, 52, .3),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide(color: CustomColors.primaryBlue),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide(color: Colors.black26),
-                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide(color: CustomColors.primaryBlue),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide(color: Colors.black26),
                   ),
                 ),
-                if (suffix != null)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: suffix,
-                  ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
