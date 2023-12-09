@@ -56,13 +56,16 @@ class NavigationConfiguration {
 
         builder: (context, state) {
           if (state.extra.runtimeType == Post && state.extra != null) {
-            return PostCreationAndUpdatePage(post: state.extra as Post);
+            return PostCreationAndUpdatePage.updatePost(
+                post: state.extra as Post);
           } else if (state.extra.runtimeType == PostCategory &&
               state.extra != null) {
-            return PostCreationAndUpdatePage(
+            return PostCreationAndUpdatePage.createNewPostWithCategory(
                 category: state.extra as PostCategory);
+          } else {
+            throw Exception(
+                'PostCreationAndUpdatePage: no extra data provided');
           }
-          return const PostCreationAndUpdatePage();
         },
       ),
       GoRoute(

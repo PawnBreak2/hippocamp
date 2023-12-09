@@ -59,10 +59,24 @@ class PostCreationAndUpdatePage extends ConsumerStatefulWidget {
 
   final PostCategory? category;
   final Post? post;
-  const PostCreationAndUpdatePage({
+  final bool isCreatingNewPost;
+  final bool isUpdatingExistingPost;
+  const PostCreationAndUpdatePage._({
     this.category,
     this.post,
-  });
+  })  : isCreatingNewPost = post == null,
+        isUpdatingExistingPost = post != null;
+
+  // Factory constructor for creating a new post
+  factory PostCreationAndUpdatePage.createNewPostWithCategory(
+      {required PostCategory category}) {
+    return PostCreationAndUpdatePage._(category: category);
+  }
+
+  // Factory constructor for updating an existing post
+  factory PostCreationAndUpdatePage.updatePost({required Post post}) {
+    return PostCreationAndUpdatePage._(post: post);
+  }
 
   @override
   ConsumerState<PostCreationAndUpdatePage> createState() =>
