@@ -22,7 +22,7 @@ class NewCreatedPost with _$NewCreatedPost {
     @Default(false) bool uncertain,
     @Default(false) bool sensitiveInfo,
     @Default('') String type,
-    @Default('') String visualization,
+    @Default('SPOT') String visualization,
     @Default('') String rating,
     @Default('') String from,
     @Default('') String to,

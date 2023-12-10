@@ -527,7 +527,7 @@ class _$NewCreatedPostImpl
       this.uncertain = false,
       this.sensitiveInfo = false,
       this.type = '',
-      this.visualization = '',
+      this.visualization = 'SPOT',
       this.rating = '',
       this.from = '',
       this.to = '',

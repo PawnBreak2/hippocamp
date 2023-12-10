@@ -26,9 +26,12 @@ mixin _$UIState {
       throw _privateConstructorUsedError; // used to manage navigation between pages in home page
   int get indexForHomePageAppBar =>
       throw _privateConstructorUsedError; // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
-  String get currentlySelectedDomainKey => throw _privateConstructorUsedError;
+  String get currentlySelectedDomainKey =>
+      throw _privateConstructorUsedError; // used to manage the state of the button for inserting a description in post creation
   InsertDescriptionButtonState get descriptionButtonStateInPostCreation =>
-      throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; // time picker state
+// used to know if the user has selected all day in time picker
+  bool get isAllDaySelectedInTimePicker => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UIStateCopyWith<UIState> get copyWith => throw _privateConstructorUsedError;
@@ -47,7 +50,8 @@ abstract class $UIStateCopyWith<$Res> {
       String longPressedCategoryKey,
       int indexForHomePageAppBar,
       String currentlySelectedDomainKey,
-      InsertDescriptionButtonState descriptionButtonStateInPostCreation});
+      InsertDescriptionButtonState descriptionButtonStateInPostCreation,
+      bool isAllDaySelectedInTimePicker});
 }
 
 /// @nodoc
@@ -71,6 +75,7 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
     Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
     Object? descriptionButtonStateInPostCreation = null,
+    Object? isAllDaySelectedInTimePicker = null,
   }) {
     return _then(_value.copyWith(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
@@ -107,6 +112,10 @@ class _$UIStateCopyWithImpl<$Res, $Val extends UIState>
           ? _value.descriptionButtonStateInPostCreation
           : descriptionButtonStateInPostCreation // ignore: cast_nullable_to_non_nullable
               as InsertDescriptionButtonState,
+      isAllDaySelectedInTimePicker: null == isAllDaySelectedInTimePicker
+          ? _value.isAllDaySelectedInTimePicker
+          : isAllDaySelectedInTimePicker // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -126,7 +135,8 @@ abstract class _$$UIStateImplCopyWith<$Res> implements $UIStateCopyWith<$Res> {
       String longPressedCategoryKey,
       int indexForHomePageAppBar,
       String currentlySelectedDomainKey,
-      InsertDescriptionButtonState descriptionButtonStateInPostCreation});
+      InsertDescriptionButtonState descriptionButtonStateInPostCreation,
+      bool isAllDaySelectedInTimePicker});
 }
 
 /// @nodoc
@@ -148,6 +158,7 @@ class __$$UIStateImplCopyWithImpl<$Res>
     Object? indexForHomePageAppBar = null,
     Object? currentlySelectedDomainKey = null,
     Object? descriptionButtonStateInPostCreation = null,
+    Object? isAllDaySelectedInTimePicker = null,
   }) {
     return _then(_$UIStateImpl(
       showCenterButtonInTimeline: null == showCenterButtonInTimeline
@@ -184,6 +195,10 @@ class __$$UIStateImplCopyWithImpl<$Res>
           ? _value.descriptionButtonStateInPostCreation
           : descriptionButtonStateInPostCreation // ignore: cast_nullable_to_non_nullable
               as InsertDescriptionButtonState,
+      isAllDaySelectedInTimePicker: null == isAllDaySelectedInTimePicker
+          ? _value.isAllDaySelectedInTimePicker
+          : isAllDaySelectedInTimePicker // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -200,7 +215,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
       this.indexForHomePageAppBar = 0,
       this.currentlySelectedDomainKey = '',
       this.descriptionButtonStateInPostCreation =
-          InsertDescriptionButtonState.closedWithoutText});
+          InsertDescriptionButtonState.closedWithoutText,
+      this.isAllDaySelectedInTimePicker = false});
 
   @override
   @JsonKey()
@@ -227,13 +243,19 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
   @override
   @JsonKey()
   final String currentlySelectedDomainKey;
+// used to manage the state of the button for inserting a description in post creation
   @override
   @JsonKey()
   final InsertDescriptionButtonState descriptionButtonStateInPostCreation;
+// time picker state
+// used to know if the user has selected all day in time picker
+  @override
+  @JsonKey()
+  final bool isAllDaySelectedInTimePicker;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, showDescriptionFieldInPostCreation: $showDescriptionFieldInPostCreation, isLongPressingCategory: $isLongPressingCategory, longPressedCategoryKey: $longPressedCategoryKey, indexForHomePageAppBar: $indexForHomePageAppBar, currentlySelectedDomainKey: $currentlySelectedDomainKey, descriptionButtonStateInPostCreation: $descriptionButtonStateInPostCreation)';
+    return 'UIState(showCenterButtonInTimeline: $showCenterButtonInTimeline, showSearchFieldForPosts: $showSearchFieldForPosts, showDescriptionFieldInPostCreation: $showDescriptionFieldInPostCreation, isLongPressingCategory: $isLongPressingCategory, longPressedCategoryKey: $longPressedCategoryKey, indexForHomePageAppBar: $indexForHomePageAppBar, currentlySelectedDomainKey: $currentlySelectedDomainKey, descriptionButtonStateInPostCreation: $descriptionButtonStateInPostCreation, isAllDaySelectedInTimePicker: $isAllDaySelectedInTimePicker)';
   }
 
   @override
@@ -256,7 +278,9 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
       ..add(DiagnosticsProperty(
           'currentlySelectedDomainKey', currentlySelectedDomainKey))
       ..add(DiagnosticsProperty('descriptionButtonStateInPostCreation',
-          descriptionButtonStateInPostCreation));
+          descriptionButtonStateInPostCreation))
+      ..add(DiagnosticsProperty(
+          'isAllDaySelectedInTimePicker', isAllDaySelectedInTimePicker));
   }
 
   @override
@@ -264,12 +288,10 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UIStateImpl &&
-            (identical(other.showCenterButtonInTimeline,
-                    showCenterButtonInTimeline) ||
+            (identical(other.showCenterButtonInTimeline, showCenterButtonInTimeline) ||
                 other.showCenterButtonInTimeline ==
                     showCenterButtonInTimeline) &&
-            (identical(
-                    other.showSearchFieldForPosts, showSearchFieldForPosts) ||
+            (identical(other.showSearchFieldForPosts, showSearchFieldForPosts) ||
                 other.showSearchFieldForPosts == showSearchFieldForPosts) &&
             (identical(other.showDescriptionFieldInPostCreation,
                     showDescriptionFieldInPostCreation) ||
@@ -288,7 +310,11 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
             (identical(other.descriptionButtonStateInPostCreation,
                     descriptionButtonStateInPostCreation) ||
                 other.descriptionButtonStateInPostCreation ==
-                    descriptionButtonStateInPostCreation));
+                    descriptionButtonStateInPostCreation) &&
+            (identical(other.isAllDaySelectedInTimePicker,
+                    isAllDaySelectedInTimePicker) ||
+                other.isAllDaySelectedInTimePicker ==
+                    isAllDaySelectedInTimePicker));
   }
 
   @override
@@ -301,7 +327,8 @@ class _$UIStateImpl with DiagnosticableTreeMixin implements _UIState {
       longPressedCategoryKey,
       indexForHomePageAppBar,
       currentlySelectedDomainKey,
-      descriptionButtonStateInPostCreation);
+      descriptionButtonStateInPostCreation,
+      isAllDaySelectedInTimePicker);
 
   @JsonKey(ignore: true)
   @override
@@ -319,8 +346,8 @@ abstract class _UIState implements UIState {
       final String longPressedCategoryKey,
       final int indexForHomePageAppBar,
       final String currentlySelectedDomainKey,
-      final InsertDescriptionButtonState
-          descriptionButtonStateInPostCreation}) = _$UIStateImpl;
+      final InsertDescriptionButtonState descriptionButtonStateInPostCreation,
+      final bool isAllDaySelectedInTimePicker}) = _$UIStateImpl;
 
   @override
   bool get showCenterButtonInTimeline;
@@ -336,8 +363,11 @@ abstract class _UIState implements UIState {
   int get indexForHomePageAppBar;
   @override // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
   String get currentlySelectedDomainKey;
-  @override
+  @override // used to manage the state of the button for inserting a description in post creation
   InsertDescriptionButtonState get descriptionButtonStateInPostCreation;
+  @override // time picker state
+// used to know if the user has selected all day in time picker
+  bool get isAllDaySelectedInTimePicker;
   @override
   @JsonKey(ignore: true)
   _$$UIStateImplCopyWith<_$UIStateImpl> get copyWith =>

@@ -4,6 +4,13 @@ enum TypeWallets {
   cartaDiCredito,
 }
 
+enum VisualizationType { slot, spot }
+
+Map<VisualizationType, String> visualizationTypeMap = {
+  VisualizationType.slot: "SLOT",
+  VisualizationType.spot: "SPOT"
+};
+
 class Constants {
   static const Map<String, String> typeFinanceMovement = {
     "Prelievo ATM": "Prelievo",

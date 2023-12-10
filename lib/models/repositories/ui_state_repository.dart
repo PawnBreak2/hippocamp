@@ -24,7 +24,14 @@ class UIState with _$UIState {
 
     // used for cases in which we need to know if the user is selecting a domain or not - used only for UI when looking for categories
     @Default('') String currentlySelectedDomainKey,
+
+    // used to manage the state of the button for inserting a description in post creation
     @Default(InsertDescriptionButtonState.closedWithoutText)
     InsertDescriptionButtonState descriptionButtonStateInPostCreation,
+
+    // time picker state
+
+    // used to know if the user has selected all day in time picker
+    @Default(false) bool isAllDaySelectedInTimePicker,
   }) = _UIState;
 }

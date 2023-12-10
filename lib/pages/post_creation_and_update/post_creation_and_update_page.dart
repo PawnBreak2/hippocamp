@@ -27,7 +27,9 @@ import 'package:hippocamp/models/responses/categories_response_model.dart';
 import 'package:hippocamp/models/responses/posts_response_model.dart' show Post;
 import 'package:hippocamp/models/wallets/wallet_model.dart';
 import 'package:hippocamp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
+import 'package:hippocamp/pages/post_creation_and_update/widgets/date_selection_section.dart';
 import 'package:hippocamp/pages/post_creation_and_update/widgets/partner_dialog.dart';
+import 'package:hippocamp/pages/post_creation_and_update/widgets/text_form_field_button.dart';
 import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_section.dart';
 import 'package:hippocamp/pages/select_categories/select_category_dialog.dart';
 import 'package:hippocamp/providers/app_state_provider.dart';
@@ -36,6 +38,7 @@ import 'package:hippocamp/providers/posts_provider.dart';
 import 'package:hippocamp/providers/ui_state_provider.dart';
 import 'package:hippocamp/providers/wallets_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocamp/styles/icons.dart';
 import 'package:hippocamp/widgets/buttons/delete_x_icon.dart';
 import 'package:hippocamp/widgets/dialogs/cupertino_bottom_sheet.dart';
 import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
@@ -378,7 +381,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                 partnerModel: _partnerModel,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Row(
                   children: [
                     Expanded(
@@ -405,17 +408,9 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                             _descriptionTextController.text.isEmpty;
 
                         return InkWell(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: CustomColors.lightBackGroundColor,
-                              border: Border.all(color: Colors.black26),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            width: 11.w,
-                            height: 11.w,
-                            alignment: Alignment.center,
+                          child: TextFormFieldButton(
                             child: insertDescriptionButtonStateMap[
-                                descriptionButtonState],
+                                descriptionButtonState]!,
                           ),
                           onTap: () {
                             ref
@@ -431,7 +426,6 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 2.h),
 
               // description field
 
@@ -442,7 +436,11 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                           (value) => value.showDescriptionFieldInPostCreation));
                   if (shouldShowDescriptionField) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.only(
+                        left: 2.w,
+                        right: 2.w,
+                        top: 1.h,
+                      ),
                       child: Row(
                         children: [
                           Expanded(
@@ -466,10 +464,10 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                   }
                 },
               ),
-              SizedBox(height: 2.h),
+              SizedBox(height: 1.h),
               // Location
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -479,104 +477,76 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                         focusNode: _focusNodeLocation,
                         hintText: "Indirizzo / Posizione",
                         action: TextInputAction.next,
-                        suffixIcon: Icon(
-                          Icons.gps_fixed,
-                        ),
                         onChange: (_) => setState(() {}),
                       ),
                     ),
-                    Container(
-                      color: Colors.red,
-                      width: 10.w,
-                      height: 10.w,
-                    ),
-                    /*Container(
-                      decoration: BoxDecoration(
-                        color: CustomColors.primaryLightGreen,
-                        border: Border.all(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      width: 50,
-                      child: TextButton(
-                        onPressed: () async {
-                          if (await canLaunchUrl(Uri.parse("comgooglemaps://")))
-                            await launchUrl(Uri.parse("comgooglemaps://"));
-                          else
-                            await launchUrl(
-                                Uri.parse("https://maps.apple.com"));
-                        },
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                        ),
-                        child: Image.asset(
-                          "assets/images/google_maps_icon.png",
-                          width: 28,
-                          height: 28,
-                        ),
-                      ),
-                    ),ß*/
+                    SizedBox(width: 2.w),
+                    InkWell(
+                      child: TextFormFieldButton(
+                          child: Icon(CustomMaterialIcons.gpsLocation)),
+                      onTap: () {},
+                    )
                   ],
                 ),
               ),
               SizedBox(height: 2.h),
 
               // Location All day / Time
-              _SelectLocationAndTimeSection(
-                allDaySelected: _allDay,
-                onTapTimeSelection: (c) async {
-                  _allDay = c == "0";
-                  setState(() {});
-                },
-                timeFrom: TextEditingController(
-                  text: _timeOfDayFrom.timeToString,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: DateSelectionSection(
+                  allDaySelected: _allDay,
+                  onTapTimeSelection: (c) async {
+                    _allDay = c == "0";
+                    setState(() {});
+                  },
+                  timeFrom: TextEditingController(
+                    text: _timeOfDayFrom.timeToString,
+                  ),
+                  onTapTimeFrom: () async {
+                    final timeOfDay = await showTimePicker(
+                      context: context,
+                      initialTime: _timeOfDayFrom,
+                    );
+                    _timeOfDayFrom = timeOfDay ?? _timeOfDayFrom;
+
+                    if (_timeOfDayFrom.hour > _timeOfDayTo.hour ||
+                        (_timeOfDayFrom.hour == _timeOfDayTo.hour &&
+                            _timeOfDayFrom.minute > _timeOfDayTo.minute))
+                      _timeOfDayTo = _timeOfDayFrom;
+
+                    setState(() {});
+                  },
+                  timeTo: TextEditingController(
+                    text: _timeOfDayTo.timeToString,
+                  ),
+                  onTapTimeTo: () async {
+                    final timeOfDay = await showTimePicker(
+                      context: context,
+                      initialTime: _timeOfDayTo,
+                    );
+
+                    if (timeOfDay == null) return;
+
+                    _timeOfDayTo = timeOfDay;
+                    setState(() {});
+                  },
+                  onTapDateSelection: () async {
+                    final dateTime = await showDatePicker(
+                      context: context,
+                      initialDate: _dateTime,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2050),
+                    );
+                    _dateTime = dateTime ?? _dateTime;
+                    setState(() {});
+                  },
+                  controllerDate: TextEditingController(
+                    text:
+                        "${_dateTime.day} ${_dateTime.month.monthFromInt.substring(0, 3).toLowerCase()} ${_dateTime.year}",
+                  ),
+                  setChange: (_) => setState(() {}),
                 ),
-                onTapTimeFrom: () async {
-                  final timeOfDay = await showTimePicker(
-                    context: context,
-                    initialTime: _timeOfDayFrom,
-                  );
-                  _timeOfDayFrom = timeOfDay ?? _timeOfDayFrom;
-
-                  if (_timeOfDayFrom.hour > _timeOfDayTo.hour ||
-                      (_timeOfDayFrom.hour == _timeOfDayTo.hour &&
-                          _timeOfDayFrom.minute > _timeOfDayTo.minute))
-                    _timeOfDayTo = _timeOfDayFrom;
-
-                  setState(() {});
-                },
-                timeTo: TextEditingController(
-                  text: _timeOfDayTo.timeToString,
-                ),
-                onTapTimeTo: () async {
-                  final timeOfDay = await showTimePicker(
-                    context: context,
-                    initialTime: _timeOfDayTo,
-                  );
-
-                  if (timeOfDay == null) return;
-
-                  _timeOfDayTo = timeOfDay;
-                  setState(() {});
-                },
-                onTapDateSelection: () async {
-                  final dateTime = await showDatePicker(
-                    context: context,
-                    initialDate: _dateTime,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2050),
-                  );
-                  _dateTime = dateTime ?? _dateTime;
-                  setState(() {});
-                },
-                controllerDate: TextEditingController(
-                  text:
-                      "${_dateTime.day} ${_dateTime.month.monthFromInt.substring(0, 3).toLowerCase()} ${_dateTime.year}",
-                ),
-                setChange: (_) => setState(() {}),
               ),
 
               // Finance Movements
@@ -937,183 +907,6 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
 
     return await _picker.pickMultiImage(
       requestFullMetadata: false,
-    );
-  }
-}
-
-class _SelectLocationAndTimeSection extends StatelessWidget {
-  final TextEditingController controllerDate;
-  final void Function(String)? setChange;
-  final bool allDaySelected;
-  final void Function()? onTapDateSelection;
-  final void Function(String)? onTapTimeSelection;
-  final TextEditingController timeFrom;
-  final void Function()? onTapTimeFrom;
-  final TextEditingController timeTo;
-  final void Function()? onTapTimeTo;
-
-  const _SelectLocationAndTimeSection({
-    required this.controllerDate,
-    required this.setChange,
-    required this.allDaySelected,
-    required this.onTapDateSelection,
-    required this.onTapTimeSelection,
-    required this.timeFrom,
-    required this.onTapTimeFrom,
-    required this.timeTo,
-    required this.onTapTimeTo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: [
-        // Data
-        Row(
-          children: [
-            InkWell(
-              onTap: onTapDateSelection,
-              child: Container(
-                height: 28.sp,
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: CustomColors.primaryLightGreen,
-                  border: Border.all(
-                    color: Color.fromRGBO(51, 51, 51, .3),
-                  ),
-                ),
-                child: Text(
-                  controllerDate.text,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 8),
-
-            // All day / Time
-            Expanded(
-              flex: 2,
-              child: FittedBox(
-                alignment: Alignment.centerRight,
-                fit: BoxFit.scaleDown,
-                child: _timeWidget(),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _timeWidget() {
-    if (allDaySelected)
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            "Tutto il giorno",
-            style: TextStyle(
-              fontSize: 15,
-            ),
-          ),
-          SizedBox(width: 4),
-          PopupMenuButton(
-            icon: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.black,
-              size: 32,
-            ),
-            onSelected: onTapTimeSelection,
-            itemBuilder: (_) => [
-              PopupMenuItem(
-                value: "0",
-                child: Text("Tutto il giorno"),
-              ),
-              PopupMenuItem(
-                value: "1",
-                child: Text("Dalle ____ alle ____"),
-              ),
-            ],
-          ),
-        ],
-      );
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text("Dalle"),
-        SizedBox(width: 4),
-        InkWell(
-          onTap: onTapTimeFrom,
-          child: Container(
-            height: 28.sp,
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: CustomColors.primaryLightGreen,
-              border: Border.all(
-                color: Color.fromRGBO(51, 51, 51, .3),
-              ),
-            ),
-            child: Text(
-              timeFrom.text,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: 4),
-        Text("alle"),
-        SizedBox(width: 4),
-        InkWell(
-          onTap: onTapTimeTo,
-          child: Container(
-            height: 28.sp,
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: CustomColors.primaryLightGreen,
-              border: Border.all(
-                color: Color.fromRGBO(51, 51, 51, .3),
-              ),
-            ),
-            child: Text(
-              timeTo.text,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ),
-        PopupMenuButton(
-          padding: EdgeInsets.zero,
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: Colors.black,
-            size: 32,
-          ),
-          onSelected: onTapTimeSelection,
-          itemBuilder: (_) => [
-            PopupMenuItem(
-              value: "0",
-              child: Text("Tutto il giorno"),
-            ),
-            PopupMenuItem(
-              value: "1",
-              child: Text("Dalle ____ alle ____"),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

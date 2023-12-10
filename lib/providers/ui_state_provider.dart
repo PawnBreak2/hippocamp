@@ -8,22 +8,32 @@ class UIStateNotifier extends Notifier<UIState> {
     return const UIState();
   }
 
+  /// Shows the center button in the timeline page, to go back to the posts for the current month.
   void setShowCenterButtonInTimeline(bool v) {
     state = state.copyWith(showCenterButtonInTimeline: v);
   }
 
+  /// Updates the visibility of the search field in the timeline page.
   void setShowSearchFieldForPosts(bool v) {
     state = state.copyWith(showSearchFieldForPosts: v);
   }
 
+  /// Updates the currently selected domain when the user is looking for categories.
   void setSelectedDomainKey(String key) {
     state = state.copyWith(currentlySelectedDomainKey: key);
   }
 
+  // methods to manage the selection of categories for a post
+  // long pressing is used to add a category to favorites
+
+  /// Updates the state of the UI when the user long presses a category in the list of categories.
   setIsLongPressingCategory(bool v) {
     state = state.copyWith(isLongPressingCategory: v);
   }
 
+  /// Updates the state of the UI when the user long presses a *specific* category in the list of categories.
+  ///
+  /// This is used to know which category is being long pressed when selecting categories for a post.
   setLongPressedCategoryKey(String key) {
     state = state.copyWith(longPressedCategoryKey: key);
   }
@@ -62,8 +72,14 @@ class UIStateNotifier extends Notifier<UIState> {
         showDescriptionFieldInPostCreation: !showDescription);
   }
 
+  /// Updates the visibility of the description field when creating a post.
   void setShowDescriptionFieldInPostCreation(bool v) {
     state = state.copyWith(showDescriptionFieldInPostCreation: v);
+  }
+
+  /// Updates the state of the time picker section when the user selects "all day" configuration for a post.
+  void setIsAllDaySelectedInTimePicker(bool v) {
+    state = state.copyWith(isAllDaySelectedInTimePicker: v);
   }
 }
 

@@ -52,7 +52,7 @@ class PrimaryTextFormField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.onChange,
     this.maxLines = 1,
-    this.maxLength = 20,
+    this.maxLength = 50,
     this.maxLengthEnforcement =
         MaxLengthEnforcement.truncateAfterCompositionEnds,
   });
@@ -102,7 +102,7 @@ class PrimaryTextFormField extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
-                    borderSide: BorderSide(color: CustomColors.primaryBlue),
+                    borderSide: BorderSide(color: CustomColors.primaryRed),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),

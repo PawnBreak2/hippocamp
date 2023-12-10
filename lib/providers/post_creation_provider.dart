@@ -1,3 +1,4 @@
+import 'package:hippocamp/constants/common.dart';
 import 'package:hippocamp/models/body/attachments_for_created_post.dart';
 import 'package:hippocamp/models/body/created_post.dart';
 import 'package:hippocamp/models/body/multi_party_transaction_for_created_post.dart';
@@ -63,6 +64,19 @@ class PostCreationNotifier extends Notifier<NewCreatedPost> {
         latitude: latitude ?? '',
         longitude: longitude ?? '',
         address: address ?? '');
+  }
+
+  void setVisualizationType(VisualizationType value) {
+    state = state.copyWith(visualization: visualizationTypeMap[value]!);
+  }
+
+  void resetAllPostAttributes() {
+    state = state.copyWith(
+      uncertain: false,
+      important: false,
+      sensitiveInfo: false,
+      visualization: visualizationTypeMap[VisualizationType.spot]!,
+    );
   }
 
   void reset() {

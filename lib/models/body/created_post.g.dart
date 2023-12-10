@@ -27,7 +27,7 @@ _$NewCreatedPostImpl _$$NewCreatedPostImplFromJson(Map<String, dynamic> json) =>
       uncertain: json['uncertain'] as bool? ?? false,
       sensitiveInfo: json['sensitiveInfo'] as bool? ?? false,
       type: json['type'] as String? ?? '',
-      visualization: json['visualization'] as String? ?? '',
+      visualization: json['visualization'] as String? ?? 'SPOT',
       rating: json['rating'] as String? ?? '',
       from: json['from'] as String? ?? '',
       to: json['to'] as String? ?? '',
