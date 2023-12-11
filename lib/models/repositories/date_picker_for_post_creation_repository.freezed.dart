@@ -16,9 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DatePickerForPostCreationState {
-  DateTime? get selectedDate => throw _privateConstructorUsedError;
-  DateTime? get timeTo => throw _privateConstructorUsedError;
-  DateTime? get timeFrom => throw _privateConstructorUsedError;
+  DateTime get selectedDate => throw _privateConstructorUsedError;
+  TimeOfDay get timeTo => throw _privateConstructorUsedError;
+  TimeOfDay get timeFrom => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DatePickerForPostCreationStateCopyWith<DatePickerForPostCreationState>
@@ -33,7 +33,7 @@ abstract class $DatePickerForPostCreationStateCopyWith<$Res> {
       _$DatePickerForPostCreationStateCopyWithImpl<$Res,
           DatePickerForPostCreationState>;
   @useResult
-  $Res call({DateTime? selectedDate, DateTime? timeTo, DateTime? timeFrom});
+  $Res call({DateTime selectedDate, TimeOfDay timeTo, TimeOfDay timeFrom});
 }
 
 /// @nodoc
@@ -50,23 +50,23 @@ class _$DatePickerForPostCreationStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? selectedDate = freezed,
-    Object? timeTo = freezed,
-    Object? timeFrom = freezed,
+    Object? selectedDate = null,
+    Object? timeTo = null,
+    Object? timeFrom = null,
   }) {
     return _then(_value.copyWith(
-      selectedDate: freezed == selectedDate
+      selectedDate: null == selectedDate
           ? _value.selectedDate
           : selectedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      timeTo: freezed == timeTo
+              as DateTime,
+      timeTo: null == timeTo
           ? _value.timeTo
           : timeTo // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      timeFrom: freezed == timeFrom
+              as TimeOfDay,
+      timeFrom: null == timeFrom
           ? _value.timeFrom
           : timeFrom // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as TimeOfDay,
     ) as $Val);
   }
 }
@@ -80,7 +80,7 @@ abstract class _$$DatePickerForPostCreationStateImplCopyWith<$Res>
       __$$DatePickerForPostCreationStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({DateTime? selectedDate, DateTime? timeTo, DateTime? timeFrom});
+  $Res call({DateTime selectedDate, TimeOfDay timeTo, TimeOfDay timeFrom});
 }
 
 /// @nodoc
@@ -96,23 +96,23 @@ class __$$DatePickerForPostCreationStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? selectedDate = freezed,
-    Object? timeTo = freezed,
-    Object? timeFrom = freezed,
+    Object? selectedDate = null,
+    Object? timeTo = null,
+    Object? timeFrom = null,
   }) {
     return _then(_$DatePickerForPostCreationStateImpl(
-      selectedDate: freezed == selectedDate
+      selectedDate: null == selectedDate
           ? _value.selectedDate
           : selectedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      timeTo: freezed == timeTo
+              as DateTime,
+      timeTo: null == timeTo
           ? _value.timeTo
           : timeTo // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      timeFrom: freezed == timeFrom
+              as TimeOfDay,
+      timeFrom: null == timeFrom
           ? _value.timeFrom
           : timeFrom // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as TimeOfDay,
     ));
   }
 }
@@ -120,34 +120,22 @@ class __$$DatePickerForPostCreationStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DatePickerForPostCreationStateImpl
-    with DiagnosticableTreeMixin
     implements _DatePickerForPostCreationState {
   const _$DatePickerForPostCreationStateImpl(
-      {this.selectedDate = null, this.timeTo = null, this.timeFrom = null});
+      {required this.selectedDate,
+      required this.timeTo,
+      required this.timeFrom});
 
   @override
-  @JsonKey()
-  final DateTime? selectedDate;
+  final DateTime selectedDate;
   @override
-  @JsonKey()
-  final DateTime? timeTo;
+  final TimeOfDay timeTo;
   @override
-  @JsonKey()
-  final DateTime? timeFrom;
+  final TimeOfDay timeFrom;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'DatePickerForPostCreationState(selectedDate: $selectedDate, timeTo: $timeTo, timeFrom: $timeFrom)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'DatePickerForPostCreationState'))
-      ..add(DiagnosticsProperty('selectedDate', selectedDate))
-      ..add(DiagnosticsProperty('timeTo', timeTo))
-      ..add(DiagnosticsProperty('timeFrom', timeFrom));
   }
 
   @override
@@ -177,16 +165,17 @@ class _$DatePickerForPostCreationStateImpl
 abstract class _DatePickerForPostCreationState
     implements DatePickerForPostCreationState {
   const factory _DatePickerForPostCreationState(
-      {final DateTime? selectedDate,
-      final DateTime? timeTo,
-      final DateTime? timeFrom}) = _$DatePickerForPostCreationStateImpl;
+          {required final DateTime selectedDate,
+          required final TimeOfDay timeTo,
+          required final TimeOfDay timeFrom}) =
+      _$DatePickerForPostCreationStateImpl;
 
   @override
-  DateTime? get selectedDate;
+  DateTime get selectedDate;
   @override
-  DateTime? get timeTo;
+  TimeOfDay get timeTo;
   @override
-  DateTime? get timeFrom;
+  TimeOfDay get timeFrom;
   @override
   @JsonKey(ignore: true)
   _$$DatePickerForPostCreationStateImplCopyWith<

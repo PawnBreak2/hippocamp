@@ -1,10 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_widgets/date_picker_widgets/date_picker_time.dart';
+import 'package:hippocamp/providers/post_creation_provider.dart';
 import 'package:hippocamp/styles/colors.dart';
 import 'package:hippocamp/styles/icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class DateSelectionSection extends StatelessWidget {
+class DateSelectionSection extends ConsumerWidget {
   final TextEditingController controllerDate;
   final void Function(String)? setChange;
   final bool allDaySelected;
@@ -28,7 +33,7 @@ class DateSelectionSection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
         InkWell(
@@ -45,6 +50,7 @@ class DateSelectionSection extends StatelessWidget {
               ),
             ),
             child: Text(
+              ///TODO: change this
               controllerDate.text,
               style: TextStyle(
                 fontSize: 16,
@@ -58,9 +64,74 @@ class DateSelectionSection extends StatelessWidget {
         Expanded(
           flex: 2,
           child: FittedBox(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.centerLeft,
             fit: BoxFit.scaleDown,
-            child: _timeWidget(),
+            child: Consumer(
+              builder: (context, ref, child) {
+                bool isWholeDay = ref.watch(
+                    postCreationProvider.select((value) => value.wholeDay));
+                if (isWholeDay) {
+                  return Text('Tutto il giorno');
+                } else
+                  return DatePickerTime();
+              },
+            ),
+          ),
+        ),
+        Container(
+          width: 11.w,
+          height: 11.w,
+          child: SpeedDial(
+            activeBackgroundColor: Colors.transparent,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            overlayColor: Colors.black12,
+            direction: SpeedDialDirection.down,
+            children: [
+              SpeedDialChild(
+                shape: const CircleBorder(),
+                child: Icon(
+                  CustomMaterialIcons.allDay,
+                  size: 20,
+                  color: Colors.white,
+                ),
+                backgroundColor: CustomColors.primaryRed,
+                label: "Tutto il giorno",
+                labelStyle: TextStyle(
+                  fontSize: 14,
+                  color: CustomColors.darkGrey,
+                ),
+                onTap: () {
+                  ref.read(postCreationProvider.notifier).setWholeDay(true);
+                },
+              ),
+              SpeedDialChild(
+                shape: CircleBorder(),
+                child: Icon(
+                  CustomMaterialIcons.hoursInterval,
+                  size: 20,
+                  color: Colors.white,
+                ),
+                backgroundColor: CustomColors.primaryRed,
+                label: "Intervallo orario",
+                labelStyle: TextStyle(
+                  fontSize: 14,
+                  color: CustomColors.darkGrey,
+                ),
+                onTap: () {
+                  ref.read(postCreationProvider.notifier).setWholeDay(false);
+                },
+              ),
+            ],
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationZ(pi / 2),
+              child: Icon(
+                Icons.play_arrow_rounded,
+                size: 30,
+                color: CustomColors.grey66,
+              ),
+            ),
           ),
         ),
       ],
@@ -70,7 +141,6 @@ class DateSelectionSection extends StatelessWidget {
   Widget _timeWidget() {
     if (allDaySelected)
       return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
             "Tutto il giorno",

@@ -437,8 +437,8 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                   if (shouldShowDescriptionField) {
                     return Padding(
                       padding: EdgeInsets.only(
-                        left: 2.w,
-                        right: 2.w,
+                        left: 4.w,
+                        right: 4.w,
                         top: 1.h,
                       ),
                       child: Row(

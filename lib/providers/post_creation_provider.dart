@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:hippocamp/constants/common.dart';
+import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocamp/models/body/attachments_for_created_post.dart';
 import 'package:hippocamp/models/body/created_post.dart';
 import 'package:hippocamp/models/body/multi_party_transaction_for_created_post.dart';
@@ -11,7 +13,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class PostCreationNotifier extends Notifier<NewCreatedPost> {
   @override
   build() {
-    return NewCreatedPost();
+    return NewCreatedPost(
+      to: TimeOfDay.now().timeToString,
+      from: TimeOfDay.now().timeToString,
+      date: DateTime.now().dateToString,
+    );
   }
 
   void setImportant(bool value) {
@@ -68,6 +74,28 @@ class PostCreationNotifier extends Notifier<NewCreatedPost> {
 
   void setVisualizationType(VisualizationType value) {
     state = state.copyWith(visualization: visualizationTypeMap[value]!);
+  }
+
+  void setWholeDay(bool value) {
+    state = state.copyWith(wholeDay: value);
+  }
+
+  void setTimeFrom(String value) {
+    state = state.copyWith(from: value);
+  }
+
+  void setTimeTo(String value) {
+    state = state.copyWith(to: value);
+  }
+
+  /// Resets the time from and time to to the current time
+  ///
+  /// Useful when there are errors in time picking
+  void resetFromAndTo() {
+    state = state.copyWith(
+      from: TimeOfDay.now().timeToString,
+      to: TimeOfDay.now().timeToString,
+    );
   }
 
   void resetAllPostAttributes() {

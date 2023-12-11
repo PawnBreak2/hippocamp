@@ -105,7 +105,7 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                         SpeedDialChild(
                           shape: CircleBorder(),
                           child: Icon(
-                            Icons.save,
+                            CustomMaterialIcons.save,
                             size: 20,
                             color: Colors.white,
                           ),

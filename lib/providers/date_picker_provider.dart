@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocamp/models/repositories/date_picker_for_post_creation_repository.dart';
 
@@ -6,8 +7,8 @@ class DatePickerNotifier extends Notifier<DatePickerForPostCreationState> {
   build() {
     return DatePickerForPostCreationState(
       selectedDate: DateTime.now(),
-      timeFrom: DateTime.now(),
-      timeTo: DateTime.now(),
+      timeFrom: TimeOfDay.now(),
+      timeTo: TimeOfDay.now(),
     );
   }
 
@@ -15,11 +16,11 @@ class DatePickerNotifier extends Notifier<DatePickerForPostCreationState> {
     state = state.copyWith(selectedDate: value);
   }
 
-  void setTimeFrom(DateTime value) {
+  void setTimeFrom(TimeOfDay value) {
     state = state.copyWith(timeFrom: value);
   }
 
-  void setTimeTo(DateTime value) {
+  void setTimeTo(TimeOfDay value) {
     state = state.copyWith(timeTo: value);
   }
 }

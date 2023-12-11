@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hippocamp/models/posts-creation/attachment_types.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
@@ -10,8 +11,8 @@ part 'date_picker_for_post_creation_repository.freezed.dart';
 @freezed
 class DatePickerForPostCreationState with _$DatePickerForPostCreationState {
   const factory DatePickerForPostCreationState({
-    @Default(null) DateTime? selectedDate,
-    @Default(null) DateTime? timeTo,
-    @Default(null) DateTime? timeFrom,
+    required DateTime selectedDate,
+    required TimeOfDay timeTo,
+    required TimeOfDay timeFrom,
   }) = _DatePickerForPostCreationState;
 }
