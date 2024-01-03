@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/constants/navigation/routeNames.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/pages/post_creation_and_update/post_creation_and_update_page.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
+import 'package:hippocapp/constants/navigation/routeNames.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
 import 'package:collection/collection.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 
 class ListCategoriesForPostCreation extends ConsumerWidget {
   final TextEditingController controller;
@@ -77,6 +77,7 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
                   : categoriesForSelectedDomain.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (_, i) {
+                print(categoriesForSelectedDomain[i].key);
                 return InkWell(
                   onLongPress: () {
                     if (!uiState.isLongPressingCategory) {

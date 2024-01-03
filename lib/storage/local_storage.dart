@@ -1,4 +1,4 @@
-import 'package:hippocamp/constants/storage_keys.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {

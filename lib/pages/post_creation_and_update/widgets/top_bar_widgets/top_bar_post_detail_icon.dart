@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 /// shows the icons on the top bar of post detail page, like important, uncertain, sensitive etc.
 class AppBarPostDetailIcon extends StatelessWidget {
@@ -16,8 +17,8 @@ class AppBarPostDetailIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 30,
-      height: 30,
+      width: 6.w,
+      height: 6.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
         color: _color,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/models/repositories/date_picker_for_post_creation_repository.dart';
+import 'package:hippocapp/models/repositories/date_picker_for_post_creation_repository.dart';
 
 class DatePickerNotifier extends Notifier<DatePickerForPostCreationState> {
   @override

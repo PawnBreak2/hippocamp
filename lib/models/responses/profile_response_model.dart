@@ -1,4 +1,4 @@
-import 'package:hippocamp/models/posts-creation/attachment_types.dart';
+import 'package:hippocapp/models/posts-creation/attachment_types.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 part 'profile_response_model.freezed.dart';

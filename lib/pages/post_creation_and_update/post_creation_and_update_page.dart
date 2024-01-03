@@ -11,41 +11,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/constants/navigation/routeNames.dart';
-import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocamp/helpers/extensions/int_extensions.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/helpers/service/permission_handler.dart';
-import 'package:hippocamp/models/body/attachments_for_created_post.dart';
-import 'package:hippocamp/models/body/created_post.dart';
-import 'package:hippocamp/models/body/multi_party_transaction_for_created_post.dart';
-import 'package:hippocamp/models/body/single_party_transaction_for_created_post.dart';
-import 'package:hippocamp/models/posts-creation/attachment_types.dart';
-import 'package:hippocamp/models/posts-creation/finance_movement_model.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart' show Post;
-import 'package:hippocamp/models/wallets/wallet_model.dart';
-import 'package:hippocamp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/date_selection_section.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/partner_dialog.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/text_form_field_button.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_section.dart';
-import 'package:hippocamp/pages/select_categories/select_category_dialog.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/post_creation_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/providers/wallets_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/styles/icons.dart';
-import 'package:hippocamp/widgets/buttons/delete_x_icon.dart';
-import 'package:hippocamp/widgets/dialogs/cupertino_bottom_sheet.dart';
-import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
-import 'package:hippocamp/widgets/dialogs/flash_dialog.dart';
-import 'package:hippocamp/widgets/forms/primary_text_form.dart';
-import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
-import 'package:hippocamp/widgets/view/photo_view.dart';
+import 'package:hippocapp/constants/common.dart';
+import 'package:hippocapp/constants/navigation/routeNames.dart';
+import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
+import 'package:hippocapp/helpers/extensions/int_extensions.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/helpers/service/permission_handler.dart';
+import 'package:hippocapp/models/body/attachments_for_created_post.dart';
+import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/body/multi_party_transaction_for_created_post.dart';
+import 'package:hippocapp/models/body/single_party_transaction_for_created_post.dart';
+import 'package:hippocapp/models/posts-creation/attachment_types.dart';
+import 'package:hippocapp/models/posts-creation/finance_movement_model.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart' show Post;
+import 'package:hippocapp/models/wallets/wallet_model.dart';
+import 'package:hippocapp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/date_selection_section.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/partner_dialog.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/text_form_field_button.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_section.dart';
+import 'package:hippocapp/pages/select_categories/select_category_dialog.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/providers/wallets_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/styles/icons.dart';
+import 'package:hippocapp/widgets/buttons/delete_x_icon.dart';
+import 'package:hippocapp/widgets/dialogs/cupertino_bottom_sheet.dart';
+import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';
+import 'package:hippocapp/widgets/dialogs/flash_dialog.dart';
+import 'package:hippocapp/widgets/forms/primary_text_form.dart';
+import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
+import 'package:hippocapp/widgets/view/photo_view.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -250,32 +250,21 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
       title: _titleTextController.text,
       description: "",
       categoryKey: category.key,
-      contacts: [],
       businessPartners: _partnerModel == null ? [] : [_partnerModel!.key],
       latitude: "",
       longitude: "",
       address: _locationTextController.text,
       important: false,
-      canceled: false,
       uncertain: false,
       sensitiveInfo: false,
-      type: "STANDARD",
       visualization: "",
       rating: "",
       from: _allDay ? "" : _timeOfDayFrom.timeToString,
       to: _allDay ? "" : _timeOfDayTo.timeToString,
-      interval: "EXACT",
       date: _dateTime.dateToString,
-      at: _allDay ? "" : _timeOfDayFrom.timeToString,
-      within: _allDay ? "" : _timeOfDayTo.timeToString,
-      morning: false,
-      afternoon: false,
-      evening: false,
       wholeDay: _allDay,
       attachments:
           attachments.map((e) => AttachmentForCreatedPost.fromJson(e)).toList(),
-      notificationsActive: false,
-      notificationsUnit: "",
       singlePartyTransactions: _singleTrxs,
       multiPartyTransaction: _multiTrxs,
       businessPartnerBranch: "",
@@ -484,7 +473,16 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                     InkWell(
                       child: TextFormFieldButton(
                           child: Icon(CustomMaterialIcons.gpsLocation)),
-                      onTap: () {},
+                      onTap: () async {
+                        final Uri url = Uri.parse(
+                            'https://www.google.com/maps/search/?api=1&query=52.32,4.917');
+
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
                     )
                   ],
                 ),
@@ -494,59 +492,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
               // Location All day / Time
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: DateSelectionSection(
-                  allDaySelected: _allDay,
-                  onTapTimeSelection: (c) async {
-                    _allDay = c == "0";
-                    setState(() {});
-                  },
-                  timeFrom: TextEditingController(
-                    text: _timeOfDayFrom.timeToString,
-                  ),
-                  onTapTimeFrom: () async {
-                    final timeOfDay = await showTimePicker(
-                      context: context,
-                      initialTime: _timeOfDayFrom,
-                    );
-                    _timeOfDayFrom = timeOfDay ?? _timeOfDayFrom;
-
-                    if (_timeOfDayFrom.hour > _timeOfDayTo.hour ||
-                        (_timeOfDayFrom.hour == _timeOfDayTo.hour &&
-                            _timeOfDayFrom.minute > _timeOfDayTo.minute))
-                      _timeOfDayTo = _timeOfDayFrom;
-
-                    setState(() {});
-                  },
-                  timeTo: TextEditingController(
-                    text: _timeOfDayTo.timeToString,
-                  ),
-                  onTapTimeTo: () async {
-                    final timeOfDay = await showTimePicker(
-                      context: context,
-                      initialTime: _timeOfDayTo,
-                    );
-
-                    if (timeOfDay == null) return;
-
-                    _timeOfDayTo = timeOfDay;
-                    setState(() {});
-                  },
-                  onTapDateSelection: () async {
-                    final dateTime = await showDatePicker(
-                      context: context,
-                      initialDate: _dateTime,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2050),
-                    );
-                    _dateTime = dateTime ?? _dateTime;
-                    setState(() {});
-                  },
-                  controllerDate: TextEditingController(
-                    text:
-                        "${_dateTime.day} ${_dateTime.month.monthFromInt.substring(0, 3).toLowerCase()} ${_dateTime.year}",
-                  ),
-                  setChange: (_) => setState(() {}),
-                ),
+                child: DateSelectionSection(),
               ),
 
               // Finance Movements

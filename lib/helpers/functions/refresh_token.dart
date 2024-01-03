@@ -1,6 +1,6 @@
-import 'package:hippocamp/clients/main_client.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
-import 'package:hippocamp/constants/urls.dart';
+import 'package:hippocapp/clients/main_client.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
+import 'package:hippocapp/constants/urls.dart';
 
 import '../../storage/secure_storage.dart';
 

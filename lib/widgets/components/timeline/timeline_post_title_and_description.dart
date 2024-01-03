@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/styles/colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TimeLinePostTitleAndDescription extends StatelessWidget {

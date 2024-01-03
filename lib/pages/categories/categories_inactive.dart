@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/widgets/dialogs/cupertino_bottom_sheet.dart';
-
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/responses/domains_response_model.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/widgets/dialogs/cupertino_bottom_sheet.dart';
 
 class CategoriesInactive extends ConsumerStatefulWidget {
   final ScrollController scrollController;
@@ -20,7 +19,6 @@ class CategoriesInactive extends ConsumerStatefulWidget {
 }
 
 class _CategoriesInactiveState extends ConsumerState<CategoriesInactive> {
-
   final TextEditingController _controller = TextEditingController();
   bool _loading = true;
 
@@ -54,7 +52,8 @@ class _CategoriesInactiveState extends ConsumerState<CategoriesInactive> {
         ),
       );
 
-    final listInactiveDomains = appStateProviderState.domainsInCategoriesInactive;
+    final listInactiveDomains =
+        appStateProviderState.domainsInCategoriesInactive;
 
     return ListView(
       controller: widget.scrollController,

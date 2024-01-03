@@ -3,15 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/constants/navigation/routeNames.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/pages/post_creation_and_update/post_creation_and_update_page.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/timeline/partner_box.dart';
-import 'package:hippocamp/widgets/components/timeline/timeline_post_icon.dart';
-import 'package:hippocamp/widgets/components/timeline/timeline_post_title_and_description.dart';
-import 'package:hippocamp/widgets/images/cached_timeline_post_icon.dart';
+import 'package:hippocapp/constants/navigation/routeNames.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/components/timeline/partner_box.dart';
+import 'package:hippocapp/widgets/components/timeline/timeline_post_icon.dart';
+import 'package:hippocapp/widgets/components/timeline/timeline_post_title_and_description.dart';
+import 'package:hippocapp/widgets/images/cached_timeline_post_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TimeEventItem extends StatelessWidget {

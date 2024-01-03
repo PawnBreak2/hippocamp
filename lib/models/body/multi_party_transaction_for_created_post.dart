@@ -11,6 +11,8 @@ class MultiPartyTransactionForCreatedPost
     @Default(0) double amountOut,
     @Default('') String date,
     @Default('') String type,
+
+    ///TODO: cancellare?
     @Default('') String categoryKey,
     @Default('') String fromWalletKey,
     @Default('') String toWalletKey,

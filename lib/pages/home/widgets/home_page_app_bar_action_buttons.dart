@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/constants/navigation/routeNames.dart';
-import 'package:hippocamp/models/repositories/ui_state_repository.dart';
-import 'package:hippocamp/pages/change_password/change_password.dart';
-import 'package:hippocamp/providers/auth_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
+import 'package:hippocapp/constants/common.dart';
+import 'package:hippocapp/constants/navigation/routeNames.dart';
+import 'package:hippocapp/models/repositories/ui_state_repository.dart';
+import 'package:hippocapp/pages/change_password/change_password.dart';
+import 'package:hippocapp/providers/auth_provider.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
 
 class HomePageAppBarActionButtons extends ConsumerWidget {
   HomePageAppBarActionButtons({

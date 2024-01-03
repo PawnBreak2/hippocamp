@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
-import 'package:hippocamp/clients/main_client.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
-import 'package:hippocamp/constants/urls.dart';
-import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocamp/models/body/created_post.dart';
-import 'package:hippocamp/models/error_call_model.dart';
-import 'package:hippocamp/models/posts-creation/attachment_types.dart';
-import 'package:hippocamp/models/posts-creation/partner_model.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/storage/secure_storage.dart';
+import 'package:hippocapp/clients/main_client.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
+import 'package:hippocapp/constants/urls.dart';
+import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
+import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/error_call_model.dart';
+import 'package:hippocapp/models/posts-creation/attachment_types.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/models/responses/domains_response_model.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/storage/secure_storage.dart';
 
 class AppStateClient {
   /// TODO: controllare duplicati tra i client
@@ -131,6 +131,8 @@ class AppStateClient {
         );
       }
 
+      ///TODO: serve?
+
       (resp.data as List).map((e) {
         var newMap = Map.from(e)
           ..remove('localizedName')
@@ -140,18 +142,19 @@ class AppStateClient {
 
       // this is used when the call is made without keys, and returns a map of all the domains and categories
 
-      final listResp = (resp.data as List);
+      final domainsList = (resp.data as List);
 
       final List<PostCategory> categories = [];
 
-      for (var i in listResp) {
+      for (var i in domainsList) {
         final categoriesFromList = (i['categories'] as List).map((e) {
           // in API call, the categories are returned with the key "localizedName", but in the model we use "name"
 
           var newMap = Map.from(e)
             ..remove('localizedName')
             ..['name'] = e['localizedName']
-            ..['domainKey'] = i['key'];
+            ..['domainKey'] = i['key']
+            ..['domainBackgroundColorHex'] = i['backgroundColorHex'];
           return PostCategory.fromMap(newMap);
         }).toList();
 

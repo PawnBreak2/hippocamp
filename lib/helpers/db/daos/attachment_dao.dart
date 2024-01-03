@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:hippocamp/helpers/db/entities/attachment.dart';
+import 'package:hippocapp/helpers/db/entities/attachment.dart';
 
 @dao
 abstract class AttachmentEntityDao {

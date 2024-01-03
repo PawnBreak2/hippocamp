@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:hippocamp/clients/main_client.dart';
+import 'package:hippocapp/clients/main_client.dart';
 
 class MockAPI {
   static final CustomDio _dio = CustomDio();

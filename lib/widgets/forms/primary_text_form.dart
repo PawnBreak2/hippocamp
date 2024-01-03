@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/forms/primary_amount_form.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/forms/primary_amount_form.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class PrimaryTextFormField extends StatelessWidget {

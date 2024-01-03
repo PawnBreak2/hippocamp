@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_draggable_gridview/flutter_draggable_gridview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/repositories/app_state_repository.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/pages/categories/categories_inactive.dart';
-import 'package:hippocamp/pages/categories/detail_category/detail_category_page.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/dialogs/cupertino_bottom_sheet.dart';
-import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
-import 'package:hippocamp/widgets/forms/primary_text_form.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/repositories/app_state_repository.dart';
+import 'package:hippocapp/models/responses/domains_response_model.dart';
+import 'package:hippocapp/pages/categories/categories_inactive.dart';
+import 'package:hippocapp/pages/categories/detail_category/detail_category_page.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/dialogs/cupertino_bottom_sheet.dart';
+import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';
+import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 
 class CategoriesPage extends ConsumerStatefulWidget {
   const CategoriesPage({super.key});

@@ -1,5 +1,5 @@
-import 'package:hippocamp/clients/user_client.dart';
-import 'package:hippocamp/models/responses/profile_response_model.dart';
+import 'package:hippocapp/clients/user_client.dart';
+import 'package:hippocapp/models/responses/profile_response_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserNotifier extends Notifier<UserProfileModel> {

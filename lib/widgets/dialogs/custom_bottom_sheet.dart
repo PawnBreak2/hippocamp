@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/styles/colors.dart';
 
 class CustomBottomSheet {
   static Future<dynamic> showDraggableBottomSheet(

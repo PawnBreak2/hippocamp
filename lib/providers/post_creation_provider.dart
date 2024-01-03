@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocamp/models/body/attachments_for_created_post.dart';
-import 'package:hippocamp/models/body/created_post.dart';
-import 'package:hippocamp/models/body/multi_party_transaction_for_created_post.dart';
-import 'package:hippocamp/models/body/single_party_transaction_for_created_post.dart';
-import 'package:hippocamp/models/repositories/ui_state_repository.dart';
+import 'package:hippocapp/constants/common.dart';
+import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
+import 'package:hippocapp/models/body/attachments_for_created_post.dart';
+import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/body/multi_party_transaction_for_created_post.dart';
+import 'package:hippocapp/models/body/single_party_transaction_for_created_post.dart';
+import 'package:hippocapp/models/repositories/ui_state_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Used to create/edit a post before creation, abstracting the logic from the widget
@@ -22,10 +22,6 @@ class PostCreationNotifier extends Notifier<NewCreatedPost> {
 
   void setImportant(bool value) {
     state = state.copyWith(important: value);
-  }
-
-  void setCanceled(bool value) {
-    state = state.copyWith(canceled: value);
   }
 
   void setUncertain(bool value) {

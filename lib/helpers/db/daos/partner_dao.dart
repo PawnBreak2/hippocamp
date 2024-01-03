@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:hippocamp/helpers/db/entities/partner.dart';
+import 'package:hippocapp/helpers/db/entities/partner.dart';
 
 @dao
 abstract class PartnerEntityDao {

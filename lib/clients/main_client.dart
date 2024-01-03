@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
-import 'package:hippocamp/helpers/functions/refresh_token.dart';
-import 'package:hippocamp/storage/secure_storage.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
+import 'package:hippocapp/helpers/functions/refresh_token.dart';
+import 'package:hippocapp/storage/secure_storage.dart';
 
 class CustomDio {
   final Dio _dio = Dio();

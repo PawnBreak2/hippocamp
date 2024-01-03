@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:floor/floor.dart';
-import 'package:hippocamp/constants/db/table_names.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/constants/db/table_names.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
 
 @Entity(tableName: TableNamesForDb.posts)
 class PostEntity {

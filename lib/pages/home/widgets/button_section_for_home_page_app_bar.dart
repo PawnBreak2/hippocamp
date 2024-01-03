@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
 
 class ButtonForHomePageAppBar extends ConsumerWidget {
   final String _text;

@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/repositories/app_state_repository.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/widgets/dialogs/cupertino_bottom_sheet.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/repositories/app_state_repository.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/widgets/dialogs/cupertino_bottom_sheet.dart';
 
 class SubCategoriesInactive extends ConsumerStatefulWidget {
   final String domainKey;

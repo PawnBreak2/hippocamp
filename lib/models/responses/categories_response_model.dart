@@ -7,6 +7,8 @@ class PostCategory {
   final String type;
   final String domainKey;
 
+  ///TODO: aggiornare modello
+
   const PostCategory({
     required this.domainKey,
     required this.key,

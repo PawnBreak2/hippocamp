@@ -1,5 +1,5 @@
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
 import 'package:collection/collection.dart';
 
 class TimelineHelpers {

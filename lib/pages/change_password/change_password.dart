@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/helpers/validators/validators_form_field.dart';
-import 'package:hippocamp/providers/auth_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/buttons/primary_button.dart';
-import 'package:hippocamp/widgets/dialogs/flash_dialog.dart';
-import 'package:hippocamp/widgets/forms/primary_text_form.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/helpers/validators/validators_form_field.dart';
+import 'package:hippocapp/providers/auth_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/buttons/primary_button.dart';
+import 'package:hippocapp/widgets/dialogs/flash_dialog.dart';
+import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ChangePasswordPage extends ConsumerStatefulWidget {

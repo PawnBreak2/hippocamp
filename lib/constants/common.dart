@@ -34,7 +34,7 @@ class Constants {
     "Dicembre"
   ];
 
-  static const String databaseName = "hippocamp.db";
+  static const String databaseName = "hippocapp.db";
   static const int databaseVersion = 1;
   static const String iconAssetsPath = 'assets/icons/';
 }

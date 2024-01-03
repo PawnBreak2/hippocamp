@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:hippocamp/clients/main_client.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
-import 'package:hippocamp/constants/urls.dart';
-import 'package:hippocamp/models/error_call_model.dart';
-import 'package:hippocamp/models/responses/login_response_model.dart';
-import 'package:hippocamp/storage/secure_storage.dart';
+import 'package:hippocapp/clients/main_client.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
+import 'package:hippocapp/constants/urls.dart';
+import 'package:hippocapp/models/error_call_model.dart';
+import 'package:hippocapp/models/responses/login_response_model.dart';
+import 'package:hippocapp/storage/secure_storage.dart';
 
 class AuthClient {
   final CustomDio _dio = CustomDio();

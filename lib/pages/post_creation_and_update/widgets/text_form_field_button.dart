@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/styles/colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TextFormFieldButton extends StatelessWidget {

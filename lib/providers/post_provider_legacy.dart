@@ -1,7 +1,7 @@
 /*
-import 'package:hippocamp/clients/posts_client.dart';
-import 'package:hippocamp/models/posts-creation/attachment_types.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/clients/posts_client.dart';
+import 'package:hippocapp/models/posts-creation/attachment_types.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PostsNotifier extends Notifier<Map> {

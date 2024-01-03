@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/buttons/button_go_on.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/buttons/button_go_on.dart';
 
 class AttachmentsPage extends StatefulWidget {
   const AttachmentsPage({super.key});

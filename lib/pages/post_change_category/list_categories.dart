@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
 import 'package:collection/collection.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/dialogs/flash_dialog.dart';
-import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/dialogs/flash_dialog.dart';
+import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ListCategoriesForPostupdate extends ConsumerWidget {

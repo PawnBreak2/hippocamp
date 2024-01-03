@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hippocamp/models/posts-creation/partner_model.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/styles/icons.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/styles/icons.dart';
 
 class TopBarPartnerButton extends StatelessWidget {
   const TopBarPartnerButton({

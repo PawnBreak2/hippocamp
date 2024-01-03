@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/pages/post_change_category/change_category_dialog.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
+import 'package:hippocapp/constants/common.dart';
+import 'package:hippocapp/pages/post_change_category/change_category_dialog.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';
 
 class PostSelectionBottomBar extends StatelessWidget {
   /// Bottom bar that appears when the user is selecting posts.

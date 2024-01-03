@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/styles/colors.dart';
 
 class DefaultBottomBar extends StatelessWidget {
   late List _pages;

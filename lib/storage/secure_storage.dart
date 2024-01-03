@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
 
 class SecureStorage {
   static const storage = FlutterSecureStorage();

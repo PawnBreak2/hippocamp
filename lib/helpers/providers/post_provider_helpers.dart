@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/models/error_call_model.dart';
-import 'package:hippocamp/models/repositories/post_repository.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
+import 'package:hippocapp/models/error_call_model.dart';
+import 'package:hippocapp/models/repositories/post_repository.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
 
 class PostsProviderHelpers {
   static void manageGetPostsResponseFromAPI(

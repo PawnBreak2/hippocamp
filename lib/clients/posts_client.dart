@@ -1,18 +1,18 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
-import 'package:hippocamp/clients/main_client.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
-import 'package:hippocamp/constants/urls.dart';
-import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocamp/models/body/created_post.dart';
-import 'package:hippocamp/models/error_call_model.dart';
-import 'package:hippocamp/models/posts-creation/attachment_types.dart';
-import 'package:hippocamp/models/posts-creation/partner_model.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/storage/secure_storage.dart';
+import 'package:hippocapp/clients/main_client.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
+import 'package:hippocapp/constants/urls.dart';
+import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
+import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/error_call_model.dart';
+import 'package:hippocapp/models/posts-creation/attachment_types.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/models/responses/domains_response_model.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/storage/secure_storage.dart';
 
 class PostsClient {
   final CustomDio _dio = CustomDio();

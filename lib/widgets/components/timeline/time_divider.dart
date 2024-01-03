@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/helpers/extensions/int_extensions.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/helpers/extensions/int_extensions.dart';
+import 'package:hippocapp/styles/colors.dart';
 
 class TimelineTimeDivider extends StatelessWidget {
   late DateTime date;

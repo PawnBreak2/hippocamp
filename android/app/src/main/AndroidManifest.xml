@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hippocamp">
+    package="com.example.hippocapp">
    <application
-        android:label="hippocamp"
+        android:label="hippocapp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

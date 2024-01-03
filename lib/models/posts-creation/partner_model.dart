@@ -1,4 +1,4 @@
-import 'package:hippocamp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
 
 class PartnerModel {
   final String key;

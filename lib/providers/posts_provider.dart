@@ -2,14 +2,14 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/clients/posts_client.dart';
-import 'package:hippocamp/helpers/providers/post_provider_helpers.dart';
-import 'package:hippocamp/models/body/created_post.dart';
-import 'package:hippocamp/models/error_call_model.dart';
-import 'package:hippocamp/models/repositories/post_repository.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
+import 'package:hippocapp/clients/posts_client.dart';
+import 'package:hippocapp/helpers/providers/post_provider_helpers.dart';
+import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/error_call_model.dart';
+import 'package:hippocapp/models/repositories/post_repository.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
 
 class PostListNotifier extends Notifier<PostsRepository> {
   @override

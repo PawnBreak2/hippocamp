@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/models/posts-creation/partner_model.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/timeline/partner_box.dart';
-import 'package:hippocamp/widgets/forms/primary_text_form.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/components/timeline/partner_box.dart';
+import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 
 class PartnerDialog extends ConsumerStatefulWidget {
   final ScrollController scrollController;

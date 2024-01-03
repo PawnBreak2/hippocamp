@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:hippocamp/helpers/db/entities/category.dart';
+import 'package:hippocapp/helpers/db/entities/category.dart';
 
 @dao
 abstract class CategoryEntityDao {

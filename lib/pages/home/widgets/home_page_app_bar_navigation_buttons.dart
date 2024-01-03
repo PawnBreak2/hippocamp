@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/pages/home/widgets/button_section_for_home_page_app_bar.dart';
-import 'package:hippocamp/providers/page_controller_provider.dart';
+import 'package:hippocapp/pages/home/widgets/button_section_for_home_page_app_bar.dart';
+import 'package:hippocapp/providers/page_controller_provider.dart';
 
 class HomePageAppBarNavigationButtons extends ConsumerWidget {
   const HomePageAppBarNavigationButtons({

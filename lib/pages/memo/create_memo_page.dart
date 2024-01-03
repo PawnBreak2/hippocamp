@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/styles/colors.dart';
 import 'package:quill_html_editor/quill_html_editor.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

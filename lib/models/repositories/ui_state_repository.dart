@@ -1,10 +1,10 @@
-import 'package:hippocamp/models/posts-creation/attachment_types.dart';
+import 'package:hippocapp/models/posts-creation/attachment_types.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
-import 'package:hippocamp/models/posts-creation/partner_model.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/models/responses/domains_response_model.dart';
+import 'package:hippocapp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
 part 'ui_state_repository.freezed.dart';
 
 @freezed

@@ -1,12 +1,12 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/helpers/extensions/int_extensions.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/timeline/time_event_item.dart';
+import 'package:hippocapp/helpers/extensions/int_extensions.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/components/timeline/time_event_item.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {

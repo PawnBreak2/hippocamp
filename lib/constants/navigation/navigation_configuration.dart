@@ -1,15 +1,15 @@
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/constants/navigation/routeNames.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
-import 'package:hippocamp/pages/home/home_page.dart';
-import 'package:hippocamp/pages/login/login_page.dart';
-import 'package:hippocamp/pages/main_scaffold/main_scaffold.dart';
-import 'package:hippocamp/pages/memo/memo.dart';
-import 'package:hippocamp/pages/post_creation_and_update/post_creation_and_update_page.dart';
-import 'package:hippocamp/pages/splash_page/splash_page.dart';
-import 'package:hippocamp/storage/local_storage.dart';
+import 'package:hippocapp/constants/navigation/routeNames.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/pages/home/home_page.dart';
+import 'package:hippocapp/pages/login/login_page.dart';
+import 'package:hippocapp/pages/main_scaffold/main_scaffold.dart';
+import 'package:hippocapp/pages/memo/memo.dart';
+import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
+import 'package:hippocapp/pages/splash_page/splash_page.dart';
+import 'package:hippocapp/storage/local_storage.dart';
 
 // routes and redirection/page building logic is all in this class
 

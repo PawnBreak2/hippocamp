@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_post_detail_icon.dart';
-import 'package:hippocamp/providers/post_creation_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/styles/icons.dart';
+import 'package:hippocapp/constants/common.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_post_detail_icon.dart';
+import 'package:hippocapp/providers/post_creation_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/styles/icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class AlertDialogForPostAttributes extends ConsumerWidget {
@@ -174,6 +174,7 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
           child: Text(
             'OK',
             style: TextStyle(
+              fontSize: 15.sp,
               color: CustomColors.grey66,
             ),
           ),
@@ -189,6 +190,7 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
           child: Text(
             'Annulla',
             style: TextStyle(
+              fontSize: 15.sp,
               color: CustomColors.grey66,
             ),
           ),
@@ -232,6 +234,7 @@ class SelectAttributeForPostItem extends StatelessWidget {
           _text,
           style: TextStyle(
               color: _isActivated ? Colors.black : CustomColors.grey121,
+              fontSize: 14.sp,
               fontWeight: _isActivated ? FontWeight.bold : FontWeight.normal),
         ),
       ],

@@ -1,11 +1,11 @@
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/providers/date_picker_provider.dart';
-import 'package:hippocamp/providers/post_creation_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/providers/date_picker_provider.dart';
+import 'package:hippocapp/providers/post_creation_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -40,15 +40,68 @@ class DatePickerTime extends ConsumerWidget {
   }
 
   void setTimeOfDayForPost(
-      TimeSelection timeSelection, BuildContext context, WidgetRef ref) {
-    Navigator.of(context).push(
+      TimeSelection timeSelection, BuildContext context, WidgetRef ref) async {
+    final selectedTimeFrom = ref
+        .watch(postCreationProvider.select((value) => value.from))
+        .timeOfDayFromString;
+    final selectedTimeTo = ref
+        .watch(postCreationProvider.select((value) => value.to))
+        .timeOfDayFromString;
+    final TimeOfDay? selectedTimeFromPicker = await showTimePicker(
+        initialEntryMode: TimePickerEntryMode.dial,
+        initialTime: TimeOfDay(
+            hour: selectedTimeFrom.hour, minute: selectedTimeFrom.minute),
+        helpText: timeSelection == TimeSelection.from
+            ? 'Inserisci l\'orario di inizio'
+            : 'Inserisci l\'orario di fine',
+        hourLabelText: '',
+        minuteLabelText: '',
+        context: context,
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                surfaceTint: CustomColors.white243,
+                primary: CustomColors.primaryRed,
+                onPrimary: Colors.white,
+                surface: CustomColors.white243,
+                onSurface: CustomColors.darkGrey,
+              ),
+              dialogBackgroundColor: CustomColors.lightBackGroundColor,
+              timePickerTheme: TimePickerThemeData(
+                  hourMinuteTextStyle: TextStyle(fontSize: 30.sp)),
+            ),
+            child: child!,
+          );
+        });
+    if (timeSelection == TimeSelection.to) {
+      ref.read(postCreationProvider.notifier).setTimeTo(
+          selectedTimeFromPicker?.timeToString ?? selectedTimeTo.timeToString);
+      if (!isSelectedTimeValid(ref)) {
+        ref.read(postCreationProvider.notifier).setTimeFrom(
+            selectedTimeFromPicker?.timeToString ??
+                selectedTimeFrom.timeToString);
+      }
+    } else {
+      ref.read(postCreationProvider.notifier).setTimeFrom(
+          selectedTimeFromPicker?.timeToString ??
+              selectedTimeFrom.timeToString);
+
+      if (!isSelectedTimeValid(ref)) {
+        ref.read(postCreationProvider.notifier).setTimeTo(
+            selectedTimeFromPicker?.timeToString ??
+                selectedTimeTo.timeToString);
+      }
+    }
+
+    /*    Navigator.of(context).push(
       showPicker(
         themeData: Theme.of(context).copyWith(
           dialogTheme: const DialogTheme(
             surfaceTintColor: CustomColors.lightBackGroundColor,
           ),
         ),
-        height: 40.h,
+        height: 42.h,
         accentColor: CustomColors.primaryRed,
         is24HrFormat: true,
         context: context,
@@ -95,7 +148,7 @@ class DatePickerTime extends ConsumerWidget {
           }
         },
       ),
-    );
+    );*/
   }
 
   @override

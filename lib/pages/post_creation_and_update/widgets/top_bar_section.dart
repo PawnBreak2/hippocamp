@@ -3,26 +3,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/constants/navigation/routeNames.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/body/created_post.dart';
-import 'package:hippocamp/models/posts-creation/partner_model.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/important_icon_overlay.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_widgets/alert_dialog_for_post_attributes.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_partner_button.dart';
-import 'package:hippocamp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_post_detail_icon.dart';
-import 'package:hippocamp/pages/select_categories/select_category_dialog.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/post_creation_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/providers/ui_state_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/styles/icons.dart';
-import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
-import 'package:hippocamp/widgets/dialogs/flash_dialog.dart';
-import 'package:hippocamp/widgets/images/generic_cached_icon.dart';
+import 'package:hippocapp/constants/common.dart';
+import 'package:hippocapp/constants/navigation/routeNames.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/important_icon_overlay.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/alert_dialog_for_post_attributes.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_partner_button.dart';
+import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_post_detail_icon.dart';
+import 'package:hippocapp/pages/select_categories/select_category_dialog.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/styles/icons.dart';
+import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';
+import 'package:hippocapp/widgets/dialogs/flash_dialog.dart';
+import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TopBarSectionForCreatePost extends ConsumerWidget {
@@ -44,6 +44,11 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    print(height);
+    print(width);
+
     return Container(
       color: Colors.white,
       height: 100,
@@ -60,19 +65,24 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                 Row(
                   children: [
                     TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                      ),
                       onPressed: onSave,
                       child: Text(
                         "Salva",
                         style: TextStyle(
                           color: CustomColors.grey66,
-                          fontSize: 16,
+                          fontSize: 15.sp,
                           decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
                     SpeedDial(
+                      buttonSize: Size(8.w, 8.w),
                       child: Icon(
                         Icons.more_vert,
+                        size: 26.sp,
                         color: Colors.black,
                       ),
                       activeBackgroundColor: Colors.transparent,
@@ -119,7 +129,7 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 2.w)
+                    SizedBox(width: 1.w)
                   ],
                 ),
               ],
@@ -264,7 +274,7 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                                   Text(
                                     category.name,
                                     style: TextStyle(
-                                      fontSize: 17,
+                                      fontSize: 14,
                                       color: Color.fromRGBO(51, 51, 51, 1),
                                       fontWeight: FontWeight.w500,
                                     ),

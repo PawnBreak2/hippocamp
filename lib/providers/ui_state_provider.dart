@@ -1,6 +1,6 @@
-import 'package:hippocamp/models/repositories/ui_state_repository.dart';
+import 'package:hippocapp/models/repositories/ui_state_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
+import 'package:hippocapp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
 
 class UIStateNotifier extends Notifier<UIState> {
   @override

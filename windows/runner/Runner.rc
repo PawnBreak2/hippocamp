@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "hippocamp" "\0"
+            VALUE "FileDescription", "hippocapp" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "hippocamp" "\0"
+            VALUE "InternalName", "hippocapp" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "hippocamp.exe" "\0"
-            VALUE "ProductName", "hippocamp" "\0"
+            VALUE "OriginalFilename", "hippocapp.exe" "\0"
+            VALUE "ProductName", "hippocapp" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

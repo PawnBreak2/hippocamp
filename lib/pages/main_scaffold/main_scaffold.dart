@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/constants/common.dart';
-import 'package:hippocamp/pages/attachments/attachments_page.dart';
-import 'package:hippocamp/pages/calendar/calendar_page.dart';
-import 'package:hippocamp/pages/categories/categories_page.dart';
-import 'package:hippocamp/pages/finance/finance_page.dart';
-import 'package:hippocamp/pages/home/home_page.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/styles/colors.dart';
-import 'package:hippocamp/widgets/components/main_scaffold/default_bottom_bar.dart';
-import 'package:hippocamp/widgets/components/main_scaffold/post_selection_bottom_bar.dart';
-import 'package:hippocamp/widgets/dialogs/custom_bottom_sheet.dart';
+import 'package:hippocapp/constants/common.dart';
+import 'package:hippocapp/pages/attachments/attachments_page.dart';
+import 'package:hippocapp/pages/calendar/calendar_page.dart';
+import 'package:hippocapp/pages/categories/categories_page.dart';
+import 'package:hippocapp/pages/finance/finance_page.dart';
+import 'package:hippocapp/pages/home/home_page.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/styles/colors.dart';
+import 'package:hippocapp/widgets/components/main_scaffold/default_bottom_bar.dart';
+import 'package:hippocapp/widgets/components/main_scaffold/post_selection_bottom_bar.dart';
+import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MainScaffold extends ConsumerStatefulWidget {

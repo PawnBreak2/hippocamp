@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:hippocamp/clients/auth_client.dart';
-import 'package:hippocamp/constants/storage_keys.dart';
-import 'package:hippocamp/providers/app_state_provider.dart';
-import 'package:hippocamp/providers/posts_provider.dart';
-import 'package:hippocamp/providers/user_provider.dart';
-import 'package:hippocamp/providers/wallets_provider.dart';
-import 'package:hippocamp/storage/local_storage.dart';
-import 'package:hippocamp/storage/secure_storage.dart';
+import 'package:hippocapp/clients/auth_client.dart';
+import 'package:hippocapp/constants/storage_keys.dart';
+import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/providers/user_provider.dart';
+import 'package:hippocapp/providers/wallets_provider.dart';
+import 'package:hippocapp/storage/local_storage.dart';
+import 'package:hippocapp/storage/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthNotifier extends AsyncNotifier<AsyncValue> {

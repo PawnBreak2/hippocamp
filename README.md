@@ -1,4 +1,4 @@
-# hippocamp
+# hippocapp
 
 A new Flutter project.
 

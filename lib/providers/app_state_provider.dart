@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/clients/appstate_client.dart';
-import 'package:hippocamp/clients/posts_client.dart';
-import 'package:hippocamp/models/posts-creation/attachment_types.dart';
-import 'package:hippocamp/models/posts-creation/partner_model.dart';
-import 'package:hippocamp/models/repositories/app_state_repository.dart';
+import 'package:hippocapp/clients/appstate_client.dart';
+import 'package:hippocapp/clients/posts_client.dart';
+import 'package:hippocapp/models/posts-creation/attachment_types.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
+import 'package:hippocapp/models/repositories/app_state_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
-import 'package:hippocamp/models/responses/domains_response_model.dart';
-import 'package:hippocamp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/models/responses/domains_response_model.dart';
+import 'package:hippocapp/models/responses/posts_response_model.dart';
 
 class AppStateNotifier extends Notifier<AppState> {
   @override

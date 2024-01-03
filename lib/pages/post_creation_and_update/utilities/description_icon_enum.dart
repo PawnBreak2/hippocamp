@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hippocamp/constants/common.dart';
+import 'package:hippocapp/constants/common.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 enum InsertDescriptionButtonState {

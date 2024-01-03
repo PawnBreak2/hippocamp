@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:hippocamp/constants/db/table_names.dart';
+import 'package:hippocapp/constants/db/table_names.dart';
 
 @Entity(tableName: TableNamesForDb.multiPartyTransactions)
 class MultiPartyTransactionEntity {

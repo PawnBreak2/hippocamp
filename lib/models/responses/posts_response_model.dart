@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/helpers/extensions/string_extensions.dart';
-import 'package:hippocamp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/responses/categories_response_model.dart';
 
 class PostResponse {
   final List<Post> posts;

@@ -1,7 +1,7 @@
 import 'package:floor/floor.dart';
 
 import 'package:floor/floor.dart';
-import 'package:hippocamp/helpers/db/entities/single_party_transaction.dart';
+import 'package:hippocapp/helpers/db/entities/single_party_transaction.dart';
 
 @dao
 abstract class SinglePartyTransactionPostEntityDao {

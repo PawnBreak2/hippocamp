@@ -25,6 +25,8 @@ mixin _$MultiPartyTransactionForCreatedPost {
   double get amountOut => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
+
+  ///TODO: cancellare?
   String get categoryKey => throw _privateConstructorUsedError;
   String get fromWalletKey => throw _privateConstructorUsedError;
   String get toWalletKey => throw _privateConstructorUsedError;
@@ -211,6 +213,8 @@ class _$MultiPartyTransactionForCreatedPostImpl
   @override
   @JsonKey()
   final String type;
+
+  ///TODO: cancellare?
   @override
   @JsonKey()
   final String categoryKey;
@@ -290,6 +294,8 @@ abstract class _MultiPartyTransactionForCreatedPost
   @override
   String get type;
   @override
+
+  ///TODO: cancellare?
   String get categoryKey;
   @override
   String get fromWalletKey;

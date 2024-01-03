@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hippocamp/styles/colors.dart';
+import 'package:hippocapp/styles/colors.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoadingScreen extends StatelessWidget {
