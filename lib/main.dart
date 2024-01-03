@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocapp/constants/navigation/navigation_configuration.dart';
 import 'package:hippocapp/storage/local_storage.dart';
+import 'package:hippocapp/styles/colors.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -59,6 +60,10 @@ class _MyAppState extends State<MyApp> {
           routerConfig: NavigationConfiguration.routes,
           title: 'hippocapp',
           theme: ThemeData(
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+                backgroundColor: Colors.white,
+                foregroundColor: CustomColors.lightRed,
+                shape: CircleBorder()),
             // This is the theme of your application.
             //
             // Try running your application with "flutter run". You'll see the

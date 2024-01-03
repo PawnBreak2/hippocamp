@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -28,7 +27,6 @@ import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/models/responses/posts_response_model.dart' show Post;
 import 'package:hippocapp/models/wallets/wallet_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
-import 'package:hippocapp/pages/post_creation_and_update/views/overlay_dialog_for_attachments.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/date_selection_section.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/partner_dialog.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/text_form_field_button.dart';
@@ -281,351 +279,407 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
     print(category.name);
     print(category.domainKey);
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: CustomColors.backgroundGrey,
-          elevation: 0,
-          leading: Container(),
-          toolbarHeight: 10,
-          shadowColor: Colors.transparent,
-        ),
-        body: GestureDetector(
-          onTap: () {
-            SystemChannels.textInput.invokeMethod('TextInput.hide');
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TopBarSectionForCreatePost(
-                  onCategoryTap: (c) async {
-                    if (c == null) return;
-                    category = c;
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: CustomColors.backgroundGrey,
+        elevation: 0,
+        leading: Container(),
+        toolbarHeight: 10,
+        shadowColor: Colors.transparent,
+      ),
+      body: GestureDetector(
+        onTap: () {
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TopBarSectionForCreatePost(
+                onCategoryTap: (c) async {
+                  if (c == null) return;
+                  category = c;
 
-                    if (widget.post == null)
-                      _titleTextController.text = category.name;
+                  if (widget.post == null)
+                    _titleTextController.text = category.name;
+                  setState(() {});
+                },
+                onPartnerTap: () async {
+                  final resp = await CustomBottomSheet.showDraggableBottomSheet(
+                    context,
+                    (controller) => PartnerDialog(scrollController: controller),
+                    appBarColor: CustomColors.pinkWhite,
+                  );
+
+                  if (resp is PartnerModel) {
+                    _partnerModel = resp;
                     setState(() {});
-                  },
-                  onPartnerTap: () async {
-                    final resp =
-                        await CustomBottomSheet.showDraggableBottomSheet(
-                      context,
-                      (controller) =>
-                          PartnerDialog(scrollController: controller),
-                      appBarColor: CustomColors.pinkWhite,
+                  }
+                },
+                onSave: () async {
+                  if (_loading) return;
+
+                  _loading = true;
+                  setState(() {});
+
+                  List<Map<String, dynamic>> attachmentsToAdd = [];
+
+                  for (var i in _fileAndDocumentsListToSave)
+                    attachmentsToAdd.add({
+                      "localizedName": (i["attachment"] as AttachmentType).name,
+                      "type": (i["attachment"] as AttachmentType).key,
+                      "content": "", //base64Encode(i["value"])
+                      "contentType": "application/pdf",
+                    });
+
+                  bool resp = false;
+
+                  if (widget.post != null) {
+                    resp = await ref.read(postListProvider.notifier).updatePost(
+                          key: widget.post?.key ?? "",
+                          postBody:
+                              postModelToCreate(attachments: attachmentsToAdd),
+                        );
+                  } else {
+                    resp = await ref.read(postListProvider.notifier).createPost(
+                          postBody:
+                              postModelToCreate(attachments: attachmentsToAdd),
+                        );
+                  }
+
+                  _loading = false;
+                  setState(() {});
+
+                  if (resp) {
+                    FlashCustomDialog.showPopUp(
+                      context: context,
+                      text: "Post salvato",
+                      isError: false,
                     );
-
-                    if (resp is PartnerModel) {
-                      _partnerModel = resp;
-                      setState(() {});
-                    }
-                  },
-                  onSave: () async {
-                    if (_loading) return;
-
-                    _loading = true;
-                    setState(() {});
-
-                    List<Map<String, dynamic>> attachmentsToAdd = [];
-
-                    for (var i in _fileAndDocumentsListToSave)
-                      attachmentsToAdd.add({
-                        "localizedName":
-                            (i["attachment"] as AttachmentType).name,
-                        "type": (i["attachment"] as AttachmentType).key,
-                        "content": "", //base64Encode(i["value"])
-                        "contentType": "application/pdf",
-                      });
-
-                    bool resp = false;
-
-                    if (widget.post != null) {
-                      resp =
-                          await ref.read(postListProvider.notifier).updatePost(
-                                key: widget.post?.key ?? "",
-                                postBody: postModelToCreate(
-                                    attachments: attachmentsToAdd),
-                              );
-                    } else {
-                      resp =
-                          await ref.read(postListProvider.notifier).createPost(
-                                postBody: postModelToCreate(
-                                    attachments: attachmentsToAdd),
-                              );
-                    }
-
-                    _loading = false;
-                    setState(() {});
-
-                    if (resp) {
-                      FlashCustomDialog.showPopUp(
-                        context: context,
-                        text: "Post salvato",
-                        isError: false,
-                      );
-                      SchedulerBinding.instance!.addPostFrameCallback((_) {
-                        context.goNamed(routeMap[routeNames.mainScaffold]);
-                      });
-                    } else {
-                      FlashCustomDialog.showPopUp(
-                        context: context,
-                        text:
-                            "Ops... qualcosa è andato storto, riprova più tardi",
-                        isError: true,
-                      );
-                      SchedulerBinding.instance!.addPostFrameCallback((_) {
-                        context.pop();
-                      });
-                    }
-                  },
-                  createPost: postModelToCreate(),
-                  category: category,
-                  partnerModel: _partnerModel,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: PrimaryTextFormField(
-                          controller: _titleTextController,
-                          focusNode: _focusNodeTitle,
-                          hintText: "Titolo",
-                          textCapitalization: TextCapitalization.sentences,
-                          action: TextInputAction.next,
-                        ),
+                    SchedulerBinding.instance!.addPostFrameCallback((_) {
+                      context.goNamed(routeMap[routeNames.mainScaffold]);
+                    });
+                  } else {
+                    FlashCustomDialog.showPopUp(
+                      context: context,
+                      text:
+                          "Ops... qualcosa è andato storto, riprova più tardi",
+                      isError: true,
+                    );
+                    SchedulerBinding.instance!.addPostFrameCallback((_) {
+                      context.pop();
+                    });
+                  }
+                },
+                createPost: postModelToCreate(),
+                category: category,
+                partnerModel: _partnerModel,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryTextFormField(
+                        controller: _titleTextController,
+                        focusNode: _focusNodeTitle,
+                        hintText: "Titolo",
+                        textCapitalization: TextCapitalization.sentences,
+                        action: TextInputAction.next,
                       ),
-                      SizedBox(width: 2.w),
+                    ),
+                    SizedBox(width: 2.w),
 
-                      // button to show/hide the description field
-                      Consumer(
-                        builder: (context, ref, child) {
-                          final descriptionButtonState = ref.watch(
-                              uiStateProvider.select((state) =>
-                                  state.descriptionButtonStateInPostCreation));
-                          final showDescription = ref.watch(
-                              uiStateProvider.select((value) =>
-                                  value.showDescriptionFieldInPostCreation));
-                          final isDescriptionEmpty =
-                              _descriptionTextController.text.isEmpty;
+                    // button to show/hide the description field
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final descriptionButtonState = ref.watch(
+                            uiStateProvider.select((state) =>
+                                state.descriptionButtonStateInPostCreation));
+                        final showDescription = ref.watch(
+                            uiStateProvider.select((value) =>
+                                value.showDescriptionFieldInPostCreation));
+                        final isDescriptionEmpty =
+                            _descriptionTextController.text.isEmpty;
 
-                          return InkWell(
-                            child: TextFormFieldButton(
-                              child: insertDescriptionButtonStateMap[
-                                  descriptionButtonState]!,
-                            ),
-                            onTap: () {
-                              ref
-                                  .read(uiStateProvider.notifier)
-                                  .updateDescriptionButtonState(
-                                    isDescriptionEmpty: isDescriptionEmpty,
-                                    showDescription: showDescription,
-                                  );
-                            },
-                          );
-                        },
-                      )
-                    ],
-                  ),
+                        return InkWell(
+                          child: TextFormFieldButton(
+                            child: insertDescriptionButtonStateMap[
+                                descriptionButtonState]!,
+                          ),
+                          onTap: () {
+                            ref
+                                .read(uiStateProvider.notifier)
+                                .updateDescriptionButtonState(
+                                  isDescriptionEmpty: isDescriptionEmpty,
+                                  showDescription: showDescription,
+                                );
+                          },
+                        );
+                      },
+                    )
+                  ],
                 ),
+              ),
 
-                // description field
+              // description field
 
-                Consumer(
-                  builder: (context, ref, child) {
-                    final shouldShowDescriptionField = ref.watch(
-                        uiStateProvider.select((value) =>
-                            value.showDescriptionFieldInPostCreation));
-                    if (shouldShowDescriptionField) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: 4.w,
-                          right: 4.w,
-                          top: 1.h,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: PrimaryTextFormField(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 12),
-                                maxLines: 5,
-                                controller: _descriptionTextController,
-                                focusNode: _focusNodeDescription,
-                                hintText: "Descrizione",
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                action: TextInputAction.next,
-                                onChange: (_) => setState(() {}),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-                SizedBox(height: 1.h),
-                // Location
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: PrimaryTextFormField(
-                          controller: _locationTextController,
-                          focusNode: _focusNodeLocation,
-                          hintText: "Indirizzo / Posizione",
-                          action: TextInputAction.next,
-                          onChange: (_) => setState(() {}),
-                        ),
+              Consumer(
+                builder: (context, ref, child) {
+                  final shouldShowDescriptionField = ref.watch(
+                      uiStateProvider.select(
+                          (value) => value.showDescriptionFieldInPostCreation));
+                  if (shouldShowDescriptionField) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: 4.w,
+                        right: 4.w,
+                        top: 1.h,
                       ),
-                      SizedBox(width: 2.w),
-                      InkWell(
-                        child: TextFormFieldButton(
-                            child: Icon(CustomMaterialIcons.gpsLocation)),
-                        onTap: () async {
-                          final Uri url = Uri.parse(
-                              'https://www.google.com/maps/search/?api=1&query=52.32,4.917');
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: PrimaryTextFormField(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 12),
+                              maxLines: 5,
+                              controller: _descriptionTextController,
+                              focusNode: _focusNodeDescription,
+                              hintText: "Descrizione",
+                              textCapitalization: TextCapitalization.sentences,
+                              action: TextInputAction.next,
+                              onChange: (_) => setState(() {}),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
+              SizedBox(height: 1.h),
+              // Location
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: PrimaryTextFormField(
+                        controller: _locationTextController,
+                        focusNode: _focusNodeLocation,
+                        hintText: "Indirizzo / Posizione",
+                        action: TextInputAction.next,
+                        onChange: (_) => setState(() {}),
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+                    InkWell(
+                      child: TextFormFieldButton(
+                          child: Icon(CustomMaterialIcons.gpsLocation)),
+                      onTap: () async {
+                        final Uri url = Uri.parse(
+                            'https://www.google.com/maps/search/?api=1&query=52.32,4.917');
 
-                          if (await canLaunchUrl(url)) {
-                            await launchUrl(url);
-                          } else {
-                            throw 'Could not launch $url';
-                          }
-                        },
-                      )
-                    ],
-                  ),
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                    )
+                  ],
                 ),
-                SizedBox(height: 2.h),
+              ),
+              SizedBox(height: 2.h),
 
-                // Location All day / Time
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: DateSelectionSection(),
-                ),
+              // Location All day / Time
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: DateSelectionSection(),
+              ),
 
-                // Finance Movements
-                if (_financeMovementListToSave.isNotEmpty)
-                  ListView.separated(
-                    itemCount: _financeMovementListToSave.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.only(top: 16),
-                    separatorBuilder: (_, __) => SizedBox(height: 28),
-                    itemBuilder: (_, i) {
-                      final _financeToSave = _financeMovementListToSave[i];
-                      final typeFinance = _financeToSave["typeNotStandard"];
-                      final typeMovement = _financeToSave[
-                          typeFinance != null ? "walletFROM" : "wallet"];
-
-                      return FinanceMovementItem(
-                        typeFinance: typeFinance,
-                        typeMovement: typeMovement,
-                        typeMovementSecond: _financeToSave["walletTO"],
-                        isInOrOut: _financeToSave["inOrOut"] ?? false,
-                        value: _financeToSave["value"] ?? "",
-                        valueSecond: _financeToSave["valueEntered"],
-                        onValueChange: (s) {
-                          _financeToSave["value"] = s;
-                          setState(() {});
-                        },
-                        onSecondValueChange: (s) {
-                          _financeToSave["valueEntered"] = s;
-                          setState(() {});
-                        },
-                        onTypeTap: (s) {
-                          _financeToSave[typeFinance != null
-                              ? "walletFROM"
-                              : "wallet"] = s;
-                          setState(() {});
-                        },
-                        onSecondTypeTap: (s) {
-                          _financeToSave["walletTO"] = s;
-                          setState(() {});
-                        },
-                        onInOrOutTap: (v) {
-                          _financeToSave["inOrOut"] = v;
-                          setState(() {});
-                        },
-                        onDelete: () async {
-                          // Update list values
-                          final cacheItems =
-                              _financeMovementListToSave.map((e) => e).toList();
-                          cacheItems.removeAt(i);
-
-                          _financeMovementListToSave.clear();
-                          setState(() {});
-
-                          await Future.delayed(Duration(milliseconds: 100));
-
-                          _financeMovementListToSave.addAll(cacheItems);
-                          setState(() {});
-                        },
-                      );
-                    },
-                  ),
-
-                // File & Documents
+              // Finance Movements
+              if (_financeMovementListToSave.isNotEmpty)
                 ListView.separated(
-                  itemCount: _fileAndDocumentsListToSave.length,
+                  itemCount: _financeMovementListToSave.length,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.only(top: 16),
                   separatorBuilder: (_, __) => SizedBox(height: 28),
                   itemBuilder: (_, i) {
-                    final _fileToSave = _fileAndDocumentsListToSave[i];
+                    final _financeToSave = _financeMovementListToSave[i];
+                    final typeFinance = _financeToSave["typeNotStandard"];
+                    final typeMovement = _financeToSave[
+                        typeFinance != null ? "walletFROM" : "wallet"];
 
-                    return _DocumentItem(
-                      attachmentType: _fileToSave["attachment"],
-                      onTypeTap: (s) {
-                        _fileToSave["attachment"] = s;
+                    return FinanceMovementItem(
+                      typeFinance: typeFinance,
+                      typeMovement: typeMovement,
+                      typeMovementSecond: _financeToSave["walletTO"],
+                      isInOrOut: _financeToSave["inOrOut"] ?? false,
+                      value: _financeToSave["value"] ?? "",
+                      valueSecond: _financeToSave["valueEntered"],
+                      onValueChange: (s) {
+                        _financeToSave["value"] = s;
                         setState(() {});
                       },
-                      value: _fileToSave["value"],
-                      onValueChange: (s) {
-                        _fileToSave["value"] = s;
+                      onSecondValueChange: (s) {
+                        _financeToSave["valueEntered"] = s;
+                        setState(() {});
+                      },
+                      onTypeTap: (s) {
+                        _financeToSave[
+                            typeFinance != null ? "walletFROM" : "wallet"] = s;
+                        setState(() {});
+                      },
+                      onSecondTypeTap: (s) {
+                        _financeToSave["walletTO"] = s;
+                        setState(() {});
+                      },
+                      onInOrOutTap: (v) {
+                        _financeToSave["inOrOut"] = v;
                         setState(() {});
                       },
                       onDelete: () async {
                         // Update list values
                         final cacheItems =
-                            _fileAndDocumentsListToSave.map((e) => e).toList();
+                            _financeMovementListToSave.map((e) => e).toList();
                         cacheItems.removeAt(i);
 
-                        _fileAndDocumentsListToSave.clear();
+                        _financeMovementListToSave.clear();
                         setState(() {});
 
                         await Future.delayed(Duration(milliseconds: 100));
 
-                        _fileAndDocumentsListToSave.addAll(cacheItems);
+                        _financeMovementListToSave.addAll(cacheItems);
                         setState(() {});
                       },
                     );
                   },
                 ),
 
-                SizedBox(height: 150),
+              // File & Documents
+              ListView.separated(
+                itemCount: _fileAndDocumentsListToSave.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.only(top: 16),
+                separatorBuilder: (_, __) => SizedBox(height: 28),
+                itemBuilder: (_, i) {
+                  final _fileToSave = _fileAndDocumentsListToSave[i];
 
-                // Appbar
-              ],
-            ),
+                  return _DocumentItem(
+                    attachmentType: _fileToSave["attachment"],
+                    onTypeTap: (s) {
+                      _fileToSave["attachment"] = s;
+                      setState(() {});
+                    },
+                    value: _fileToSave["value"],
+                    onValueChange: (s) {
+                      _fileToSave["value"] = s;
+                      setState(() {});
+                    },
+                    onDelete: () async {
+                      // Update list values
+                      final cacheItems =
+                          _fileAndDocumentsListToSave.map((e) => e).toList();
+                      cacheItems.removeAt(i);
+
+                      _fileAndDocumentsListToSave.clear();
+                      setState(() {});
+
+                      await Future.delayed(Duration(milliseconds: 100));
+
+                      _fileAndDocumentsListToSave.addAll(cacheItems);
+                      setState(() {});
+                    },
+                  );
+                },
+              ),
+
+              SizedBox(height: 150),
+
+              // Appbar
+            ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (_) => OverlayDialogForAttachments());
-          },
-          child: Transform.rotate(
-              angle: pi / 2,
-              alignment: Alignment.center,
-              child: Icon(Icons.attach_file)),
-        ));
+      ),
+      floatingActionButton: SpeedDial(
+        backgroundColor: CustomColors.primaryYellow,
+        overlayColor: Colors.black12,
+        spaceBetweenChildren: 3.h,
+        children: [
+          // Movimenti di finanza
+          if (Constants.typeFinanceMovement[category.name] == null ||
+              (Constants.typeFinanceMovement[category.name] != null &&
+                  _financeMovementListToSave.isEmpty))
+            SpeedDialChild(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              labelWidget: Text(
+                "",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Icon(
+                        Icons.pie_chart,
+                        color: CustomColors.primaryGrey,
+                      ),
+                      Text(
+                        'Entrata',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Icon(
+                        Icons.pie_chart,
+                        color: CustomColors.primaryGrey,
+                      ),
+                      Text(
+                        'FIN',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              onTap: addFinancesMovement,
+            ),
+
+          // File e Documenti
+          SpeedDialChild(
+            backgroundColor: Colors.white,
+            labelWidget: Text(
+              "File e Documenti ",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            child: Icon(
+              Icons.file_copy,
+              color: CustomColors.primaryGrey,
+            ),
+            onTap: uploadDocuments,
+          ),
+        ],
+        activeChild: Icon(Icons.cancel),
+        buttonSize: Size(60, 60),
+        child: Icon(
+          Icons.attach_file,
+          size: 24,
+        ),
+      ),
+    );
   }
 
   Future<void> addFinancesMovement() async {

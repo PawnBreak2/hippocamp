@@ -9,7 +9,7 @@ class CustomColors {
 
   static const Color primaryRed = Color.fromRGBO(149, 17, 1, 1);
 
-  static const Color primaryYellow = Color.fromRGBO(254, 173, 32, 1);
+  static const Color primaryYellow = Color(0xFFFFD479);
 
   static const Color primaryGrey = Color.fromRGBO(95, 94, 95, 1);
 
