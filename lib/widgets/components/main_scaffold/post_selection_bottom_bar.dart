@@ -142,14 +142,17 @@ class PostSelectionBottomBar extends StatelessWidget {
                 color: Colors.transparent,
                 child: Consumer(
                   builder: (context, ref, child) {
-                    final postsProviderNotifier =
-                        ref.read(postListProvider.notifier);
-                    final postsProviderState = ref.read(postListProvider);
-
+                    bool canChangeCategory = !ref
+                        .read(postListProvider.notifier)
+                        .isSelectingPostForNotChangeableCategory();
+                    print('canChangeCategory');
+                    print(canChangeCategory);
                     return InkWell(
                       onTap: () async {
-                        final category =
-                            await CustomBottomSheet.showDraggableBottomSheet(
+                        if (!canChangeCategory) {
+                          return;
+                        }
+                        await CustomBottomSheet.showDraggableBottomSheet(
                           context,
                           (controller) => ChangeCategoryDialog(
                             scrollController: controller,
@@ -174,17 +177,18 @@ class PostSelectionBottomBar extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                                Constants.iconAssetsPath +
-                                    "nav-bar-category.png",
-                                color: textColor,
-                                height: 20),
+                            Icon(Icons.category_outlined,
+                                color: canChangeCategory
+                                    ? textColor
+                                    : CustomColors.darkerGrey),
                             const SizedBox(height: 8),
-                            const Text(
+                            Text(
                               "Cambia categoria",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: textColor,
+                                color: canChangeCategory
+                                    ? textColor
+                                    : CustomColors.darkerGrey,
                                 fontSize: 12,
                               ),
                             ),

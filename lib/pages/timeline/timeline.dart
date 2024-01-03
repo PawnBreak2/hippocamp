@@ -373,7 +373,7 @@ class _TimelinePageState extends ConsumerState<TimelinePage>
                                       return TimeEventItem(
                                         post: post,
                                         isSelectedItem: postsProviderNotifier
-                                            .postIsSelected(post),
+                                            .isPostSelected(post),
                                         showSelectionCircle: isSelectingPosts,
                                         onTap: isSelectingPosts
                                             ? () {

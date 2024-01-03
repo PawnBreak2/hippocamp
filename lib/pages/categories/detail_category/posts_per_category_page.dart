@@ -221,7 +221,7 @@ class _PostsPerCategoryState extends ConsumerState<PostsPerCategory> {
                     for (var j in postsPerCategory[p.key]!)
                       TimeEventItem(
                         post: j,
-                        isSelectedItem: postsProviderNotifier.postIsSelected(j),
+                        isSelectedItem: postsProviderNotifier.isPostSelected(j),
                         showSelectionCircle:
                             appStateProviderState.isSelectingPosts,
                         onTap: appStateProviderState.isSelectingPosts

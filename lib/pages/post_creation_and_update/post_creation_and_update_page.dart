@@ -128,7 +128,9 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
     _titleTextController = TextEditingController()
       ..addListener(() {
         // sets the title of the post in the post creation provider state
-        _postCreationNotifier.setTitle(_titleTextController.text);
+        Future.delayed(Duration(milliseconds: 10), () {
+          _postCreationNotifier.setTitle(_titleTextController.text);
+        });
       });
     _locationTextController = TextEditingController()..addListener(() {});
     _descriptionTextController = TextEditingController()
@@ -273,6 +275,9 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('domainkey');
+    print(category.name);
+    print(category.domainKey);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -604,6 +609,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
       floatingActionButton: SpeedDial(
         backgroundColor: CustomColors.primaryYellow,
         overlayColor: Colors.black12,
+        spaceBetweenChildren: 4.h,
         children: [
           // Movimenti di finanza
           if (Constants.typeFinanceMovement[category.name] == null ||

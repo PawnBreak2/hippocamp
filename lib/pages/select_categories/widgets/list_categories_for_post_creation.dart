@@ -21,7 +21,6 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('rebuild');
     final selectedDomainKey = ref.watch(
         uiStateProvider.select((state) => state.currentlySelectedDomainKey));
     String selectedDomainName = ref
@@ -77,7 +76,6 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
                   : categoriesForSelectedDomain.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (_, i) {
-                print(categoriesForSelectedDomain[i].key);
                 return InkWell(
                   onLongPress: () {
                     if (!uiState.isLongPressingCategory) {

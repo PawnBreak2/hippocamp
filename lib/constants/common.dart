@@ -37,4 +37,10 @@ class Constants {
   static const String databaseName = "hippocapp.db";
   static const int databaseVersion = 1;
   static const String iconAssetsPath = 'assets/icons/';
+
+  /// The key of the domain used for financial operations.
+  ///
+  /// Useful because posts in this domain cannot change their category after creation.
+  static const domainKeyForFinancialOperations =
+      '2d3761b6-990c-41bc-a16b-08dcd19e41e4';
 }

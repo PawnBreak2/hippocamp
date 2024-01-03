@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocapp/clients/posts_client.dart';
+import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/helpers/providers/post_provider_helpers.dart';
 import 'package:hippocapp/models/body/created_post.dart';
 import 'package:hippocapp/models/error_call_model.dart';
@@ -21,8 +22,19 @@ class PostListNotifier extends Notifier<PostsRepository> {
 
   // Used in timeline when user is selecting multiple posts
 
-  bool postIsSelected(Post post) =>
+  bool isPostSelected(Post post) =>
       state.selectedPosts.map((e) => e.key).contains(post.key);
+
+  /// This is used to determine if the user is selecting posts for a category that cannot be changed (e.g. financial operations).
+
+  bool isSelectingPostForNotChangeableCategory() {
+    if (state.selectedPosts.any((element) =>
+        element.key == Constants.domainKeyForFinancialOperations)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   Post? getFirstPostOfYear(int year) {
     // Check if the year exists in the map
@@ -52,7 +64,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
     if (post == null) {
       state = state.copyWith(selectedPosts: []);
     } else {
-      if (postIsSelected(post)) {
+      if (isPostSelected(post)) {
         state = state.copyWith(
           selectedPosts: [
             ...state.selectedPosts.where((e) => e.key != post.key),
