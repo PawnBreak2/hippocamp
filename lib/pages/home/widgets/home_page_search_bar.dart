@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 
 class HomePageSearchBar extends ConsumerStatefulWidget {

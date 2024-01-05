@@ -6,8 +6,8 @@ import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/models/repositories/ui_state_repository.dart';
 import 'package:hippocapp/pages/change_password/change_password.dart';
-import 'package:hippocapp/providers/auth_provider.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/providers/auth/auth_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 
 class HomePageAppBarActionButtons extends ConsumerWidget {
   HomePageAppBarActionButtons({

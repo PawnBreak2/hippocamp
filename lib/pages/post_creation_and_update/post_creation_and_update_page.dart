@@ -17,16 +17,18 @@ import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocapp/helpers/extensions/int_extensions.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
-import 'package:hippocapp/helpers/service/permission_handler.dart';
-import 'package:hippocapp/models/body/attachments_for_created_post.dart';
-import 'package:hippocapp/models/posts-creation/created_post.dart';
-import 'package:hippocapp/models/body/multi_party_transaction_for_created_post.dart';
-import 'package:hippocapp/models/body/single_party_transaction_for_created_post.dart';
+import 'package:hippocapp/models/posts-creation/attachment/attachment_for_post_to_be_sent_to_api.dart';
+import 'package:hippocapp/models/posts-creation/post/post_to_be_sent_to_api.dart';
+
+import 'package:hippocapp/models/posts-creation/transactions/multi_party_transaction_for_post_to_be_sent_to_api.dart';
+import 'package:hippocapp/models/posts-creation/transactions/single_party_transaction_for_post_to_be_sent_to_api.dart';
 import 'package:hippocapp/models/posts-creation/attachment_types.dart';
 import 'package:hippocapp/models/posts-creation/finance_movement_model.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart' show Post;
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
+
 import 'package:hippocapp/models/wallets/wallet_model.dart';
+import 'package:hippocapp/pages/post_creation_and_update/functions/listeners.dart';
 import 'package:hippocapp/pages/post_creation_and_update/utilities/description_icon_enum.dart';
 import 'package:hippocapp/pages/post_creation_and_update/views/overlay_dialog_for_attachments.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/date_selection_section.dart';
@@ -34,11 +36,12 @@ import 'package:hippocapp/pages/post_creation_and_update/widgets/partner_dialog.
 import 'package:hippocapp/pages/post_creation_and_update/widgets/text_form_field_button.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_section.dart';
 import 'package:hippocapp/pages/select_categories/select_category_dialog.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/post_creation_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
-import 'package:hippocapp/providers/wallets_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/support/wallets_provider.dart';
+import 'package:hippocapp/services/permissions/permission_handler.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/styles/icons.dart';
 import 'package:hippocapp/widgets/buttons/delete_x_icon.dart';
@@ -68,6 +71,7 @@ class PostCreationAndUpdatePage extends ConsumerStatefulWidget {
   final Post? post;
   final bool isCreatingNewPost;
   final bool isUpdatingExistingPost;
+
   const PostCreationAndUpdatePage._({
     this.category,
     this.post,
@@ -95,13 +99,14 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
   late TextEditingController _titleTextController;
   late TextEditingController _locationTextController;
   late TextEditingController _descriptionTextController;
-  late PostCreationNotifier _postCreationNotifier;
+  late PostCreationAndUpdateNotifier _postCreationAndUpdateNotifier;
+  late UIStateNotifier uiNotifier;
   PartnerModel? _partnerModel;
   DateTime _dateTime = DateTime.now();
   bool _allDay = true;
   TimeOfDay _timeOfDayFrom = TimeOfDay.now();
   TimeOfDay _timeOfDayTo = TimeOfDay.now();
-  late UIStateNotifier uiNotifier;
+
   final List<Map> _financeMovementListToSave = [];
 
   final List<Map> _fileAndDocumentsListToSave = [];
@@ -126,32 +131,22 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
   @override
   void initState() {
     uiNotifier = ref.read(uiStateProvider.notifier);
+    _postCreationAndUpdateNotifier = ref.read(postCreationProvider.notifier);
+
+    // Setup controllers for text fields and add listeners
+    ///TODO: dispose of listeners
 
     _titleTextController = TextEditingController()
       ..addListener(() {
-        // sets the title of the post in the post creation provider state
-        Future.delayed(Duration(milliseconds: 10), () {
-          _postCreationNotifier.setTitle(_titleTextController.text);
-        });
+        titleTextControllerListener(controller: _titleTextController, ref: ref);
       });
     _locationTextController = TextEditingController()..addListener(() {});
     _descriptionTextController = TextEditingController()
       ..addListener(() {
-        // sets the description of the post in the post creation provider state
-        _postCreationNotifier.setDescription(_descriptionTextController.text);
-        if (_descriptionTextController.text.isNotEmpty) {
-          uiNotifier.updateDescriptionButtonState(
-              isDescriptionEmpty: false,
-              showDescription: true,
-              isFromListener: true);
-        } else {
-          uiNotifier.updateDescriptionButtonState(
-              isDescriptionEmpty: true,
-              showDescription: true,
-              isFromListener: true);
-        }
+        descriptionTextControllerListener(
+            controller: _descriptionTextController, ref: ref);
       });
-    _postCreationNotifier = ref.read(postCreationProvider.notifier);
+
     super.initState();
     initPost();
   }
@@ -160,24 +155,28 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
     final walletsProviderNotifier = ref.read(walletsProvider.notifier);
     final walletsProviderState = ref.read(walletsProvider);
 
-    category = widget.category ??
-        PostCategory.fromCategoryModel(widget.post!.category);
-    _titleTextController.text = category.name;
+    if (widget.isUpdatingExistingPost) {
+      _postCreationAndUpdateNotifier.reset();
+
+      category = widget.category!;
+      _titleTextController.text = widget.post!.title;
+      _locationTextController.text = widget.post!.address;
+
+      _dateTime = widget.post!.dateTimeFromString;
+
+      _allDay = widget.post!.allDay;
+      _timeOfDayFrom = widget.post!.from.timeOfDayFromString;
+      _timeOfDayTo = widget.post!.to.timeOfDayFromString;
+    } else {
+      category = PostCategory.fromCategoryModel(widget.post!.category);
+      _titleTextController.text = category.name;
+    }
 
     if (widget.post == null) return;
 
     if (widget.post!.businessPartners.isNotEmpty)
       _partnerModel =
           PartnerModel.fromPostPartner(widget.post!.businessPartners.first);
-
-    _titleTextController.text = widget.post!.title;
-    _locationTextController.text = widget.post!.address;
-
-    _dateTime = widget.post!.dateTimeFromString;
-
-    _allDay = widget.post!.wholeDay;
-    _timeOfDayFrom = widget.post!.from.timeOfDayFromString;
-    _timeOfDayTo = widget.post!.to.timeOfDayFromString;
 
     for (var i in widget.post!.singlePartyTransactions) {
       final firstWallet =
@@ -211,10 +210,10 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
     }
   }
 
-  NewCreatedPost postModelToCreate(
+  PostToBeSentToAPI postModelToCreate(
       {List<Map<String, dynamic>> attachments = const []}) {
-    List<SinglePartyTransactionForCreatedPost>? _singleTrxs;
-    MultiPartyTransactionForCreatedPost? _multiTrxs;
+    List<SinglePartyTransactionForPostToBeSentToAPI>? _singleTrxs;
+    MultiPartyTransactionForPostToBeSentToAPI? _multiTrxs;
 
     if (_financeMovementListToSave.isNotEmpty) {
       for (var i in _financeMovementListToSave) {
@@ -229,20 +228,20 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
           _singleTrxs ??= [];
 
           _singleTrxs.add(
-            SinglePartyTransactionForCreatedPost(
+            SinglePartyTransactionForPostToBeSentToAPI(
               amount: double.tryParse(amountValue) ?? 0,
               date: _dateTime.toUtc().toIso8601String(),
               type: i["inOrOut"] ? "INFLOW" : "OUTFLOW",
-              walletKey: i["wallet"].key,
+              wallet: i["wallet"].key,
             ),
           );
         } else {
-          _multiTrxs ??= MultiPartyTransactionForCreatedPost(
+          _multiTrxs ??= MultiPartyTransactionForPostToBeSentToAPI(
             date: _dateTime.toUtc().toIso8601String(),
             type: category.type,
             categoryKey: category.key,
-            fromWalletKey: i["walletFROM"].key,
-            toWalletKey: i["walletTO"].key,
+            fromWallet: i["walletFROM"].key,
+            toWallet: i["walletTO"].key,
             amountIn: double.tryParse(amountValue) ?? 0,
             amountOut: double.tryParse(secondAmountValue) ?? 0,
           );
@@ -250,25 +249,25 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
       }
     }
 
-    return NewCreatedPost(
+    return PostToBeSentToAPI(
       title: _titleTextController.text,
       description: "",
       categoryKey: category.key,
       businessPartners: _partnerModel == null ? [] : [_partnerModel!.key],
-      latitude: "",
-      longitude: "",
+      latitude: 0,
+      longitude: 0,
       address: _locationTextController.text,
       important: false,
       uncertain: false,
       sensitiveInfo: false,
       visualization: "",
-      rating: "",
       from: _allDay ? "" : _timeOfDayFrom.timeToString,
       to: _allDay ? "" : _timeOfDayTo.timeToString,
       date: _dateTime.dateToString,
-      wholeDay: _allDay,
-      attachments:
-          attachments.map((e) => AttachmentForCreatedPost.fromJson(e)).toList(),
+      allDay: _allDay,
+      attachments: attachments
+          .map((e) => AttachmentForPostToBeSentToAPI.fromJson(e))
+          .toList(),
       singlePartyTransactions: _singleTrxs,
       multiPartyTransaction: _multiTrxs,
       businessPartnerBranch: "",

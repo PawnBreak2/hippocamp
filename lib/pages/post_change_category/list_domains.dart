@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 
-import '../../../providers/ui_state_provider.dart';
+import '../../providers/ui/ui_state_provider.dart';
 
 class ListDomainsForPostUpdate extends StatelessWidget {
   final List<Domain> domains;

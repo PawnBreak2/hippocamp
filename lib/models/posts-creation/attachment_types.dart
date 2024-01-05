@@ -17,7 +17,7 @@ class AttachmentType {
     required this.position,
   });
 
-  static AttachmentType fromMap(Map json) {
+  static AttachmentType fromJson(Map json) {
     return AttachmentType(
       id: json["id"] ?? 0,
       key: json["key"] ?? "",

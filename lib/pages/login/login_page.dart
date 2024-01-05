@@ -10,14 +10,14 @@ import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/helpers/ui/pop_ups.dart';
 import 'package:hippocapp/helpers/validators/validators_form_field.dart';
-import 'package:hippocapp/providers/auth_provider.dart';
+import 'package:hippocapp/providers/auth/auth_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/buttons/primary_button.dart';
 import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter/services.dart';
 
-import '../../providers/isLoading_provider.dart';
+import '../../providers/ui/isLoading_provider.dart';
 import '../../widgets/dialogs/flash_dialog.dart';
 
 class LoginPage extends ConsumerStatefulWidget {

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/models/responses/domains_response_model.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
 import 'package:hippocapp/widgets/dialogs/cupertino_bottom_sheet.dart';
 
 class CategoriesInactive extends ConsumerStatefulWidget {

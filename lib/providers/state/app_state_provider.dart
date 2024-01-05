@@ -7,7 +7,7 @@ import 'package:hippocapp/models/repositories/app_state_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/models/responses/domains_response_model.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 
 class AppStateNotifier extends Notifier<AppState> {
   @override

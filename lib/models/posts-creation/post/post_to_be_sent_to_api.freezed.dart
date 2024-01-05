@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'created_post.dart';
+part of 'post_to_be_sent_to_api.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,55 +14,48 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-NewCreatedPost _$NewCreatedPostFromJson(Map<String, dynamic> json) {
-  return _NewCreatedPost.fromJson(json);
+PostToBeSentToAPI _$PostToBeSentToAPIFromJson(Map<String, dynamic> json) {
+  return _PostToBeSentToAPI.fromJson(json);
 }
 
 /// @nodoc
-mixin _$NewCreatedPost {
+mixin _$PostToBeSentToAPI {
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get categoryKey => throw _privateConstructorUsedError;
   List<String> get businessPartners => throw _privateConstructorUsedError;
   String get businessPartnerBranch => throw _privateConstructorUsedError;
-  String get latitude => throw _privateConstructorUsedError;
-  String get longitude => throw _privateConstructorUsedError;
+  double get latitude => throw _privateConstructorUsedError;
+  double get longitude => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  bool get setDefault => throw _privateConstructorUsedError;
   bool get important => throw _privateConstructorUsedError;
   bool get uncertain => throw _privateConstructorUsedError;
   bool get sensitiveInfo => throw _privateConstructorUsedError;
-  String get visualization =>
-      throw _privateConstructorUsedError; // ONE, TWO, THREE, FOUR, FIVE
-  String get rating => throw _privateConstructorUsedError;
+  String get visualization => throw _privateConstructorUsedError;
   String get from => throw _privateConstructorUsedError;
   String get to => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
-
-  ///TODO: cancellare?
-// @Default('') String within,
-// @Default(false) bool morning,
-// @Default(false) bool afternoon,
-// @Default(false) bool evening,
-  bool get wholeDay =>
-      throw _privateConstructorUsedError; // TOGLIERE FINO A QUI
-  List<SinglePartyTransactionForCreatedPost>? get singlePartyTransactions =>
+  bool get allDay => throw _privateConstructorUsedError;
+  List<SinglePartyTransactionForPostToBeSentToAPI>?
+      get singlePartyTransactions => throw _privateConstructorUsedError;
+  MultiPartyTransactionForPostToBeSentToAPI? get multiPartyTransaction =>
       throw _privateConstructorUsedError;
-  MultiPartyTransactionForCreatedPost? get multiPartyTransaction =>
-      throw _privateConstructorUsedError;
-  List<AttachmentForCreatedPost> get attachments =>
+  List<AttachmentForPostToBeSentToAPI> get attachments =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $NewCreatedPostCopyWith<NewCreatedPost> get copyWith =>
+  $PostToBeSentToAPICopyWith<PostToBeSentToAPI> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $NewCreatedPostCopyWith<$Res> {
-  factory $NewCreatedPostCopyWith(
-          NewCreatedPost value, $Res Function(NewCreatedPost) then) =
-      _$NewCreatedPostCopyWithImpl<$Res, NewCreatedPost>;
+abstract class $PostToBeSentToAPICopyWith<$Res> {
+  factory $PostToBeSentToAPICopyWith(
+          PostToBeSentToAPI value, $Res Function(PostToBeSentToAPI) then) =
+      _$PostToBeSentToAPICopyWithImpl<$Res, PostToBeSentToAPI>;
   @useResult
   $Res call(
       {String title,
@@ -70,29 +63,31 @@ abstract class $NewCreatedPostCopyWith<$Res> {
       String categoryKey,
       List<String> businessPartners,
       String businessPartnerBranch,
-      String latitude,
-      String longitude,
+      double latitude,
+      double longitude,
       String address,
+      String type,
+      bool setDefault,
       bool important,
       bool uncertain,
       bool sensitiveInfo,
       String visualization,
-      String rating,
       String from,
       String to,
       String date,
-      bool wholeDay,
-      List<SinglePartyTransactionForCreatedPost>? singlePartyTransactions,
-      MultiPartyTransactionForCreatedPost? multiPartyTransaction,
-      List<AttachmentForCreatedPost> attachments});
+      bool allDay,
+      List<SinglePartyTransactionForPostToBeSentToAPI>? singlePartyTransactions,
+      MultiPartyTransactionForPostToBeSentToAPI? multiPartyTransaction,
+      List<AttachmentForPostToBeSentToAPI> attachments});
 
-  $MultiPartyTransactionForCreatedPostCopyWith<$Res>? get multiPartyTransaction;
+  $MultiPartyTransactionForPostToBeSentToAPICopyWith<$Res>?
+      get multiPartyTransaction;
 }
 
 /// @nodoc
-class _$NewCreatedPostCopyWithImpl<$Res, $Val extends NewCreatedPost>
-    implements $NewCreatedPostCopyWith<$Res> {
-  _$NewCreatedPostCopyWithImpl(this._value, this._then);
+class _$PostToBeSentToAPICopyWithImpl<$Res, $Val extends PostToBeSentToAPI>
+    implements $PostToBeSentToAPICopyWith<$Res> {
+  _$PostToBeSentToAPICopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -110,15 +105,16 @@ class _$NewCreatedPostCopyWithImpl<$Res, $Val extends NewCreatedPost>
     Object? latitude = null,
     Object? longitude = null,
     Object? address = null,
+    Object? type = null,
+    Object? setDefault = null,
     Object? important = null,
     Object? uncertain = null,
     Object? sensitiveInfo = null,
     Object? visualization = null,
-    Object? rating = null,
     Object? from = null,
     Object? to = null,
     Object? date = null,
-    Object? wholeDay = null,
+    Object? allDay = null,
     Object? singlePartyTransactions = freezed,
     Object? multiPartyTransaction = freezed,
     Object? attachments = null,
@@ -147,15 +143,23 @@ class _$NewCreatedPostCopyWithImpl<$Res, $Val extends NewCreatedPost>
       latitude: null == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       longitude: null == longitude
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      setDefault: null == setDefault
+          ? _value.setDefault
+          : setDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
       important: null == important
           ? _value.important
           : important // ignore: cast_nullable_to_non_nullable
@@ -172,10 +176,6 @@ class _$NewCreatedPostCopyWithImpl<$Res, $Val extends NewCreatedPost>
           ? _value.visualization
           : visualization // ignore: cast_nullable_to_non_nullable
               as String,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as String,
       from: null == from
           ? _value.from
           : from // ignore: cast_nullable_to_non_nullable
@@ -188,34 +188,34 @@ class _$NewCreatedPostCopyWithImpl<$Res, $Val extends NewCreatedPost>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      wholeDay: null == wholeDay
-          ? _value.wholeDay
-          : wholeDay // ignore: cast_nullable_to_non_nullable
+      allDay: null == allDay
+          ? _value.allDay
+          : allDay // ignore: cast_nullable_to_non_nullable
               as bool,
       singlePartyTransactions: freezed == singlePartyTransactions
           ? _value.singlePartyTransactions
           : singlePartyTransactions // ignore: cast_nullable_to_non_nullable
-              as List<SinglePartyTransactionForCreatedPost>?,
+              as List<SinglePartyTransactionForPostToBeSentToAPI>?,
       multiPartyTransaction: freezed == multiPartyTransaction
           ? _value.multiPartyTransaction
           : multiPartyTransaction // ignore: cast_nullable_to_non_nullable
-              as MultiPartyTransactionForCreatedPost?,
+              as MultiPartyTransactionForPostToBeSentToAPI?,
       attachments: null == attachments
           ? _value.attachments
           : attachments // ignore: cast_nullable_to_non_nullable
-              as List<AttachmentForCreatedPost>,
+              as List<AttachmentForPostToBeSentToAPI>,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $MultiPartyTransactionForCreatedPostCopyWith<$Res>?
+  $MultiPartyTransactionForPostToBeSentToAPICopyWith<$Res>?
       get multiPartyTransaction {
     if (_value.multiPartyTransaction == null) {
       return null;
     }
 
-    return $MultiPartyTransactionForCreatedPostCopyWith<$Res>(
+    return $MultiPartyTransactionForPostToBeSentToAPICopyWith<$Res>(
         _value.multiPartyTransaction!, (value) {
       return _then(_value.copyWith(multiPartyTransaction: value) as $Val);
     });
@@ -223,11 +223,11 @@ class _$NewCreatedPostCopyWithImpl<$Res, $Val extends NewCreatedPost>
 }
 
 /// @nodoc
-abstract class _$$NewCreatedPostImplCopyWith<$Res>
-    implements $NewCreatedPostCopyWith<$Res> {
-  factory _$$NewCreatedPostImplCopyWith(_$NewCreatedPostImpl value,
-          $Res Function(_$NewCreatedPostImpl) then) =
-      __$$NewCreatedPostImplCopyWithImpl<$Res>;
+abstract class _$$PostToBeSentToAPIImplCopyWith<$Res>
+    implements $PostToBeSentToAPICopyWith<$Res> {
+  factory _$$PostToBeSentToAPIImplCopyWith(_$PostToBeSentToAPIImpl value,
+          $Res Function(_$PostToBeSentToAPIImpl) then) =
+      __$$PostToBeSentToAPIImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -236,32 +236,34 @@ abstract class _$$NewCreatedPostImplCopyWith<$Res>
       String categoryKey,
       List<String> businessPartners,
       String businessPartnerBranch,
-      String latitude,
-      String longitude,
+      double latitude,
+      double longitude,
       String address,
+      String type,
+      bool setDefault,
       bool important,
       bool uncertain,
       bool sensitiveInfo,
       String visualization,
-      String rating,
       String from,
       String to,
       String date,
-      bool wholeDay,
-      List<SinglePartyTransactionForCreatedPost>? singlePartyTransactions,
-      MultiPartyTransactionForCreatedPost? multiPartyTransaction,
-      List<AttachmentForCreatedPost> attachments});
+      bool allDay,
+      List<SinglePartyTransactionForPostToBeSentToAPI>? singlePartyTransactions,
+      MultiPartyTransactionForPostToBeSentToAPI? multiPartyTransaction,
+      List<AttachmentForPostToBeSentToAPI> attachments});
 
   @override
-  $MultiPartyTransactionForCreatedPostCopyWith<$Res>? get multiPartyTransaction;
+  $MultiPartyTransactionForPostToBeSentToAPICopyWith<$Res>?
+      get multiPartyTransaction;
 }
 
 /// @nodoc
-class __$$NewCreatedPostImplCopyWithImpl<$Res>
-    extends _$NewCreatedPostCopyWithImpl<$Res, _$NewCreatedPostImpl>
-    implements _$$NewCreatedPostImplCopyWith<$Res> {
-  __$$NewCreatedPostImplCopyWithImpl(
-      _$NewCreatedPostImpl _value, $Res Function(_$NewCreatedPostImpl) _then)
+class __$$PostToBeSentToAPIImplCopyWithImpl<$Res>
+    extends _$PostToBeSentToAPICopyWithImpl<$Res, _$PostToBeSentToAPIImpl>
+    implements _$$PostToBeSentToAPIImplCopyWith<$Res> {
+  __$$PostToBeSentToAPIImplCopyWithImpl(_$PostToBeSentToAPIImpl _value,
+      $Res Function(_$PostToBeSentToAPIImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -275,20 +277,21 @@ class __$$NewCreatedPostImplCopyWithImpl<$Res>
     Object? latitude = null,
     Object? longitude = null,
     Object? address = null,
+    Object? type = null,
+    Object? setDefault = null,
     Object? important = null,
     Object? uncertain = null,
     Object? sensitiveInfo = null,
     Object? visualization = null,
-    Object? rating = null,
     Object? from = null,
     Object? to = null,
     Object? date = null,
-    Object? wholeDay = null,
+    Object? allDay = null,
     Object? singlePartyTransactions = freezed,
     Object? multiPartyTransaction = freezed,
     Object? attachments = null,
   }) {
-    return _then(_$NewCreatedPostImpl(
+    return _then(_$PostToBeSentToAPIImpl(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -312,15 +315,23 @@ class __$$NewCreatedPostImplCopyWithImpl<$Res>
       latitude: null == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       longitude: null == longitude
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      setDefault: null == setDefault
+          ? _value.setDefault
+          : setDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
       important: null == important
           ? _value.important
           : important // ignore: cast_nullable_to_non_nullable
@@ -337,10 +348,6 @@ class __$$NewCreatedPostImplCopyWithImpl<$Res>
           ? _value.visualization
           : visualization // ignore: cast_nullable_to_non_nullable
               as String,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as String,
       from: null == from
           ? _value.from
           : from // ignore: cast_nullable_to_non_nullable
@@ -353,58 +360,60 @@ class __$$NewCreatedPostImplCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      wholeDay: null == wholeDay
-          ? _value.wholeDay
-          : wholeDay // ignore: cast_nullable_to_non_nullable
+      allDay: null == allDay
+          ? _value.allDay
+          : allDay // ignore: cast_nullable_to_non_nullable
               as bool,
       singlePartyTransactions: freezed == singlePartyTransactions
           ? _value._singlePartyTransactions
           : singlePartyTransactions // ignore: cast_nullable_to_non_nullable
-              as List<SinglePartyTransactionForCreatedPost>?,
+              as List<SinglePartyTransactionForPostToBeSentToAPI>?,
       multiPartyTransaction: freezed == multiPartyTransaction
           ? _value.multiPartyTransaction
           : multiPartyTransaction // ignore: cast_nullable_to_non_nullable
-              as MultiPartyTransactionForCreatedPost?,
+              as MultiPartyTransactionForPostToBeSentToAPI?,
       attachments: null == attachments
           ? _value._attachments
           : attachments // ignore: cast_nullable_to_non_nullable
-              as List<AttachmentForCreatedPost>,
+              as List<AttachmentForPostToBeSentToAPI>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$NewCreatedPostImpl
+class _$PostToBeSentToAPIImpl
     with DiagnosticableTreeMixin
-    implements _NewCreatedPost {
-  const _$NewCreatedPostImpl(
+    implements _PostToBeSentToAPI {
+  const _$PostToBeSentToAPIImpl(
       {this.title = '',
       this.description = '',
       this.categoryKey = '',
       final List<String> businessPartners = const [],
       this.businessPartnerBranch = '',
-      this.latitude = '',
-      this.longitude = '',
+      this.latitude = 0,
+      this.longitude = 0,
       this.address = '',
+      this.type = '',
+      this.setDefault = false,
       this.important = false,
       this.uncertain = false,
       this.sensitiveInfo = false,
       this.visualization = 'SPOT',
-      this.rating = '',
       this.from = '',
       this.to = '',
       this.date = '',
-      this.wholeDay = false,
-      final List<SinglePartyTransactionForCreatedPost>? singlePartyTransactions,
+      this.allDay = false,
+      final List<SinglePartyTransactionForPostToBeSentToAPI>?
+          singlePartyTransactions = const [],
       this.multiPartyTransaction,
-      final List<AttachmentForCreatedPost> attachments = const []})
+      final List<AttachmentForPostToBeSentToAPI> attachments = const []})
       : _businessPartners = businessPartners,
         _singlePartyTransactions = singlePartyTransactions,
         _attachments = attachments;
 
-  factory _$NewCreatedPostImpl.fromJson(Map<String, dynamic> json) =>
-      _$$NewCreatedPostImplFromJson(json);
+  factory _$PostToBeSentToAPIImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PostToBeSentToAPIImplFromJson(json);
 
   @override
   @JsonKey()
@@ -430,13 +439,19 @@ class _$NewCreatedPostImpl
   final String businessPartnerBranch;
   @override
   @JsonKey()
-  final String latitude;
+  final double latitude;
   @override
   @JsonKey()
-  final String longitude;
+  final double longitude;
   @override
   @JsonKey()
   final String address;
+  @override
+  @JsonKey()
+  final String type;
+  @override
+  @JsonKey()
+  final bool setDefault;
   @override
   @JsonKey()
   final bool important;
@@ -449,10 +464,6 @@ class _$NewCreatedPostImpl
   @override
   @JsonKey()
   final String visualization;
-// ONE, TWO, THREE, FOUR, FIVE
-  @override
-  @JsonKey()
-  final String rating;
   @override
   @JsonKey()
   final String from;
@@ -462,20 +473,15 @@ class _$NewCreatedPostImpl
   @override
   @JsonKey()
   final String date;
-
-  ///TODO: cancellare?
-// @Default('') String within,
-// @Default(false) bool morning,
-// @Default(false) bool afternoon,
-// @Default(false) bool evening,
   @override
   @JsonKey()
-  final bool wholeDay;
-// TOGLIERE FINO A QUI
-  final List<SinglePartyTransactionForCreatedPost>? _singlePartyTransactions;
-// TOGLIERE FINO A QUI
+  final bool allDay;
+  final List<SinglePartyTransactionForPostToBeSentToAPI>?
+      _singlePartyTransactions;
   @override
-  List<SinglePartyTransactionForCreatedPost>? get singlePartyTransactions {
+  @JsonKey()
+  List<SinglePartyTransactionForPostToBeSentToAPI>?
+      get singlePartyTransactions {
     final value = _singlePartyTransactions;
     if (value == null) return null;
     if (_singlePartyTransactions is EqualUnmodifiableListView)
@@ -485,11 +491,11 @@ class _$NewCreatedPostImpl
   }
 
   @override
-  final MultiPartyTransactionForCreatedPost? multiPartyTransaction;
-  final List<AttachmentForCreatedPost> _attachments;
+  final MultiPartyTransactionForPostToBeSentToAPI? multiPartyTransaction;
+  final List<AttachmentForPostToBeSentToAPI> _attachments;
   @override
   @JsonKey()
-  List<AttachmentForCreatedPost> get attachments {
+  List<AttachmentForPostToBeSentToAPI> get attachments {
     if (_attachments is EqualUnmodifiableListView) return _attachments;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_attachments);
@@ -497,14 +503,14 @@ class _$NewCreatedPostImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'NewCreatedPost(title: $title, description: $description, categoryKey: $categoryKey, businessPartners: $businessPartners, businessPartnerBranch: $businessPartnerBranch, latitude: $latitude, longitude: $longitude, address: $address, important: $important, uncertain: $uncertain, sensitiveInfo: $sensitiveInfo, visualization: $visualization, rating: $rating, from: $from, to: $to, date: $date, wholeDay: $wholeDay, singlePartyTransactions: $singlePartyTransactions, multiPartyTransaction: $multiPartyTransaction, attachments: $attachments)';
+    return 'PostToBeSentToAPI(title: $title, description: $description, categoryKey: $categoryKey, businessPartners: $businessPartners, businessPartnerBranch: $businessPartnerBranch, latitude: $latitude, longitude: $longitude, address: $address, type: $type, setDefault: $setDefault, important: $important, uncertain: $uncertain, sensitiveInfo: $sensitiveInfo, visualization: $visualization, from: $from, to: $to, date: $date, allDay: $allDay, singlePartyTransactions: $singlePartyTransactions, multiPartyTransaction: $multiPartyTransaction, attachments: $attachments)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'NewCreatedPost'))
+      ..add(DiagnosticsProperty('type', 'PostToBeSentToAPI'))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('categoryKey', categoryKey))
@@ -513,15 +519,16 @@ class _$NewCreatedPostImpl
       ..add(DiagnosticsProperty('latitude', latitude))
       ..add(DiagnosticsProperty('longitude', longitude))
       ..add(DiagnosticsProperty('address', address))
+      ..add(DiagnosticsProperty('type', type))
+      ..add(DiagnosticsProperty('setDefault', setDefault))
       ..add(DiagnosticsProperty('important', important))
       ..add(DiagnosticsProperty('uncertain', uncertain))
       ..add(DiagnosticsProperty('sensitiveInfo', sensitiveInfo))
       ..add(DiagnosticsProperty('visualization', visualization))
-      ..add(DiagnosticsProperty('rating', rating))
       ..add(DiagnosticsProperty('from', from))
       ..add(DiagnosticsProperty('to', to))
       ..add(DiagnosticsProperty('date', date))
-      ..add(DiagnosticsProperty('wholeDay', wholeDay))
+      ..add(DiagnosticsProperty('allDay', allDay))
       ..add(DiagnosticsProperty(
           'singlePartyTransactions', singlePartyTransactions))
       ..add(DiagnosticsProperty('multiPartyTransaction', multiPartyTransaction))
@@ -532,7 +539,7 @@ class _$NewCreatedPostImpl
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$NewCreatedPostImpl &&
+            other is _$PostToBeSentToAPIImpl &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -547,6 +554,9 @@ class _$NewCreatedPostImpl
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
             (identical(other.address, address) || other.address == address) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.setDefault, setDefault) ||
+                other.setDefault == setDefault) &&
             (identical(other.important, important) ||
                 other.important == important) &&
             (identical(other.uncertain, uncertain) ||
@@ -555,12 +565,10 @@ class _$NewCreatedPostImpl
                 other.sensitiveInfo == sensitiveInfo) &&
             (identical(other.visualization, visualization) ||
                 other.visualization == visualization) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.from, from) || other.from == from) &&
             (identical(other.to, to) || other.to == to) &&
             (identical(other.date, date) || other.date == date) &&
-            (identical(other.wholeDay, wholeDay) ||
-                other.wholeDay == wholeDay) &&
+            (identical(other.allDay, allDay) || other.allDay == allDay) &&
             const DeepCollectionEquality().equals(
                 other._singlePartyTransactions, _singlePartyTransactions) &&
             (identical(other.multiPartyTransaction, multiPartyTransaction) ||
@@ -581,15 +589,16 @@ class _$NewCreatedPostImpl
         latitude,
         longitude,
         address,
+        type,
+        setDefault,
         important,
         uncertain,
         sensitiveInfo,
         visualization,
-        rating,
         from,
         to,
         date,
-        wholeDay,
+        allDay,
         const DeepCollectionEquality().hash(_singlePartyTransactions),
         multiPartyTransaction,
         const DeepCollectionEquality().hash(_attachments)
@@ -598,43 +607,46 @@ class _$NewCreatedPostImpl
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$NewCreatedPostImplCopyWith<_$NewCreatedPostImpl> get copyWith =>
-      __$$NewCreatedPostImplCopyWithImpl<_$NewCreatedPostImpl>(
+  _$$PostToBeSentToAPIImplCopyWith<_$PostToBeSentToAPIImpl> get copyWith =>
+      __$$PostToBeSentToAPIImplCopyWithImpl<_$PostToBeSentToAPIImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$NewCreatedPostImplToJson(
+    return _$$PostToBeSentToAPIImplToJson(
       this,
     );
   }
 }
 
-abstract class _NewCreatedPost implements NewCreatedPost {
-  const factory _NewCreatedPost(
+abstract class _PostToBeSentToAPI implements PostToBeSentToAPI {
+  const factory _PostToBeSentToAPI(
       {final String title,
       final String description,
       final String categoryKey,
       final List<String> businessPartners,
       final String businessPartnerBranch,
-      final String latitude,
-      final String longitude,
+      final double latitude,
+      final double longitude,
       final String address,
+      final String type,
+      final bool setDefault,
       final bool important,
       final bool uncertain,
       final bool sensitiveInfo,
       final String visualization,
-      final String rating,
       final String from,
       final String to,
       final String date,
-      final bool wholeDay,
-      final List<SinglePartyTransactionForCreatedPost>? singlePartyTransactions,
-      final MultiPartyTransactionForCreatedPost? multiPartyTransaction,
-      final List<AttachmentForCreatedPost> attachments}) = _$NewCreatedPostImpl;
+      final bool allDay,
+      final List<SinglePartyTransactionForPostToBeSentToAPI>?
+          singlePartyTransactions,
+      final MultiPartyTransactionForPostToBeSentToAPI? multiPartyTransaction,
+      final List<AttachmentForPostToBeSentToAPI>
+          attachments}) = _$PostToBeSentToAPIImpl;
 
-  factory _NewCreatedPost.fromJson(Map<String, dynamic> json) =
-      _$NewCreatedPostImpl.fromJson;
+  factory _PostToBeSentToAPI.fromJson(Map<String, dynamic> json) =
+      _$PostToBeSentToAPIImpl.fromJson;
 
   @override
   String get title;
@@ -647,11 +659,15 @@ abstract class _NewCreatedPost implements NewCreatedPost {
   @override
   String get businessPartnerBranch;
   @override
-  String get latitude;
+  double get latitude;
   @override
-  String get longitude;
+  double get longitude;
   @override
   String get address;
+  @override
+  String get type;
+  @override
+  bool get setDefault;
   @override
   bool get important;
   @override
@@ -660,8 +676,6 @@ abstract class _NewCreatedPost implements NewCreatedPost {
   bool get sensitiveInfo;
   @override
   String get visualization;
-  @override // ONE, TWO, THREE, FOUR, FIVE
-  String get rating;
   @override
   String get from;
   @override
@@ -669,21 +683,15 @@ abstract class _NewCreatedPost implements NewCreatedPost {
   @override
   String get date;
   @override
-
-  ///TODO: cancellare?
-// @Default('') String within,
-// @Default(false) bool morning,
-// @Default(false) bool afternoon,
-// @Default(false) bool evening,
-  bool get wholeDay;
-  @override // TOGLIERE FINO A QUI
-  List<SinglePartyTransactionForCreatedPost>? get singlePartyTransactions;
+  bool get allDay;
   @override
-  MultiPartyTransactionForCreatedPost? get multiPartyTransaction;
+  List<SinglePartyTransactionForPostToBeSentToAPI>? get singlePartyTransactions;
   @override
-  List<AttachmentForCreatedPost> get attachments;
+  MultiPartyTransactionForPostToBeSentToAPI? get multiPartyTransaction;
+  @override
+  List<AttachmentForPostToBeSentToAPI> get attachments;
   @override
   @JsonKey(ignore: true)
-  _$$NewCreatedPostImplCopyWith<_$NewCreatedPostImpl> get copyWith =>
+  _$$PostToBeSentToAPIImplCopyWith<_$PostToBeSentToAPIImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

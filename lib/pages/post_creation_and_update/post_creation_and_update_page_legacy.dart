@@ -1,3 +1,4 @@
+/*
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -16,7 +17,7 @@ import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocapp/helpers/extensions/int_extensions.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
-import 'package:hippocapp/helpers/service/permission_handler.dart';
+import 'package:hippocapp/helpers/service/permissions/permission_handler.dart';
 import 'package:hippocapp/models/body/attachments_for_created_post.dart';
 import 'package:hippocapp/models/posts-creation/created_post.dart';
 import 'package:hippocapp/models/body/multi_party_transaction_for_created_post.dart';
@@ -32,11 +33,11 @@ import 'package:hippocapp/pages/post_creation_and_update/widgets/partner_dialog.
 import 'package:hippocapp/pages/post_creation_and_update/widgets/text_form_field_button.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_section.dart';
 import 'package:hippocapp/pages/select_categories/select_category_dialog.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/post_creation_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
-import 'package:hippocapp/providers/wallets_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/support/wallets_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/styles/icons.dart';
 import 'package:hippocapp/widgets/buttons/delete_x_icon.dart';
@@ -1716,3 +1717,4 @@ class __DocumentItemState extends ConsumerState<_DocumentItem> {
     );
   }
 }
+*/

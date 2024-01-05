@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'single_party_transaction_for_created_post.dart';
+part of 'single_party_transaction_for_post_to_be_sent_to_api.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,13 +14,14 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-SinglePartyTransactionForCreatedPost
-    _$SinglePartyTransactionForCreatedPostFromJson(Map<String, dynamic> json) {
-  return _SinglePartyTransactionForCreatedPost.fromJson(json);
+SinglePartyTransactionForPostToBeSentToAPI
+    _$SinglePartyTransactionForPostToBeSentToAPIFromJson(
+        Map<String, dynamic> json) {
+  return _SinglePartyTransactionForPostToBeSentToAPI.fromJson(json);
 }
 
 /// @nodoc
-mixin _$SinglePartyTransactionForCreatedPost {
+mixin _$SinglePartyTransactionForPostToBeSentToAPI {
   double get amount => throw _privateConstructorUsedError;
   bool get planned => throw _privateConstructorUsedError;
   bool get taxRelevant => throw _privateConstructorUsedError;
@@ -28,22 +29,22 @@ mixin _$SinglePartyTransactionForCreatedPost {
   bool get variable => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
-  String get walletKey => throw _privateConstructorUsedError;
+  String get wallet => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SinglePartyTransactionForCreatedPostCopyWith<
-          SinglePartyTransactionForCreatedPost>
+  $SinglePartyTransactionForPostToBeSentToAPICopyWith<
+          SinglePartyTransactionForPostToBeSentToAPI>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SinglePartyTransactionForCreatedPostCopyWith<$Res> {
-  factory $SinglePartyTransactionForCreatedPostCopyWith(
-          SinglePartyTransactionForCreatedPost value,
-          $Res Function(SinglePartyTransactionForCreatedPost) then) =
-      _$SinglePartyTransactionForCreatedPostCopyWithImpl<$Res,
-          SinglePartyTransactionForCreatedPost>;
+abstract class $SinglePartyTransactionForPostToBeSentToAPICopyWith<$Res> {
+  factory $SinglePartyTransactionForPostToBeSentToAPICopyWith(
+          SinglePartyTransactionForPostToBeSentToAPI value,
+          $Res Function(SinglePartyTransactionForPostToBeSentToAPI) then) =
+      _$SinglePartyTransactionForPostToBeSentToAPICopyWithImpl<$Res,
+          SinglePartyTransactionForPostToBeSentToAPI>;
   @useResult
   $Res call(
       {double amount,
@@ -53,14 +54,15 @@ abstract class $SinglePartyTransactionForCreatedPostCopyWith<$Res> {
       bool variable,
       String date,
       String type,
-      String walletKey});
+      String wallet});
 }
 
 /// @nodoc
-class _$SinglePartyTransactionForCreatedPostCopyWithImpl<$Res,
-        $Val extends SinglePartyTransactionForCreatedPost>
-    implements $SinglePartyTransactionForCreatedPostCopyWith<$Res> {
-  _$SinglePartyTransactionForCreatedPostCopyWithImpl(this._value, this._then);
+class _$SinglePartyTransactionForPostToBeSentToAPICopyWithImpl<$Res,
+        $Val extends SinglePartyTransactionForPostToBeSentToAPI>
+    implements $SinglePartyTransactionForPostToBeSentToAPICopyWith<$Res> {
+  _$SinglePartyTransactionForPostToBeSentToAPICopyWithImpl(
+      this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -77,7 +79,7 @@ class _$SinglePartyTransactionForCreatedPostCopyWithImpl<$Res,
     Object? variable = null,
     Object? date = null,
     Object? type = null,
-    Object? walletKey = null,
+    Object? wallet = null,
   }) {
     return _then(_value.copyWith(
       amount: null == amount
@@ -108,21 +110,22 @@ class _$SinglePartyTransactionForCreatedPostCopyWithImpl<$Res,
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      walletKey: null == walletKey
-          ? _value.walletKey
-          : walletKey // ignore: cast_nullable_to_non_nullable
+      wallet: null == wallet
+          ? _value.wallet
+          : wallet // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$SinglePartyTransactionForCreatedPostImplCopyWith<$Res>
-    implements $SinglePartyTransactionForCreatedPostCopyWith<$Res> {
-  factory _$$SinglePartyTransactionForCreatedPostImplCopyWith(
-          _$SinglePartyTransactionForCreatedPostImpl value,
-          $Res Function(_$SinglePartyTransactionForCreatedPostImpl) then) =
-      __$$SinglePartyTransactionForCreatedPostImplCopyWithImpl<$Res>;
+abstract class _$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWith<$Res>
+    implements $SinglePartyTransactionForPostToBeSentToAPICopyWith<$Res> {
+  factory _$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWith(
+          _$SinglePartyTransactionForPostToBeSentToAPIImpl value,
+          $Res Function(_$SinglePartyTransactionForPostToBeSentToAPIImpl)
+              then) =
+      __$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -133,17 +136,17 @@ abstract class _$$SinglePartyTransactionForCreatedPostImplCopyWith<$Res>
       bool variable,
       String date,
       String type,
-      String walletKey});
+      String wallet});
 }
 
 /// @nodoc
-class __$$SinglePartyTransactionForCreatedPostImplCopyWithImpl<$Res>
-    extends _$SinglePartyTransactionForCreatedPostCopyWithImpl<$Res,
-        _$SinglePartyTransactionForCreatedPostImpl>
-    implements _$$SinglePartyTransactionForCreatedPostImplCopyWith<$Res> {
-  __$$SinglePartyTransactionForCreatedPostImplCopyWithImpl(
-      _$SinglePartyTransactionForCreatedPostImpl _value,
-      $Res Function(_$SinglePartyTransactionForCreatedPostImpl) _then)
+class __$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWithImpl<$Res>
+    extends _$SinglePartyTransactionForPostToBeSentToAPICopyWithImpl<$Res,
+        _$SinglePartyTransactionForPostToBeSentToAPIImpl>
+    implements _$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWith<$Res> {
+  __$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWithImpl(
+      _$SinglePartyTransactionForPostToBeSentToAPIImpl _value,
+      $Res Function(_$SinglePartyTransactionForPostToBeSentToAPIImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -156,9 +159,9 @@ class __$$SinglePartyTransactionForCreatedPostImplCopyWithImpl<$Res>
     Object? variable = null,
     Object? date = null,
     Object? type = null,
-    Object? walletKey = null,
+    Object? wallet = null,
   }) {
-    return _then(_$SinglePartyTransactionForCreatedPostImpl(
+    return _then(_$SinglePartyTransactionForPostToBeSentToAPIImpl(
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -187,9 +190,9 @@ class __$$SinglePartyTransactionForCreatedPostImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      walletKey: null == walletKey
-          ? _value.walletKey
-          : walletKey // ignore: cast_nullable_to_non_nullable
+      wallet: null == wallet
+          ? _value.wallet
+          : wallet // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -197,9 +200,9 @@ class __$$SinglePartyTransactionForCreatedPostImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$SinglePartyTransactionForCreatedPostImpl
-    implements _SinglePartyTransactionForCreatedPost {
-  const _$SinglePartyTransactionForCreatedPostImpl(
+class _$SinglePartyTransactionForPostToBeSentToAPIImpl
+    implements _SinglePartyTransactionForPostToBeSentToAPI {
+  const _$SinglePartyTransactionForPostToBeSentToAPIImpl(
       {this.amount = 0,
       this.planned = false,
       this.taxRelevant = false,
@@ -207,11 +210,11 @@ class _$SinglePartyTransactionForCreatedPostImpl
       this.variable = false,
       this.date = '',
       this.type = '',
-      this.walletKey = ''});
+      this.wallet = ''});
 
-  factory _$SinglePartyTransactionForCreatedPostImpl.fromJson(
+  factory _$SinglePartyTransactionForPostToBeSentToAPIImpl.fromJson(
           Map<String, dynamic> json) =>
-      _$$SinglePartyTransactionForCreatedPostImplFromJson(json);
+      _$$SinglePartyTransactionForPostToBeSentToAPIImplFromJson(json);
 
   @override
   @JsonKey()
@@ -236,18 +239,18 @@ class _$SinglePartyTransactionForCreatedPostImpl
   final String type;
   @override
   @JsonKey()
-  final String walletKey;
+  final String wallet;
 
   @override
   String toString() {
-    return 'SinglePartyTransactionForCreatedPost(amount: $amount, planned: $planned, taxRelevant: $taxRelevant, ordinary: $ordinary, variable: $variable, date: $date, type: $type, walletKey: $walletKey)';
+    return 'SinglePartyTransactionForPostToBeSentToAPI(amount: $amount, planned: $planned, taxRelevant: $taxRelevant, ordinary: $ordinary, variable: $variable, date: $date, type: $type, wallet: $wallet)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SinglePartyTransactionForCreatedPostImpl &&
+            other is _$SinglePartyTransactionForPostToBeSentToAPIImpl &&
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.planned, planned) || other.planned == planned) &&
             (identical(other.taxRelevant, taxRelevant) ||
@@ -258,34 +261,35 @@ class _$SinglePartyTransactionForCreatedPostImpl
                 other.variable == variable) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.walletKey, walletKey) ||
-                other.walletKey == walletKey));
+            (identical(other.wallet, wallet) || other.wallet == wallet));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, amount, planned, taxRelevant,
-      ordinary, variable, date, type, walletKey);
+      ordinary, variable, date, type, wallet);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SinglePartyTransactionForCreatedPostImplCopyWith<
-          _$SinglePartyTransactionForCreatedPostImpl>
-      get copyWith => __$$SinglePartyTransactionForCreatedPostImplCopyWithImpl<
-          _$SinglePartyTransactionForCreatedPostImpl>(this, _$identity);
+  _$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWith<
+          _$SinglePartyTransactionForPostToBeSentToAPIImpl>
+      get copyWith =>
+          __$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWithImpl<
+                  _$SinglePartyTransactionForPostToBeSentToAPIImpl>(
+              this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SinglePartyTransactionForCreatedPostImplToJson(
+    return _$$SinglePartyTransactionForPostToBeSentToAPIImplToJson(
       this,
     );
   }
 }
 
-abstract class _SinglePartyTransactionForCreatedPost
-    implements SinglePartyTransactionForCreatedPost {
-  const factory _SinglePartyTransactionForCreatedPost(
+abstract class _SinglePartyTransactionForPostToBeSentToAPI
+    implements SinglePartyTransactionForPostToBeSentToAPI {
+  const factory _SinglePartyTransactionForPostToBeSentToAPI(
       {final double amount,
       final bool planned,
       final bool taxRelevant,
@@ -293,11 +297,11 @@ abstract class _SinglePartyTransactionForCreatedPost
       final bool variable,
       final String date,
       final String type,
-      final String walletKey}) = _$SinglePartyTransactionForCreatedPostImpl;
+      final String wallet}) = _$SinglePartyTransactionForPostToBeSentToAPIImpl;
 
-  factory _SinglePartyTransactionForCreatedPost.fromJson(
+  factory _SinglePartyTransactionForPostToBeSentToAPI.fromJson(
           Map<String, dynamic> json) =
-      _$SinglePartyTransactionForCreatedPostImpl.fromJson;
+      _$SinglePartyTransactionForPostToBeSentToAPIImpl.fromJson;
 
   @override
   double get amount;
@@ -314,10 +318,10 @@ abstract class _SinglePartyTransactionForCreatedPost
   @override
   String get type;
   @override
-  String get walletKey;
+  String get wallet;
   @override
   @JsonKey(ignore: true)
-  _$$SinglePartyTransactionForCreatedPostImplCopyWith<
-          _$SinglePartyTransactionForCreatedPostImpl>
+  _$$SinglePartyTransactionForPostToBeSentToAPIImplCopyWith<
+          _$SinglePartyTransactionForPostToBeSentToAPIImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

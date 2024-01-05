@@ -10,7 +10,7 @@ import 'package:hippocapp/models/repositories/app_state_repository.dart';
 import 'package:hippocapp/models/responses/domains_response_model.dart';
 import 'package:hippocapp/pages/categories/categories_inactive.dart';
 import 'package:hippocapp/pages/categories/detail_category/detail_category_page.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/dialogs/cupertino_bottom_sheet.dart';
 import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';

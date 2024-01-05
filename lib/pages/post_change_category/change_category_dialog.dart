@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocapp/pages/post_change_category/list_categories.dart';
 import 'package:hippocapp/pages/post_change_category/list_domains.dart';
 
-import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
 
 import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 

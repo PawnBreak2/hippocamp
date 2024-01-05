@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hippocapp/helpers/extensions/int_extensions.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/date_picker_widgets/date_picker_time.dart';
-import 'package:hippocapp/providers/date_picker_provider.dart';
-import 'package:hippocapp/providers/post_creation_provider.dart';
+import 'package:hippocapp/providers/services/date_picker_provider.dart';
+import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/styles/icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -79,8 +79,8 @@ class DateSelectionSection extends ConsumerWidget {
           flex: 2,
           child: Consumer(
             builder: (context, ref, child) {
-              bool isWholeDay = ref.watch(
-                  postCreationProvider.select((value) => value.wholeDay));
+              bool isWholeDay = ref
+                  .watch(postCreationProvider.select((value) => value.allDay));
               if (isWholeDay) {
                 return const FittedBox(
                     alignment: Alignment.centerRight,
@@ -117,7 +117,7 @@ class DateSelectionSection extends ConsumerWidget {
                   color: CustomColors.darkGrey,
                 ),
                 onTap: () {
-                  ref.read(postCreationProvider.notifier).setWholeDay(true);
+                  ref.read(postCreationProvider.notifier).setAllDay(true);
                 },
               ),
               SpeedDialChild(
@@ -134,7 +134,7 @@ class DateSelectionSection extends ConsumerWidget {
                   color: CustomColors.darkGrey,
                 ),
                 onTap: () {
-                  ref.read(postCreationProvider.notifier).setWholeDay(false);
+                  ref.read(postCreationProvider.notifier).setAllDay(false);
                 },
               ),
             ],

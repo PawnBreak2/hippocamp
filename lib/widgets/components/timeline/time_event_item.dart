@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/components/timeline/partner_box.dart';

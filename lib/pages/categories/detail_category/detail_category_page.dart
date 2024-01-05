@@ -6,7 +6,7 @@ import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/models/responses/domains_response_model.dart';
 import 'package:hippocapp/pages/categories/detail_category/posts_per_category_page.dart';
 import 'package:hippocapp/pages/categories/sub_categories_inactive.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';
 

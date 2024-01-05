@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocapp/models/body/attachments_for_created_post.dart';
-import 'package:hippocapp/models/posts-creation/created_post.dart';
-import 'package:hippocapp/models/body/multi_party_transaction_for_created_post.dart';
-import 'package:hippocapp/models/body/single_party_transaction_for_created_post.dart';
+import 'package:hippocapp/models/posts-creation/attachment/attachment_for_post_to_be_sent_to_api.dart';
+import 'package:hippocapp/models/posts-creation/post/post_to_be_sent_to_api.dart';
+import 'package:hippocapp/models/posts-creation/transactions/multi_party_transaction_for_post_to_be_sent_to_api.dart';
+import 'package:hippocapp/models/posts-creation/transactions/single_party_transaction_for_post_to_be_sent_to_api.dart';
 import 'package:hippocapp/models/repositories/ui_state_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Used to create/edit a post before creation, abstracting the logic from the widget
 
-class PostCreationNotifier extends Notifier<NewCreatedPost> {
+class PostCreationAndUpdateNotifier extends Notifier<PostToBeSentToAPI> {
   @override
   build() {
-    return NewCreatedPost(
+    return PostToBeSentToAPI(
       to: TimeOfDay.now().timeToString,
       from: TimeOfDay.now().timeToString,
       date: DateTime.now().dateToString,
@@ -49,22 +49,23 @@ class PostCreationNotifier extends Notifier<NewCreatedPost> {
   }
 
   void setSinglePartyTransactions(
-      List<SinglePartyTransactionForCreatedPost> value) {
+      List<SinglePartyTransactionForPostToBeSentToAPI> value) {
     state = state.copyWith(singlePartyTransactions: value);
   }
 
-  void setMultiPartyTransaction(MultiPartyTransactionForCreatedPost value) {
+  void setMultiPartyTransaction(
+      MultiPartyTransactionForPostToBeSentToAPI value) {
     state = state.copyWith(multiPartyTransaction: value);
   }
 
-  void setAttachments(List<AttachmentForCreatedPost> value) {
+  void setAttachments(List<AttachmentForPostToBeSentToAPI> value) {
     state = state.copyWith(attachments: value);
   }
 
-  void setLocation({String? latitude, String? longitude, String? address}) {
+  void setLocation({double? latitude, double? longitude, String? address}) {
     state = state.copyWith(
-        latitude: latitude ?? '',
-        longitude: longitude ?? '',
+        latitude: latitude ?? 0,
+        longitude: longitude ?? 0,
         address: address ?? '');
   }
 
@@ -72,8 +73,8 @@ class PostCreationNotifier extends Notifier<NewCreatedPost> {
     state = state.copyWith(visualization: visualizationTypeMap[value]!);
   }
 
-  void setWholeDay(bool value) {
-    state = state.copyWith(wholeDay: value);
+  void setAllDay(bool value) {
+    state = state.copyWith(allDay: value);
   }
 
   void setTimeFrom(String value) {
@@ -87,7 +88,7 @@ class PostCreationNotifier extends Notifier<NewCreatedPost> {
   /// Resets the time from and time to to the current time
   ///
   /// Useful when there are errors in time picking
-  void resetFromAndTo() {
+  void setFromAndToToNow() {
     state = state.copyWith(
       from: TimeOfDay.now().timeToString,
       to: TimeOfDay.now().timeToString,
@@ -104,10 +105,10 @@ class PostCreationNotifier extends Notifier<NewCreatedPost> {
   }
 
   void reset() {
-    state = NewCreatedPost();
+    state = PostToBeSentToAPI();
   }
 }
 
 final postCreationProvider =
-    NotifierProvider<PostCreationNotifier, NewCreatedPost>(
-        () => PostCreationNotifier());
+    NotifierProvider<PostCreationAndUpdateNotifier, PostToBeSentToAPI>(
+        () => PostCreationAndUpdateNotifier());

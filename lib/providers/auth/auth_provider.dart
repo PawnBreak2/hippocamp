@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:hippocapp/clients/auth_client.dart';
 import 'package:hippocapp/constants/storage_keys.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
-import 'package:hippocapp/providers/user_provider.dart';
-import 'package:hippocapp/providers/wallets_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
+import 'package:hippocapp/providers/user_profile/user_provider.dart';
+import 'package:hippocapp/providers/posts_management/support/wallets_provider.dart';
 import 'package:hippocapp/storage/local_storage.dart';
 import 'package:hippocapp/storage/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

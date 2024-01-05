@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/models/responses/domains_response_model.dart';
 import 'package:flutter/material.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 
-import '../../../../providers/ui_state_provider.dart';
+import '../../../providers/ui/ui_state_provider.dart';
 
 class ListDomainsForPostCreation extends StatelessWidget {
   final TextEditingController _textController;

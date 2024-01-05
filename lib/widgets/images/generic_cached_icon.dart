@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 
 class GenericCachedIcon extends StatelessWidget {
   late double width;

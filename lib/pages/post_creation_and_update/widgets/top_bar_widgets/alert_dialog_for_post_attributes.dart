@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_post_detail_icon.dart';
-import 'package:hippocapp/providers/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/styles/icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

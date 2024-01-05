@@ -3,7 +3,7 @@ import 'package:hippocapp/clients/wallets_client.dart';
 import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/models/repositories/wallets_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/wallets/wallet_model.dart';
+import '../../../models/wallets/wallet_model.dart';
 
 class WalletsProvider extends Notifier<WalletsRepository> {
   @override

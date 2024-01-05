@@ -4,7 +4,7 @@ import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../models/responses/posts_response_model.dart';
+import '../../../models/responses/posts/post_response_model.dart';
 
 class MonthDivider extends StatelessWidget {
   const MonthDivider({

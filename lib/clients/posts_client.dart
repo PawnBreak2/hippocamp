@@ -5,13 +5,13 @@ import 'package:hippocapp/clients/main_client.dart';
 import 'package:hippocapp/constants/storage_keys.dart';
 import 'package:hippocapp/constants/urls.dart';
 import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocapp/models/posts-creation/created_post.dart';
+import 'package:hippocapp/models/posts-creation/post/post_to_be_sent_to_api.dart';
 import 'package:hippocapp/models/error_call_model.dart';
 import 'package:hippocapp/models/posts-creation/attachment_types.dart';
 import 'package:hippocapp/models/posts-creation/partner_model.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/models/responses/domains_response_model.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 import 'package:hippocapp/storage/secure_storage.dart';
 
 class PostsClient {
@@ -42,8 +42,9 @@ class PostsClient {
     if (resp.statusCode == 200) {
       return Right(
         PostResponse(
-          posts:
-              (resp.data["posts"] as List).map((e) => Post.fromMap(e)).toList(),
+          posts: (resp.data["posts"] as List)
+              .map((e) => Post.fromJson(e))
+              .toList(),
           end: resp.data["end"] ?? true,
         ),
       );
@@ -78,8 +79,9 @@ class PostsClient {
     if (resp.statusCode == 200)
       return Right(
         PostResponse(
-          posts:
-              (resp.data["posts"] as List).map((e) => Post.fromMap(e)).toList(),
+          posts: (resp.data["posts"] as List)
+              .map((e) => Post.fromJson(e))
+              .toList(),
           end: resp.data["end"] ?? true,
         ),
       );
@@ -108,8 +110,9 @@ class PostsClient {
     if (resp.statusCode == 200)
       return Right(
         PostResponse(
-          posts:
-              (resp.data["posts"] as List).map((e) => Post.fromMap(e)).toList(),
+          posts: (resp.data["posts"] as List)
+              .map((e) => Post.fromJson(e))
+              .toList(),
           end: resp.data["end"] ?? true,
         ),
       );
@@ -137,7 +140,7 @@ class PostsClient {
     if (resp.statusCode == 200)
       return Right(
         PostResponse(
-          posts: (resp.data as List).map((e) => Post.fromMap(e)).toList(),
+          posts: (resp.data as List).map((e) => Post.fromJson(e)).toList(),
           end: false,
         ),
       );
@@ -187,7 +190,7 @@ class PostsClient {
       },
     );
 
-    if (resp.statusCode == 200) return Right(Post.fromMap(resp.data));
+    if (resp.statusCode == 200) return Right(Post.fromJson(resp.data));
 
     return Left(
       ErrorCallModel(
@@ -272,7 +275,7 @@ class PostsClient {
   }
 
   Future<Either<ErrorCallModel, Post>> createPost({
-    required NewCreatedPost createPost,
+    required PostToBeSentToAPI createPost,
   }) async {
     final token = await SecureStorage.read(StorageKeys.token);
 
@@ -284,7 +287,7 @@ class PostsClient {
       },
     );
 
-    if (resp.statusCode == 201) return Right(Post.fromMap(resp.data));
+    if (resp.statusCode == 201) return Right(Post.fromJson(resp.data));
 
     return Left(
       ErrorCallModel(
@@ -297,7 +300,7 @@ class PostsClient {
 
   Future<Either<ErrorCallModel, Post>> updatePost({
     required String key,
-    required NewCreatedPost createPost,
+    required PostToBeSentToAPI createPost,
   }) async {
     final token = await SecureStorage.read(StorageKeys.token);
 
@@ -309,7 +312,7 @@ class PostsClient {
       },
     );
 
-    if (resp.statusCode == 200) return Right(Post.fromMap(resp.data));
+    if (resp.statusCode == 200) return Right(Post.fromJson(resp.data));
 
     return Left(
       ErrorCallModel(

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'multi_party_transaction_for_created_post.dart';
+part of 'multi_party_transaction_for_post_to_be_sent_to_api.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,13 +14,14 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-MultiPartyTransactionForCreatedPost
-    _$MultiPartyTransactionForCreatedPostFromJson(Map<String, dynamic> json) {
-  return _MultiPartyTransactionForCreatedPost.fromJson(json);
+MultiPartyTransactionForPostToBeSentToAPI
+    _$MultiPartyTransactionForPostToBeSentToAPIFromJson(
+        Map<String, dynamic> json) {
+  return _MultiPartyTransactionForPostToBeSentToAPI.fromJson(json);
 }
 
 /// @nodoc
-mixin _$MultiPartyTransactionForCreatedPost {
+mixin _$MultiPartyTransactionForPostToBeSentToAPI {
   double get amountIn => throw _privateConstructorUsedError;
   double get amountOut => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
@@ -28,23 +29,23 @@ mixin _$MultiPartyTransactionForCreatedPost {
 
   ///TODO: cancellare?
   String get categoryKey => throw _privateConstructorUsedError;
-  String get fromWalletKey => throw _privateConstructorUsedError;
-  String get toWalletKey => throw _privateConstructorUsedError;
+  String get fromWallet => throw _privateConstructorUsedError;
+  String get toWallet => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $MultiPartyTransactionForCreatedPostCopyWith<
-          MultiPartyTransactionForCreatedPost>
+  $MultiPartyTransactionForPostToBeSentToAPICopyWith<
+          MultiPartyTransactionForPostToBeSentToAPI>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MultiPartyTransactionForCreatedPostCopyWith<$Res> {
-  factory $MultiPartyTransactionForCreatedPostCopyWith(
-          MultiPartyTransactionForCreatedPost value,
-          $Res Function(MultiPartyTransactionForCreatedPost) then) =
-      _$MultiPartyTransactionForCreatedPostCopyWithImpl<$Res,
-          MultiPartyTransactionForCreatedPost>;
+abstract class $MultiPartyTransactionForPostToBeSentToAPICopyWith<$Res> {
+  factory $MultiPartyTransactionForPostToBeSentToAPICopyWith(
+          MultiPartyTransactionForPostToBeSentToAPI value,
+          $Res Function(MultiPartyTransactionForPostToBeSentToAPI) then) =
+      _$MultiPartyTransactionForPostToBeSentToAPICopyWithImpl<$Res,
+          MultiPartyTransactionForPostToBeSentToAPI>;
   @useResult
   $Res call(
       {double amountIn,
@@ -52,15 +53,16 @@ abstract class $MultiPartyTransactionForCreatedPostCopyWith<$Res> {
       String date,
       String type,
       String categoryKey,
-      String fromWalletKey,
-      String toWalletKey});
+      String fromWallet,
+      String toWallet});
 }
 
 /// @nodoc
-class _$MultiPartyTransactionForCreatedPostCopyWithImpl<$Res,
-        $Val extends MultiPartyTransactionForCreatedPost>
-    implements $MultiPartyTransactionForCreatedPostCopyWith<$Res> {
-  _$MultiPartyTransactionForCreatedPostCopyWithImpl(this._value, this._then);
+class _$MultiPartyTransactionForPostToBeSentToAPICopyWithImpl<$Res,
+        $Val extends MultiPartyTransactionForPostToBeSentToAPI>
+    implements $MultiPartyTransactionForPostToBeSentToAPICopyWith<$Res> {
+  _$MultiPartyTransactionForPostToBeSentToAPICopyWithImpl(
+      this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -75,8 +77,8 @@ class _$MultiPartyTransactionForCreatedPostCopyWithImpl<$Res,
     Object? date = null,
     Object? type = null,
     Object? categoryKey = null,
-    Object? fromWalletKey = null,
-    Object? toWalletKey = null,
+    Object? fromWallet = null,
+    Object? toWallet = null,
   }) {
     return _then(_value.copyWith(
       amountIn: null == amountIn
@@ -99,25 +101,25 @@ class _$MultiPartyTransactionForCreatedPostCopyWithImpl<$Res,
           ? _value.categoryKey
           : categoryKey // ignore: cast_nullable_to_non_nullable
               as String,
-      fromWalletKey: null == fromWalletKey
-          ? _value.fromWalletKey
-          : fromWalletKey // ignore: cast_nullable_to_non_nullable
+      fromWallet: null == fromWallet
+          ? _value.fromWallet
+          : fromWallet // ignore: cast_nullable_to_non_nullable
               as String,
-      toWalletKey: null == toWalletKey
-          ? _value.toWalletKey
-          : toWalletKey // ignore: cast_nullable_to_non_nullable
+      toWallet: null == toWallet
+          ? _value.toWallet
+          : toWallet // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$MultiPartyTransactionForCreatedPostImplCopyWith<$Res>
-    implements $MultiPartyTransactionForCreatedPostCopyWith<$Res> {
-  factory _$$MultiPartyTransactionForCreatedPostImplCopyWith(
-          _$MultiPartyTransactionForCreatedPostImpl value,
-          $Res Function(_$MultiPartyTransactionForCreatedPostImpl) then) =
-      __$$MultiPartyTransactionForCreatedPostImplCopyWithImpl<$Res>;
+abstract class _$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWith<$Res>
+    implements $MultiPartyTransactionForPostToBeSentToAPICopyWith<$Res> {
+  factory _$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWith(
+          _$MultiPartyTransactionForPostToBeSentToAPIImpl value,
+          $Res Function(_$MultiPartyTransactionForPostToBeSentToAPIImpl) then) =
+      __$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -126,18 +128,18 @@ abstract class _$$MultiPartyTransactionForCreatedPostImplCopyWith<$Res>
       String date,
       String type,
       String categoryKey,
-      String fromWalletKey,
-      String toWalletKey});
+      String fromWallet,
+      String toWallet});
 }
 
 /// @nodoc
-class __$$MultiPartyTransactionForCreatedPostImplCopyWithImpl<$Res>
-    extends _$MultiPartyTransactionForCreatedPostCopyWithImpl<$Res,
-        _$MultiPartyTransactionForCreatedPostImpl>
-    implements _$$MultiPartyTransactionForCreatedPostImplCopyWith<$Res> {
-  __$$MultiPartyTransactionForCreatedPostImplCopyWithImpl(
-      _$MultiPartyTransactionForCreatedPostImpl _value,
-      $Res Function(_$MultiPartyTransactionForCreatedPostImpl) _then)
+class __$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWithImpl<$Res>
+    extends _$MultiPartyTransactionForPostToBeSentToAPICopyWithImpl<$Res,
+        _$MultiPartyTransactionForPostToBeSentToAPIImpl>
+    implements _$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWith<$Res> {
+  __$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWithImpl(
+      _$MultiPartyTransactionForPostToBeSentToAPIImpl _value,
+      $Res Function(_$MultiPartyTransactionForPostToBeSentToAPIImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -148,10 +150,10 @@ class __$$MultiPartyTransactionForCreatedPostImplCopyWithImpl<$Res>
     Object? date = null,
     Object? type = null,
     Object? categoryKey = null,
-    Object? fromWalletKey = null,
-    Object? toWalletKey = null,
+    Object? fromWallet = null,
+    Object? toWallet = null,
   }) {
-    return _then(_$MultiPartyTransactionForCreatedPostImpl(
+    return _then(_$MultiPartyTransactionForPostToBeSentToAPIImpl(
       amountIn: null == amountIn
           ? _value.amountIn
           : amountIn // ignore: cast_nullable_to_non_nullable
@@ -172,13 +174,13 @@ class __$$MultiPartyTransactionForCreatedPostImplCopyWithImpl<$Res>
           ? _value.categoryKey
           : categoryKey // ignore: cast_nullable_to_non_nullable
               as String,
-      fromWalletKey: null == fromWalletKey
-          ? _value.fromWalletKey
-          : fromWalletKey // ignore: cast_nullable_to_non_nullable
+      fromWallet: null == fromWallet
+          ? _value.fromWallet
+          : fromWallet // ignore: cast_nullable_to_non_nullable
               as String,
-      toWalletKey: null == toWalletKey
-          ? _value.toWalletKey
-          : toWalletKey // ignore: cast_nullable_to_non_nullable
+      toWallet: null == toWallet
+          ? _value.toWallet
+          : toWallet // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -186,20 +188,20 @@ class __$$MultiPartyTransactionForCreatedPostImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$MultiPartyTransactionForCreatedPostImpl
-    implements _MultiPartyTransactionForCreatedPost {
-  const _$MultiPartyTransactionForCreatedPostImpl(
+class _$MultiPartyTransactionForPostToBeSentToAPIImpl
+    implements _MultiPartyTransactionForPostToBeSentToAPI {
+  const _$MultiPartyTransactionForPostToBeSentToAPIImpl(
       {this.amountIn = 0,
       this.amountOut = 0,
       this.date = '',
       this.type = '',
       this.categoryKey = '',
-      this.fromWalletKey = '',
-      this.toWalletKey = ''});
+      this.fromWallet = '',
+      this.toWallet = ''});
 
-  factory _$MultiPartyTransactionForCreatedPostImpl.fromJson(
+  factory _$MultiPartyTransactionForPostToBeSentToAPIImpl.fromJson(
           Map<String, dynamic> json) =>
-      _$$MultiPartyTransactionForCreatedPostImplFromJson(json);
+      _$$MultiPartyTransactionForPostToBeSentToAPIImplFromJson(json);
 
   @override
   @JsonKey()
@@ -220,21 +222,21 @@ class _$MultiPartyTransactionForCreatedPostImpl
   final String categoryKey;
   @override
   @JsonKey()
-  final String fromWalletKey;
+  final String fromWallet;
   @override
   @JsonKey()
-  final String toWalletKey;
+  final String toWallet;
 
   @override
   String toString() {
-    return 'MultiPartyTransactionForCreatedPost(amountIn: $amountIn, amountOut: $amountOut, date: $date, type: $type, categoryKey: $categoryKey, fromWalletKey: $fromWalletKey, toWalletKey: $toWalletKey)';
+    return 'MultiPartyTransactionForPostToBeSentToAPI(amountIn: $amountIn, amountOut: $amountOut, date: $date, type: $type, categoryKey: $categoryKey, fromWallet: $fromWallet, toWallet: $toWallet)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MultiPartyTransactionForCreatedPostImpl &&
+            other is _$MultiPartyTransactionForPostToBeSentToAPIImpl &&
             (identical(other.amountIn, amountIn) ||
                 other.amountIn == amountIn) &&
             (identical(other.amountOut, amountOut) ||
@@ -243,47 +245,49 @@ class _$MultiPartyTransactionForCreatedPostImpl
             (identical(other.type, type) || other.type == type) &&
             (identical(other.categoryKey, categoryKey) ||
                 other.categoryKey == categoryKey) &&
-            (identical(other.fromWalletKey, fromWalletKey) ||
-                other.fromWalletKey == fromWalletKey) &&
-            (identical(other.toWalletKey, toWalletKey) ||
-                other.toWalletKey == toWalletKey));
+            (identical(other.fromWallet, fromWallet) ||
+                other.fromWallet == fromWallet) &&
+            (identical(other.toWallet, toWallet) ||
+                other.toWallet == toWallet));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, amountIn, amountOut, date, type,
-      categoryKey, fromWalletKey, toWalletKey);
+      categoryKey, fromWallet, toWallet);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MultiPartyTransactionForCreatedPostImplCopyWith<
-          _$MultiPartyTransactionForCreatedPostImpl>
-      get copyWith => __$$MultiPartyTransactionForCreatedPostImplCopyWithImpl<
-          _$MultiPartyTransactionForCreatedPostImpl>(this, _$identity);
+  _$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWith<
+          _$MultiPartyTransactionForPostToBeSentToAPIImpl>
+      get copyWith =>
+          __$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWithImpl<
+                  _$MultiPartyTransactionForPostToBeSentToAPIImpl>(
+              this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MultiPartyTransactionForCreatedPostImplToJson(
+    return _$$MultiPartyTransactionForPostToBeSentToAPIImplToJson(
       this,
     );
   }
 }
 
-abstract class _MultiPartyTransactionForCreatedPost
-    implements MultiPartyTransactionForCreatedPost {
-  const factory _MultiPartyTransactionForCreatedPost(
+abstract class _MultiPartyTransactionForPostToBeSentToAPI
+    implements MultiPartyTransactionForPostToBeSentToAPI {
+  const factory _MultiPartyTransactionForPostToBeSentToAPI(
       {final double amountIn,
       final double amountOut,
       final String date,
       final String type,
       final String categoryKey,
-      final String fromWalletKey,
-      final String toWalletKey}) = _$MultiPartyTransactionForCreatedPostImpl;
+      final String fromWallet,
+      final String toWallet}) = _$MultiPartyTransactionForPostToBeSentToAPIImpl;
 
-  factory _MultiPartyTransactionForCreatedPost.fromJson(
+  factory _MultiPartyTransactionForPostToBeSentToAPI.fromJson(
           Map<String, dynamic> json) =
-      _$MultiPartyTransactionForCreatedPostImpl.fromJson;
+      _$MultiPartyTransactionForPostToBeSentToAPIImpl.fromJson;
 
   @override
   double get amountIn;
@@ -298,12 +302,12 @@ abstract class _MultiPartyTransactionForCreatedPost
   ///TODO: cancellare?
   String get categoryKey;
   @override
-  String get fromWalletKey;
+  String get fromWallet;
   @override
-  String get toWalletKey;
+  String get toWallet;
   @override
   @JsonKey(ignore: true)
-  _$$MultiPartyTransactionForCreatedPostImplCopyWith<
-          _$MultiPartyTransactionForCreatedPostImpl>
+  _$$MultiPartyTransactionForPostToBeSentToAPIImplCopyWith<
+          _$MultiPartyTransactionForPostToBeSentToAPIImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

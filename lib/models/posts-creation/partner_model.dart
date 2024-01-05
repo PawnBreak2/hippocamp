@@ -1,4 +1,5 @@
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/partner.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 
 class PartnerModel {
   final String key;

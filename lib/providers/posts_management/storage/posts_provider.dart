@@ -4,13 +4,13 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocapp/clients/posts_client.dart';
 import 'package:hippocapp/constants/common.dart';
-import 'package:hippocapp/helpers/providers/post_provider_helpers.dart';
-import 'package:hippocapp/models/posts-creation/created_post.dart';
+import 'package:hippocapp/helpers/providers_helpers/post_provider_helpers.dart';
+import 'package:hippocapp/models/posts-creation/post/post_to_be_sent_to_api.dart';
 import 'package:hippocapp/models/error_call_model.dart';
 import 'package:hippocapp/models/repositories/post_repository.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 
 class PostListNotifier extends Notifier<PostsRepository> {
   @override
@@ -286,7 +286,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
     );
   }
 
-  Future<bool> saveTemplate(String categoryKey, NewCreatedPost post) async {
+  Future<bool> saveTemplate(String categoryKey, PostToBeSentToAPI post) async {
     final resp = await _postsClient.saveTemplatePost(
       key: categoryKey,
       body: post.toJson(),
@@ -298,7 +298,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
     );
   }
 
-  Future<bool> createPost({required NewCreatedPost postBody}) async {
+  Future<bool> createPost({required PostToBeSentToAPI postBody}) async {
     final resp = await _postsClient.createPost(
       createPost: postBody,
     );
@@ -316,7 +316,7 @@ class PostListNotifier extends Notifier<PostsRepository> {
   /// TODO: implementare con SQLite
 
   Future<bool> updatePost(
-      {required String key, required NewCreatedPost postBody}) async {
+      {required String key, required PostToBeSentToAPI postBody}) async {
     final resp = await _postsClient.updatePost(
       key: key,
       createPost: postBody,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocapp/helpers/utilities.dart';
-import 'package:hippocapp/providers/attachments_provider.dart';
+import 'package:hippocapp/providers/posts_management/support/attachments_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/styles/icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

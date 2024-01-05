@@ -1,15 +1,15 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'single_party_transaction_for_created_post.dart';
+part of 'single_party_transaction_for_post_to_be_sent_to_api.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SinglePartyTransactionForCreatedPostImpl
-    _$$SinglePartyTransactionForCreatedPostImplFromJson(
+_$SinglePartyTransactionForPostToBeSentToAPIImpl
+    _$$SinglePartyTransactionForPostToBeSentToAPIImplFromJson(
             Map<String, dynamic> json) =>
-        _$SinglePartyTransactionForCreatedPostImpl(
+        _$SinglePartyTransactionForPostToBeSentToAPIImpl(
           amount: (json['amount'] as num?)?.toDouble() ?? 0,
           planned: json['planned'] as bool? ?? false,
           taxRelevant: json['taxRelevant'] as bool? ?? false,
@@ -17,11 +17,11 @@ _$SinglePartyTransactionForCreatedPostImpl
           variable: json['variable'] as bool? ?? false,
           date: json['date'] as String? ?? '',
           type: json['type'] as String? ?? '',
-          walletKey: json['walletKey'] as String? ?? '',
+          wallet: json['wallet'] as String? ?? '',
         );
 
-Map<String, dynamic> _$$SinglePartyTransactionForCreatedPostImplToJson(
-        _$SinglePartyTransactionForCreatedPostImpl instance) =>
+Map<String, dynamic> _$$SinglePartyTransactionForPostToBeSentToAPIImplToJson(
+        _$SinglePartyTransactionForPostToBeSentToAPIImpl instance) =>
     <String, dynamic>{
       'amount': instance.amount,
       'planned': instance.planned,
@@ -30,5 +30,5 @@ Map<String, dynamic> _$$SinglePartyTransactionForCreatedPostImplToJson(
       'variable': instance.variable,
       'date': instance.date,
       'type': instance.type,
-      'walletKey': instance.walletKey,
+      'wallet': instance.wallet,
     };

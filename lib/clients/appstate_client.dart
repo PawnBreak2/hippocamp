@@ -3,13 +3,13 @@ import 'package:hippocapp/clients/main_client.dart';
 import 'package:hippocapp/constants/storage_keys.dart';
 import 'package:hippocapp/constants/urls.dart';
 import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocapp/models/posts-creation/created_post.dart';
+import 'package:hippocapp/models/posts-creation/post/post_to_be_sent_to_api.dart';
 import 'package:hippocapp/models/error_call_model.dart';
 import 'package:hippocapp/models/posts-creation/attachment_types.dart';
 import 'package:hippocapp/models/posts-creation/partner_model.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/models/responses/domains_response_model.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 import 'package:hippocapp/storage/secure_storage.dart';
 
 class AppStateClient {
@@ -210,7 +210,7 @@ class AppStateClient {
 
     if (resp.statusCode == 200)
       return Right(
-        (resp.data as List).map((e) => AttachmentType.fromMap(e)).toList(),
+        (resp.data as List).map((e) => AttachmentType.fromJson(e)).toList(),
       );
 
     return Left(

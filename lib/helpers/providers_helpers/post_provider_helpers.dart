@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocapp/models/error_call_model.dart';
 import 'package:hippocapp/models/repositories/post_repository.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
 
 class PostsProviderHelpers {
   static void manageGetPostsResponseFromAPI(

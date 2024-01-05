@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/models/repositories/app_state_repository.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
 import 'package:hippocapp/widgets/dialogs/cupertino_bottom_sheet.dart';
 
 class SubCategoriesInactive extends ConsumerStatefulWidget {

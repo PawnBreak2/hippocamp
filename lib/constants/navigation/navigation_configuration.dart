@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/constants/storage_keys.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 import 'package:hippocapp/pages/home/home_page.dart';
 import 'package:hippocapp/pages/login/login_page.dart';
 import 'package:hippocapp/pages/main_scaffold/main_scaffold.dart';

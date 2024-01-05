@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/helpers/validators/validators_form_field.dart';
-import 'package:hippocapp/providers/auth_provider.dart';
+import 'package:hippocapp/providers/auth/auth_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/buttons/primary_button.dart';
 import 'package:hippocapp/widgets/dialogs/flash_dialog.dart';

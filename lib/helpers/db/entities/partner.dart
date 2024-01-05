@@ -1,6 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:hippocapp/constants/db/table_names.dart';
-import 'package:hippocapp/models/responses/posts_response_model.dart';
+import 'package:hippocapp/models/responses/posts/partner.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 
 @Entity(tableName: TableNamesForDb.businessPartners)
 class BusinessPartnerEntity {

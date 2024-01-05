@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/models/wallets/wallet_model.dart';
-import 'package:hippocapp/providers/wallets_provider.dart';
+import 'package:hippocapp/providers/posts_management/support/wallets_provider.dart';
 
 class FinanceMovementModel {
   final bool inOrOut;

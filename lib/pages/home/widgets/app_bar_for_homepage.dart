@@ -13,11 +13,11 @@ import 'package:hippocapp/pages/home/widgets/button_section_for_home_page_app_ba
 import 'package:hippocapp/pages/home/widgets/home_page_app_bar_action_buttons.dart';
 import 'package:hippocapp/pages/home/widgets/home_page_app_bar_navigation_buttons.dart';
 import 'package:hippocapp/pages/home/widgets/home_page_search_bar.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/auth_provider.dart';
-import 'package:hippocapp/providers/page_controller_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/auth/auth_provider.dart';
+import 'package:hippocapp/providers/services/page_controller_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

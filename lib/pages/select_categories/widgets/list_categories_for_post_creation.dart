@@ -5,9 +5,9 @@ import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
 import 'package:collection/collection.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 

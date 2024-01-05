@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
-import 'package:hippocapp/models/posts-creation/created_post.dart';
+import 'package:hippocapp/models/posts-creation/post/post_to_be_sent_to_api.dart';
 import 'package:hippocapp/models/posts-creation/partner_model.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/important_icon_overlay.dart';
@@ -14,10 +14,10 @@ import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_partner_button.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_post_detail_icon.dart';
 import 'package:hippocapp/pages/select_categories/select_category_dialog.dart';
-import 'package:hippocapp/providers/app_state_provider.dart';
-import 'package:hippocapp/providers/post_creation_provider.dart';
-import 'package:hippocapp/providers/posts_provider.dart';
-import 'package:hippocapp/providers/ui_state_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
+import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
+import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/styles/icons.dart';
 import 'package:hippocapp/widgets/dialogs/custom_bottom_sheet.dart';
@@ -26,7 +26,7 @@ import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TopBarSectionForCreatePost extends ConsumerWidget {
-  final NewCreatedPost createPost;
+  final PostToBeSentToAPI createPost;
   final PostCategory category;
   final void Function(PostCategory?) onCategoryTap;
   final void Function()? onPartnerTap;
