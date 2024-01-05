@@ -34,5 +34,7 @@ class CustomColors {
   static const Color backgroundGrey = Color.fromRGBO(232, 232, 232, 1);
   static const Color lightGrey = Color(0xFFEEEEEE);
   static const Color lightBackGroundColor = Color(0xFFf7f7f7);
+  static const Color inflowBackgroundColor = Color(0xFF178c3e);
+  static const Color outflowBackgroundColor = Color(0xFFc5221f);
   //208 232
 }

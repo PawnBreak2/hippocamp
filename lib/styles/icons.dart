@@ -33,4 +33,10 @@ class CustomIcons {
   static const String lineStartHours = "assets/icons/line_start_hours.svg";
   static const String documentIcon = "assets/icons/doc_infotype.svg";
   static const String financeIcon = "assets/icons/fin_infotype.svg";
+  static const String imageGalleryIcon = "assets/icons/attachments_gallery.svg";
+  static const String cameraIcon = "assets/icons/attachments_camera.svg";
+  static const String pdfIcon = "assets/icons/attachments_pdf.svg";
+  static const String linkIcon = "assets/icons/attachments_link.svg";
+  static const String outflowIcon = "assets/icons/attachments_outflow.svg";
+  static const String inflowIcon = "assets/icons/attachments_inflow.svg";
 }
