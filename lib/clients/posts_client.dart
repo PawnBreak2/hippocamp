@@ -5,7 +5,7 @@ import 'package:hippocapp/clients/main_client.dart';
 import 'package:hippocapp/constants/storage_keys.dart';
 import 'package:hippocapp/constants/urls.dart';
 import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
-import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/posts-creation/created_post.dart';
 import 'package:hippocapp/models/error_call_model.dart';
 import 'package:hippocapp/models/posts-creation/attachment_types.dart';
 import 'package:hippocapp/models/posts-creation/partner_model.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/helpers/extensions/datetime_extension.dart';
 import 'package:hippocapp/models/body/attachments_for_created_post.dart';
-import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/posts-creation/created_post.dart';
 import 'package:hippocapp/models/body/multi_party_transaction_for_created_post.dart';
 import 'package:hippocapp/models/body/single_party_transaction_for_created_post.dart';
 import 'package:hippocapp/models/repositories/ui_state_repository.dart';

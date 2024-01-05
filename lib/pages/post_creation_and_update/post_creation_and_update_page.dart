@@ -19,7 +19,7 @@ import 'package:hippocapp/helpers/extensions/int_extensions.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/helpers/service/permission_handler.dart';
 import 'package:hippocapp/models/body/attachments_for_created_post.dart';
-import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/posts-creation/created_post.dart';
 import 'package:hippocapp/models/body/multi_party_transaction_for_created_post.dart';
 import 'package:hippocapp/models/body/single_party_transaction_for_created_post.dart';
 import 'package:hippocapp/models/posts-creation/attachment_types.dart';

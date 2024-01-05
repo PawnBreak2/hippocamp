@@ -168,12 +168,11 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     //loads all attachment types in appState repository and precaches all icons
     var startTime = DateTime.now();
 
-    List<AttachmentType> attachments =
-        await appStateNotifier.getAttachmentTypes();
+    await appStateNotifier.getAttachmentTypes();
 
     var endTime = DateTime.now();
     var duration = endTime.difference(startTime);
-    //print('attachment types loaded in $duration milliseconds ✅');
+    print('attachment types loaded in $duration milliseconds ✅');
   }
 
   Future<void> _precacheImages({

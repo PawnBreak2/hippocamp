@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hippocapp/helpers/utilities.dart';
+import 'package:hippocapp/providers/attachments_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/styles/icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class OverlayDialogForAttachments extends StatelessWidget {
+class OverlayDialogForAttachments extends ConsumerWidget {
   const OverlayDialogForAttachments({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: Align(
@@ -50,7 +53,16 @@ class OverlayDialogForAttachments extends StatelessWidget {
                           backgroundColor: Colors.white,
                           imagePath: CustomIcons.cameraIcon,
                           lateralMargin: 7,
-                          onPressed: () {},
+                          onPressed: () async {
+                            await ref
+                                .read(attachmentsProvider.notifier)
+                                .pickImageFromGallery();
+                            for (var image
+                                in ref.read(attachmentsProvider).images) {
+                              var length = await image.file.length();
+                              print(length);
+                            }
+                          },
                         ),
                         ButtonForOverlay(
                           isTextBold: false,

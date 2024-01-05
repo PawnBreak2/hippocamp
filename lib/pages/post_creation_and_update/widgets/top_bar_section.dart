@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hippocapp/constants/common.dart';
 import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
-import 'package:hippocapp/models/body/created_post.dart';
+import 'package:hippocapp/models/posts-creation/created_post.dart';
 import 'package:hippocapp/models/posts-creation/partner_model.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/important_icon_overlay.dart';
