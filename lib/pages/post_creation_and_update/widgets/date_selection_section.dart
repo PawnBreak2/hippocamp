@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hippocapp/helpers/extensions/int_extensions.dart';
+import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/date_picker_widgets/date_picker_time.dart';
 import 'package:hippocapp/providers/services/date_picker_provider.dart';
 import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
@@ -12,14 +13,26 @@ import 'package:hippocapp/styles/icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DateSelectionSection extends ConsumerWidget {
+  bool isUpdatingPost;
+  DateSelectionSection({
+    Key? key,
+    this.isUpdatingPost = false,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final postCreationAndUpdateNotifier =
+        ref.read(postCreationAndUpdateProvider.notifier);
+    final postCreationAndUpdateState = ref.watch(postCreationAndUpdateProvider);
+
     return Row(
       children: [
         InkWell(
           onTap: () async {
-            final selectedDate = ref
-                .read(datePickerProvider.select((value) => value.selectedDate));
+            final selectedDate = isUpdatingPost
+                ? postCreationAndUpdateState.date.dateFromString
+                : ref.read(
+                    datePickerProvider.select((value) => value.selectedDate));
             final selectedDateTimeFromPicker = await showDatePicker(
               context: context,
               builder: (context, child) {
@@ -42,9 +55,8 @@ class DateSelectionSection extends ConsumerWidget {
               firstDate: DateTime(2000),
               lastDate: DateTime(2050),
             );
-            ref
-                .read(datePickerProvider.notifier)
-                .setSelectedDate(selectedDateTimeFromPicker ?? selectedDate);
+            postCreationAndUpdateNotifier
+                .setDate(selectedDateTimeFromPicker ?? selectedDate);
           },
           child: Container(
             height: 28.sp,
@@ -57,10 +69,15 @@ class DateSelectionSection extends ConsumerWidget {
                 color: Color.fromRGBO(51, 51, 51, .3),
               ),
             ),
+
+            // date field
+
             child: Consumer(
               builder: (context, ref, child) {
                 final selectedDateTime = ref.watch(
-                    datePickerProvider.select((value) => value.selectedDate));
+                  postCreationAndUpdateProvider
+                      .select((value) => value.date.dateFromString),
+                );
 
                 return Text(
                   "${selectedDateTime.day} ${selectedDateTime.month.monthFromInt.substring(0, 3).toLowerCase()} ${selectedDateTime.year}",
@@ -79,8 +96,8 @@ class DateSelectionSection extends ConsumerWidget {
           flex: 2,
           child: Consumer(
             builder: (context, ref, child) {
-              bool isWholeDay = ref
-                  .watch(postCreationProvider.select((value) => value.allDay));
+              bool isWholeDay = ref.watch(postCreationAndUpdateProvider
+                  .select((value) => value.allDay));
               if (isWholeDay) {
                 return const FittedBox(
                     alignment: Alignment.centerRight,
@@ -117,7 +134,9 @@ class DateSelectionSection extends ConsumerWidget {
                   color: CustomColors.darkGrey,
                 ),
                 onTap: () {
-                  ref.read(postCreationProvider.notifier).setAllDay(true);
+                  ref
+                      .read(postCreationAndUpdateProvider.notifier)
+                      .setAllDay(true);
                 },
               ),
               SpeedDialChild(
@@ -134,7 +153,9 @@ class DateSelectionSection extends ConsumerWidget {
                   color: CustomColors.darkGrey,
                 ),
                 onTap: () {
-                  ref.read(postCreationProvider.notifier).setAllDay(false);
+                  ref
+                      .read(postCreationAndUpdateProvider.notifier)
+                      .setAllDay(false);
                 },
               ),
             ],

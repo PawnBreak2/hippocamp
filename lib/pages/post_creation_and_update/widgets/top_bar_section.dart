@@ -198,7 +198,7 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                                 child: Consumer(
                                   builder: (context, ref, child) {
                                     bool isImportant = ref.watch(
-                                        postCreationProvider.select(
+                                        postCreationAndUpdateProvider.select(
                                             (value) => value.important));
                                     return Visibility(
                                       visible: isImportant,
@@ -238,7 +238,7 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                                   Consumer(
                                     builder: (context, ref, child) {
                                       bool isUncertain = ref.watch(
-                                          postCreationProvider.select(
+                                          postCreationAndUpdateProvider.select(
                                               (value) => value.uncertain));
                                       return Visibility(
                                         visible: isUncertain,
@@ -253,8 +253,8 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                                   Consumer(
                                       builder: (context, ref, child) {
                                         bool isSensitive = ref.watch(
-                                            postCreationProvider.select(
-                                                (value) =>
+                                            postCreationAndUpdateProvider
+                                                .select((value) =>
                                                     value.sensitiveInfo));
 
                                         return Visibility(
@@ -283,10 +283,11 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                                   Consumer(
                                     builder: (context, ref, child) {
                                       bool isSpot = ref.watch(
-                                          postCreationProvider.select((value) =>
-                                              value.visualization ==
-                                              visualizationTypeMap[
-                                                  VisualizationType.spot]));
+                                          postCreationAndUpdateProvider.select(
+                                              (value) =>
+                                                  value.visualization ==
+                                                  visualizationTypeMap[
+                                                      VisualizationType.spot]));
                                       return Icon(
                                         isSpot
                                             ? CustomMaterialIcons.spot

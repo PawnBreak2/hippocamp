@@ -33,7 +33,7 @@ class Post {
   final String holiday;
   final bool allDay;
   final String visualization;
-  final List<Partner> businessPartners;
+  final List<String> businessPartners;
   final List<SinglePartyTransactionPost> singlePartyTransactions;
   final List<Attachment> attachments;
 
@@ -82,7 +82,7 @@ class Post {
     String? holiday,
     String? visualization,
     bool? allDay,
-    List<Partner>? businessPartners,
+    List<String>? businessPartners,
     List<SinglePartyTransactionPost>? singlePartyTransactions,
     List<Attachment>? attachments,
   }) {
@@ -121,15 +121,11 @@ class Post {
       description: json["description"] ?? "",
       attachmentCount: json["attachmentCount"] ?? 0,
       category: PostCategory.fromMap(json["category"] ?? {}),
-      businessPartners: json["businessPartners"] != null
-          ? (json["businessPartners"] as List)
-              .map((e) => Partner.fromMap(e))
-              .toList()
-          : [],
+      businessPartners: json["businessPartners"] ?? [],
       multiPartyTransaction:
           MultiPartyTransaction.fromMap(json["multiPartyTransaction"]),
-      latitude: json["latitude"] ?? "",
-      longitude: json["longitude"] ?? "",
+      latitude: json["latitude"] ?? 0,
+      longitude: json["longitude"] ?? 0,
       address: json["address"] ?? "",
       visualization: json["visualization"] ?? "",
       important: json["important"] ?? false,

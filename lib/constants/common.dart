@@ -11,14 +11,28 @@ Map<VisualizationType, String> visualizationTypeMap = {
   VisualizationType.spot: "SPOT"
 };
 
-class Constants {
-  static const Map<String, String> typeFinanceMovement = {
-    "Prelievo ATM": "Prelievo",
-    "Trasferimento Portafoglio": "Trasferimento",
-    "RID mensile Carta di Credito": "RID CC",
-    "Compravendita Valuta": "Compravaluta",
-  };
+enum SingleTransactionType { inflow, outflow }
 
+Map<SingleTransactionType, String> singleTransactionTypeMap = {
+  SingleTransactionType.inflow: "INFLOW",
+  SingleTransactionType.outflow: "OUTFLOW"
+};
+
+enum MultiTransactionType {
+  atmWithdrawal,
+  currencyTrade,
+  monthlyCreditCardBill,
+  transfer
+}
+
+Map<MultiTransactionType, String> multipleTransactionTypeMap = {
+  MultiTransactionType.atmWithdrawal: "ATM_WITHDRAWAL",
+  MultiTransactionType.currencyTrade: "CURRENCY_TRADE",
+  MultiTransactionType.monthlyCreditCardBill: "MONTHLY_CREDIT_CARD_BILL",
+  MultiTransactionType.transfer: "TRANSFER",
+};
+
+class Constants {
   static const List<String> monthsNames = [
     "Gennaio",
     "Febbraio",

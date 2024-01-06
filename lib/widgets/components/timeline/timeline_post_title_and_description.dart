@@ -33,18 +33,18 @@ class TimeLinePostTitleAndDescription extends StatelessWidget {
             children: [
               // Builds this section depending on the post type based on time
               Builder(builder: (context) {
-                if (post.wholeDay) {
+                if (post.allDay) {
                   return Icon(
                     Icons.square,
                     color: CustomColors.grey66,
                     size: 10,
                   );
-                } else if (!post.wholeDay && post.from == post.to) {
+                } else if (!post.allDay && post.from == post.to) {
                   return Text(post.timePost,
                       style: TextStyle(
                         fontSize: 14,
                       ));
-                } else if (!post.wholeDay && post.from != post.to) {
+                } else if (!post.allDay && post.from != post.to) {
                   return Text(
                     '${post.from.substring(0, post.from.length - 3)} - ${post.to.substring(0, post.to.length - 3)}',
                     style: TextStyle(

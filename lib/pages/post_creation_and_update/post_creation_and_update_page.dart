@@ -25,6 +25,7 @@ import 'package:hippocapp/models/posts-creation/transactions/single_party_transa
 import 'package:hippocapp/models/posts-creation/attachment_types.dart';
 import 'package:hippocapp/models/posts-creation/finance_movement_model.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
+import 'package:hippocapp/models/responses/posts/partner.dart';
 import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 
 import 'package:hippocapp/models/wallets/wallet_model.dart';
@@ -95,17 +96,15 @@ class PostCreationAndUpdatePage extends ConsumerStatefulWidget {
 }
 
 class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
-  late PostCategory category;
+  late PostCategory _category;
+  late List<BusinessPartner> _businessPartners;
   late TextEditingController _titleTextController;
   late TextEditingController _locationTextController;
   late TextEditingController _descriptionTextController;
   late PostCreationAndUpdateNotifier _postCreationAndUpdateNotifier;
-  late UIStateNotifier uiNotifier;
-  PartnerModel? _partnerModel;
-  DateTime _dateTime = DateTime.now();
-  bool _allDay = true;
-  TimeOfDay _timeOfDayFrom = TimeOfDay.now();
-  TimeOfDay _timeOfDayTo = TimeOfDay.now();
+  late PostToBeSentToAPI _postCreationAndUpdateState;
+  late UIStateNotifier _uiNotifier;
+  late AppStateNotifier _appStateNotifier;
 
   final List<Map> _financeMovementListToSave = [];
 
@@ -130,10 +129,39 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
 
   @override
   void initState() {
-    uiNotifier = ref.read(uiStateProvider.notifier);
-    _postCreationAndUpdateNotifier = ref.read(postCreationProvider.notifier);
+    _uiNotifier = ref.read(uiStateProvider.notifier);
+    _postCreationAndUpdateNotifier =
+        ref.read(postCreationAndUpdateProvider.notifier);
+    _appStateNotifier = ref.read(appStateProvider.notifier);
 
     // Setup controllers for text fields and add listeners
+
+    _category = _appStateNotifier
+        .findCategoryByKey(_postCreationAndUpdateState.categoryKey);
+    _businessPartners ==
+        _appStateNotifier.findBusinessPartnersByKeys(
+            _postCreationAndUpdateState.businessPartners);
+
+    super.initState();
+    initListeners();
+    initPost();
+  }
+
+  void initPost() {
+    final walletsProviderNotifier = ref.read(walletsProvider.notifier);
+    final walletsProviderState = ref.read(walletsProvider);
+
+    if (widget.isUpdatingExistingPost) {
+      _titleTextController.text = _postCreationAndUpdateState.title;
+      _locationTextController.text = _postCreationAndUpdateState.address;
+    } else {
+      _titleTextController.text = _category.name;
+    }
+
+    if (widget.isCreatingNewPost) return;
+  }
+
+  void initListeners() {
     ///TODO: dispose of listeners
 
     _titleTextController = TextEditingController()
@@ -146,139 +174,10 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
         descriptionTextControllerListener(
             controller: _descriptionTextController, ref: ref);
       });
-
-    super.initState();
-    initPost();
-  }
-
-  void initPost() {
-    final walletsProviderNotifier = ref.read(walletsProvider.notifier);
-    final walletsProviderState = ref.read(walletsProvider);
-
-    if (widget.isUpdatingExistingPost) {
-      _postCreationAndUpdateNotifier.reset();
-
-      category = widget.category!;
-      _titleTextController.text = widget.post!.title;
-      _locationTextController.text = widget.post!.address;
-
-      _dateTime = widget.post!.dateTimeFromString;
-
-      _allDay = widget.post!.allDay;
-      _timeOfDayFrom = widget.post!.from.timeOfDayFromString;
-      _timeOfDayTo = widget.post!.to.timeOfDayFromString;
-    } else {
-      category = PostCategory.fromCategoryModel(widget.post!.category);
-      _titleTextController.text = category.name;
-    }
-
-    if (widget.post == null) return;
-
-    if (widget.post!.businessPartners.isNotEmpty)
-      _partnerModel =
-          PartnerModel.fromPostPartner(widget.post!.businessPartners.first);
-
-    for (var i in widget.post!.singlePartyTransactions) {
-      final firstWallet =
-          walletsProviderNotifier.getWalletByWalletKey(i.wallet);
-
-      _financeMovementListToSave.add(
-        FinanceMovementModel(
-          wallet: firstWallet,
-          inOrOut: i.type != "OUTFLOW",
-          value: i.amount.toString(),
-        ).toJsonStandard(),
-      );
-    }
-
-    if (widget.post!.multiPartyTransaction != null) {
-      final trx = widget.post!.multiPartyTransaction!;
-      final fromWallet =
-          walletsProviderNotifier.getWalletByWalletKey(trx.fromWallet);
-      final toWallet =
-          walletsProviderNotifier.getWalletByWalletKey(trx.toWallet);
-
-      _financeMovementListToSave.add(
-        FinanceMovementModel(
-          typeNotStandard: trx.type,
-          typeWalletFROM: fromWallet,
-          typeWalletTO: toWallet,
-          value: trx.amountIn.toString(),
-          valueEntered: trx.amountOut == 0 ? null : trx.amountOut.toString(),
-        ).toJsonNotStandard(),
-      );
-    }
-  }
-
-  PostToBeSentToAPI postModelToCreate(
-      {List<Map<String, dynamic>> attachments = const []}) {
-    List<SinglePartyTransactionForPostToBeSentToAPI>? _singleTrxs;
-    MultiPartyTransactionForPostToBeSentToAPI? _multiTrxs;
-
-    if (_financeMovementListToSave.isNotEmpty) {
-      for (var i in _financeMovementListToSave) {
-        final amountValue =
-            i["value"].toString().replaceAll(".", "").replaceAll(",", ".");
-        final secondAmountValue = i["valueEntered"]
-            .toString()
-            .replaceAll(".", "")
-            .replaceAll(",", ".");
-
-        if (i["typeNotStandard"] == null) {
-          _singleTrxs ??= [];
-
-          _singleTrxs.add(
-            SinglePartyTransactionForPostToBeSentToAPI(
-              amount: double.tryParse(amountValue) ?? 0,
-              date: _dateTime.toUtc().toIso8601String(),
-              type: i["inOrOut"] ? "INFLOW" : "OUTFLOW",
-              wallet: i["wallet"].key,
-            ),
-          );
-        } else {
-          _multiTrxs ??= MultiPartyTransactionForPostToBeSentToAPI(
-            date: _dateTime.toUtc().toIso8601String(),
-            type: category.type,
-            categoryKey: category.key,
-            fromWallet: i["walletFROM"].key,
-            toWallet: i["walletTO"].key,
-            amountIn: double.tryParse(amountValue) ?? 0,
-            amountOut: double.tryParse(secondAmountValue) ?? 0,
-          );
-        }
-      }
-    }
-
-    return PostToBeSentToAPI(
-      title: _titleTextController.text,
-      description: "",
-      categoryKey: category.key,
-      businessPartners: _partnerModel == null ? [] : [_partnerModel!.key],
-      latitude: 0,
-      longitude: 0,
-      address: _locationTextController.text,
-      important: false,
-      uncertain: false,
-      sensitiveInfo: false,
-      visualization: "",
-      from: _allDay ? "" : _timeOfDayFrom.timeToString,
-      to: _allDay ? "" : _timeOfDayTo.timeToString,
-      date: _dateTime.dateToString,
-      allDay: _allDay,
-      attachments: attachments
-          .map((e) => AttachmentForPostToBeSentToAPI.fromJson(e))
-          .toList(),
-      singlePartyTransactions: _singleTrxs,
-      multiPartyTransaction: _multiTrxs,
-      businessPartnerBranch: "",
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    print('domainkey');
-    print(category.name);
-    print(category.domainKey);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -296,7 +195,7 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
             child: Column(
               children: [
                 TopBarSectionForCreatePost(
-                  onCategoryTap: (c) async {
+                  onCategoryTap: (c) {
                     if (c == null) return;
                     category = c;
 
@@ -504,7 +403,9 @@ class _PostCreationPageState extends ConsumerState<PostCreationAndUpdatePage> {
                 // Location All day / Time
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: DateSelectionSection(),
+                  child: DateSelectionSection(
+                    isUpdatingPost: widget.isUpdatingExistingPost,
+                  ),
                 ),
 
                 // Finance Movements

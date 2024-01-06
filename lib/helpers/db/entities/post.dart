@@ -86,8 +86,7 @@ class PostEntity {
       holiday: post.holiday,
 
       allDay: post.allDay,
-      businessPartnersKeys:
-          serializeIds(post.businessPartners.map((e) => e.key).toList()),
+      businessPartnersKeys: serializeIds(post.businessPartners),
       singlePartyTransactionKeys:
           serializeIds(post.singlePartyTransactions.map((e) => e.key).toList()),
       attachmentIds: serializeIds(post.attachments.map((e) => e.key).toList()),

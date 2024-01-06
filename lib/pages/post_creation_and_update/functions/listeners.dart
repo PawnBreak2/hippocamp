@@ -11,7 +11,7 @@ import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 void titleTextControllerListener(
     {required TextEditingController controller, required WidgetRef ref}) {
   Future.delayed(Duration(milliseconds: 10), () {
-    ref.read(postCreationProvider.notifier).setTitle(controller.text);
+    ref.read(postCreationAndUpdateProvider.notifier).setTitle(controller.text);
   });
 }
 
@@ -21,7 +21,9 @@ void titleTextControllerListener(
 
 void descriptionTextControllerListener(
     {required TextEditingController controller, required WidgetRef ref}) {
-  ref.read(postCreationProvider.notifier).setDescription(controller.text);
+  ref
+      .read(postCreationAndUpdateProvider.notifier)
+      .setDescription(controller.text);
   final UIStateNotifier uiNotifier = ref.read(uiStateProvider.notifier);
   if (controller.text.isNotEmpty) {
     uiNotifier.updateDescriptionButtonState(

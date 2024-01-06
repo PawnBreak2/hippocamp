@@ -146,6 +146,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage>
       print('DO IT');
     }
 
+    ///TODO: da implementare refresh
+
     final nearTheStart =
         itemPositionsListener.itemPositions.value.first.index < 3;
 
@@ -403,6 +405,8 @@ class _TimelinePageState extends ConsumerState<TimelinePage>
                                           postsProviderNotifier
                                               .addOrRemoveSelectedPost(
                                                   post: post);
+
+                                          ///TODO: lasciarlo?
                                           setState(() {});
                                         },
                                       );

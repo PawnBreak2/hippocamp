@@ -35,14 +35,14 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
           children: [
             Consumer(
               builder: (context, ref, child) {
-                bool isImportant = ref.watch(
-                    postCreationProvider.select((value) => value.important));
+                bool isImportant = ref.watch(postCreationAndUpdateProvider
+                    .select((value) => value.important));
                 return Padding(
                   padding: contentPadding,
                   child: InkWell(
                     onTap: () {
                       ref
-                          .read(postCreationProvider.notifier)
+                          .read(postCreationAndUpdateProvider.notifier)
                           .setImportant(!isImportant);
                     },
                     child: SelectAttributeForPostItem(
@@ -56,14 +56,14 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                bool isUncertain = ref.watch(
-                    postCreationProvider.select((value) => value.uncertain));
+                bool isUncertain = ref.watch(postCreationAndUpdateProvider
+                    .select((value) => value.uncertain));
                 return Padding(
                   padding: contentPadding,
                   child: InkWell(
                     onTap: () {
                       ref
-                          .read(postCreationProvider.notifier)
+                          .read(postCreationAndUpdateProvider.notifier)
                           .setUncertain(!isUncertain);
                     },
                     child: SelectAttributeForPostItem(
@@ -77,14 +77,14 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                bool isSensitive = ref.watch(postCreationProvider
+                bool isSensitive = ref.watch(postCreationAndUpdateProvider
                     .select((value) => value.sensitiveInfo));
                 return Padding(
                   padding: contentPadding,
                   child: InkWell(
                     onTap: () {
                       ref
-                          .read(postCreationProvider.notifier)
+                          .read(postCreationAndUpdateProvider.notifier)
                           .setSensitiveInfo(!isSensitive);
                     },
                     child: SelectAttributeForPostItem(
@@ -98,12 +98,14 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                bool isSlot = ref.watch(postCreationProvider.select((value) =>
-                    value.visualization ==
-                    visualizationTypeMap[VisualizationType.slot]));
-                bool isSpot = ref.watch(postCreationProvider.select((value) =>
-                    value.visualization ==
-                    visualizationTypeMap[VisualizationType.spot]));
+                bool isSlot = ref.watch(postCreationAndUpdateProvider.select(
+                    (value) =>
+                        value.visualization ==
+                        visualizationTypeMap[VisualizationType.slot]));
+                bool isSpot = ref.watch(postCreationAndUpdateProvider.select(
+                    (value) =>
+                        value.visualization ==
+                        visualizationTypeMap[VisualizationType.spot]));
                 return Container(
                   height: 12.h,
                   decoration: BoxDecoration(
@@ -122,7 +124,7 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
                         child: InkWell(
                           onTap: () {
                             ref
-                                .read(postCreationProvider.notifier)
+                                .read(postCreationAndUpdateProvider.notifier)
                                 .setVisualizationType(VisualizationType.slot);
                           },
                           child: SelectAttributeForPostItem(
@@ -137,7 +139,7 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
                         child: InkWell(
                           onTap: () {
                             ref
-                                .read(postCreationProvider.notifier)
+                                .read(postCreationAndUpdateProvider.notifier)
                                 .setVisualizationType(VisualizationType.spot);
                           },
                           child: SelectAttributeForPostItem(
@@ -195,7 +197,9 @@ class AlertDialogForPostAttributes extends ConsumerWidget {
             ),
           ),
           onPressed: () {
-            ref.read(postCreationProvider.notifier).resetAllPostAttributes();
+            ref
+                .read(postCreationAndUpdateProvider.notifier)
+                .resetAllPostAttributes();
             context.pop(); // Dismiss alert dialog
           },
         ),

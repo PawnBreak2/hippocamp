@@ -12,9 +12,11 @@ import 'package:hippocapp/widgets/forms/primary_text_form.dart';
 class SelectCategoriesDialog extends ConsumerStatefulWidget {
   final ScrollController scrollController;
   final bool selectNewCategory;
+  final bool updateCategoryForPost;
   const SelectCategoriesDialog({
     required this.scrollController,
     this.selectNewCategory = false,
+    this.updateCategoryForPost = false,
   });
 
   @override
@@ -78,6 +80,7 @@ class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
                   child: ListCategoriesForPostCreation(
                     controller: _textEditingController,
                     selectNewCategory: widget.selectNewCategory,
+                    updateCategoryForPost: widget.updateCategoryForPost,
                   ),
                 ),
                 Expanded(

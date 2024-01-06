@@ -12,7 +12,7 @@ class AppState with _$AppState {
     @Default([]) List<AttachmentType> attachmentTypes,
     @Default([]) List<PostCategory> categories,
     @Default([]) List<Domain> domains,
-    @Default([]) List<PartnerModel> businessPartners,
+    @Default([]) List<BusinessPartner> businessPartners,
     @Default(0) int valueToScrollToToday,
     @Default([]) List<Domain> domainsInCategories,
     @Default([]) List<Domain> domainsInCategoriesInactive,

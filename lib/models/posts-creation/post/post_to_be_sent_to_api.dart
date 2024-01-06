@@ -41,8 +41,7 @@ class PostToBeSentToAPI with _$PostToBeSentToAPI {
       description: post.description,
       categoryKey: post.category
           .key, // Assuming categoryKey matches with key in PostCategory
-      businessPartners:
-          post.businessPartners.map((partner) => partner.key).toList(),
+      businessPartners: post.businessPartners,
       businessPartnerBranch:
           "", // No equivalent in Post, defaulting to empty string
       latitude: post.latitude,

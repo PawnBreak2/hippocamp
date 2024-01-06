@@ -14,9 +14,11 @@ import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 class ListCategoriesForPostCreation extends ConsumerWidget {
   final TextEditingController controller;
   final bool selectNewCategory;
+  final bool updateCategoryForPost;
   const ListCategoriesForPostCreation({
     required this.controller,
     required this.selectNewCategory,
+    this.updateCategoryForPost = false,
   });
 
   @override

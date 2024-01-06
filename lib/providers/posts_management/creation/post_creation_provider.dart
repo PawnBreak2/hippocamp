@@ -7,6 +7,7 @@ import 'package:hippocapp/models/posts-creation/transactions/multi_party_transac
 import 'package:hippocapp/models/posts-creation/transactions/single_party_transaction_for_post_to_be_sent_to_api.dart';
 import 'package:hippocapp/models/repositories/ui_state_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 
 /// Used to create/edit a post before creation, abstracting the logic from the widget
 
@@ -85,6 +86,10 @@ class PostCreationAndUpdateNotifier extends Notifier<PostToBeSentToAPI> {
     state = state.copyWith(to: value);
   }
 
+  void setDate(DateTime date) {
+    state = state.copyWith(date: date.dateToString);
+  }
+
   /// Resets the time from and time to to the current time
   ///
   /// Useful when there are errors in time picking
@@ -104,11 +109,15 @@ class PostCreationAndUpdateNotifier extends Notifier<PostToBeSentToAPI> {
     );
   }
 
+  void initPostToBeSentToAPIFromExistingPost(Post post) {
+    state = PostToBeSentToAPI.fromPost(post);
+  }
+
   void reset() {
-    state = PostToBeSentToAPI();
+    state = const PostToBeSentToAPI();
   }
 }
 
-final postCreationProvider =
+final postCreationAndUpdateProvider =
     NotifierProvider<PostCreationAndUpdateNotifier, PostToBeSentToAPI>(
         () => PostCreationAndUpdateNotifier());

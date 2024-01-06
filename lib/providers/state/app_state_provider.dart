@@ -208,7 +208,7 @@ class AppStateNotifier extends Notifier<AppState> {
 
   // PARTNERS
 
-  Future<List<PartnerModel>> getBusinessPartners(
+  Future<List<BusinessPartner>> getBusinessPartners(
       {bool forceCall = false}) async {
     if (state.businessPartners.isNotEmpty && !forceCall)
       return state.businessPartners;
@@ -223,6 +223,18 @@ class AppStateNotifier extends Notifier<AppState> {
       },
     );
     return state.businessPartners;
+  }
+
+  // UTILITIES
+
+  PostCategory findCategoryByKey(String key) {
+    return state.categories.firstWhere((element) => element.key == key);
+  }
+
+  List<BusinessPartner> findBusinessPartnersByKeys(List<String> keys) {
+    return state.businessPartners
+        .where((element) => keys.contains(element.key))
+        .toList();
   }
 
   void clearAllData() {

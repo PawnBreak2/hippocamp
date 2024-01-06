@@ -173,7 +173,7 @@ class AppStateClient {
     );
   }
 
-  Future<Either<ErrorCallModel, List<PartnerModel>>> getPartners() async {
+  Future<Either<ErrorCallModel, List<BusinessPartner>>> getPartners() async {
     final token = await SecureStorage.read(StorageKeys.token);
 
     final resp = await _dio.get(
@@ -185,7 +185,7 @@ class AppStateClient {
 
     if (resp.statusCode == 200)
       return Right(
-        (resp.data as List).map((e) => PartnerModel.fromMap(e)).toList(),
+        (resp.data as List).map((e) => BusinessPartner.fromMap(e)).toList(),
       );
 
     return Left(

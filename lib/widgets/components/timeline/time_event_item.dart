@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
+import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/components/timeline/partner_box.dart';
 import 'package:hippocapp/widgets/components/timeline/timeline_post_icon.dart';
@@ -14,7 +16,7 @@ import 'package:hippocapp/widgets/components/timeline/timeline_post_title_and_de
 import 'package:hippocapp/widgets/images/cached_timeline_post_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class TimeEventItem extends StatelessWidget {
+class TimeEventItem extends ConsumerWidget {
   final Post post;
   final bool isLastOne;
   final VoidCallback? onTap;
@@ -56,7 +58,7 @@ class TimeEventItem extends StatelessWidget {
 */
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // final listChips = _chipsBoxList;
     // final isPast = post.dateTimeFromString.isBefore(DateTime.now());
 
@@ -67,6 +69,11 @@ class TimeEventItem extends StatelessWidget {
         splashColor: CustomColors.mediumRed,
         onTap: onTap ??
             () {
+              // resets the postCreationAndUpdate provider and sets it to the post to be edited
+
+              ref
+                  .read(postCreationAndUpdateProvider.notifier)
+                  .initPostToBeSentToAPIFromExistingPost(post);
               context.pushNamed(routeMap[routeNames.postCreationAndUpdate],
                   extra: post);
             },

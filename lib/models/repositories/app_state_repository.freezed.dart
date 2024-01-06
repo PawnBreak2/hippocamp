@@ -20,7 +20,8 @@ mixin _$AppState {
       throw _privateConstructorUsedError;
   List<PostCategory> get categories => throw _privateConstructorUsedError;
   List<Domain> get domains => throw _privateConstructorUsedError;
-  List<PartnerModel> get businessPartners => throw _privateConstructorUsedError;
+  List<BusinessPartner> get businessPartners =>
+      throw _privateConstructorUsedError;
   int get valueToScrollToToday => throw _privateConstructorUsedError;
   List<Domain> get domainsInCategories => throw _privateConstructorUsedError;
   List<Domain> get domainsInCategoriesInactive =>
@@ -49,7 +50,7 @@ abstract class $AppStateCopyWith<$Res> {
       {List<AttachmentType> attachmentTypes,
       List<PostCategory> categories,
       List<Domain> domains,
-      List<PartnerModel> businessPartners,
+      List<BusinessPartner> businessPartners,
       int valueToScrollToToday,
       List<Domain> domainsInCategories,
       List<Domain> domainsInCategoriesInactive,
@@ -104,7 +105,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
       businessPartners: null == businessPartners
           ? _value.businessPartners
           : businessPartners // ignore: cast_nullable_to_non_nullable
-              as List<PartnerModel>,
+              as List<BusinessPartner>,
       valueToScrollToToday: null == valueToScrollToToday
           ? _value.valueToScrollToToday
           : valueToScrollToToday // ignore: cast_nullable_to_non_nullable
@@ -157,7 +158,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
       {List<AttachmentType> attachmentTypes,
       List<PostCategory> categories,
       List<Domain> domains,
-      List<PartnerModel> businessPartners,
+      List<BusinessPartner> businessPartners,
       int valueToScrollToToday,
       List<Domain> domainsInCategories,
       List<Domain> domainsInCategoriesInactive,
@@ -210,7 +211,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
       businessPartners: null == businessPartners
           ? _value._businessPartners
           : businessPartners // ignore: cast_nullable_to_non_nullable
-              as List<PartnerModel>,
+              as List<BusinessPartner>,
       valueToScrollToToday: null == valueToScrollToToday
           ? _value.valueToScrollToToday
           : valueToScrollToToday // ignore: cast_nullable_to_non_nullable
@@ -258,7 +259,7 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
       {final List<AttachmentType> attachmentTypes = const [],
       final List<PostCategory> categories = const [],
       final List<Domain> domains = const [],
-      final List<PartnerModel> businessPartners = const [],
+      final List<BusinessPartner> businessPartners = const [],
       this.valueToScrollToToday = 0,
       final List<Domain> domainsInCategories = const [],
       final List<Domain> domainsInCategoriesInactive = const [],
@@ -304,10 +305,10 @@ class _$AppStateImpl with DiagnosticableTreeMixin implements _AppState {
     return EqualUnmodifiableListView(_domains);
   }
 
-  final List<PartnerModel> _businessPartners;
+  final List<BusinessPartner> _businessPartners;
   @override
   @JsonKey()
-  List<PartnerModel> get businessPartners {
+  List<BusinessPartner> get businessPartners {
     if (_businessPartners is EqualUnmodifiableListView)
       return _businessPartners;
     // ignore: implicit_dynamic_type
@@ -463,7 +464,7 @@ abstract class _AppState implements AppState {
       {final List<AttachmentType> attachmentTypes,
       final List<PostCategory> categories,
       final List<Domain> domains,
-      final List<PartnerModel> businessPartners,
+      final List<BusinessPartner> businessPartners,
       final int valueToScrollToToday,
       final List<Domain> domainsInCategories,
       final List<Domain> domainsInCategoriesInactive,
@@ -481,7 +482,7 @@ abstract class _AppState implements AppState {
   @override
   List<Domain> get domains;
   @override
-  List<PartnerModel> get businessPartners;
+  List<BusinessPartner> get businessPartners;
   @override
   int get valueToScrollToToday;
   @override

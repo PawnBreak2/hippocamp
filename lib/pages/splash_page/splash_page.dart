@@ -135,7 +135,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   Future<void> _getAllPartnersAndPrecacheImages() async {
     var startTime = DateTime.now();
-    List<PartnerModel> businessPartners =
+    List<BusinessPartner> businessPartners =
         await appStateNotifier.getBusinessPartners();
     await _precacheImages(elements: businessPartners);
 

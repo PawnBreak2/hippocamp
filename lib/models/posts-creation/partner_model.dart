@@ -1,34 +1,25 @@
 import 'package:hippocapp/models/responses/posts/partner.dart';
 import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 
-class PartnerModel {
+class BusinessPartner {
   final String key;
   final String name;
   final String iconUrl;
-  final bool assigned;
+  final bool installed;
 
-  const PartnerModel({
+  const BusinessPartner({
     required this.key,
     required this.name,
     required this.iconUrl,
-    required this.assigned,
+    required this.installed,
   });
 
-  static PartnerModel fromMap(Map map) {
-    return PartnerModel(
+  static BusinessPartner fromMap(Map map) {
+    return BusinessPartner(
       key: map["key"] ?? "",
       name: map["name"] ?? "",
       iconUrl: map["iconUrl"] ?? "",
-      assigned: map["assigned"] ?? false,
-    );
-  }
-
-  static PartnerModel fromPostPartner(Partner partner) {
-    return PartnerModel(
-      key: partner.key,
-      name: partner.name,
-      iconUrl: partner.iconUrl,
-      assigned: true,
+      installed: map["installed"] ?? false,
     );
   }
 }

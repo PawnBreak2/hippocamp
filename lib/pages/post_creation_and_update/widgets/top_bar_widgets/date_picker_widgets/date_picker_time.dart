@@ -16,10 +16,10 @@ class DatePickerTime extends ConsumerWidget {
 
   bool isSelectedTimeValid(WidgetRef ref) {
     TimeOfDay timeFrom = ref
-        .watch(postCreationProvider.select((value) => value.from))
+        .watch(postCreationAndUpdateProvider.select((value) => value.from))
         .timeOfDayFromString;
     TimeOfDay timeTo = ref
-        .watch(postCreationProvider.select((value) => value.to))
+        .watch(postCreationAndUpdateProvider.select((value) => value.to))
         .timeOfDayFromString;
 
     DateTime timeFromInDateTime = DateTime(
@@ -42,10 +42,10 @@ class DatePickerTime extends ConsumerWidget {
   void setTimeOfDayForPost(
       TimeSelection timeSelection, BuildContext context, WidgetRef ref) async {
     final selectedTimeFrom = ref
-        .watch(postCreationProvider.select((value) => value.from))
+        .watch(postCreationAndUpdateProvider.select((value) => value.from))
         .timeOfDayFromString;
     final selectedTimeTo = ref
-        .watch(postCreationProvider.select((value) => value.to))
+        .watch(postCreationAndUpdateProvider.select((value) => value.to))
         .timeOfDayFromString;
     final TimeOfDay? selectedTimeFromPicker = await showTimePicker(
         initialEntryMode: TimePickerEntryMode.dial,
@@ -75,20 +75,20 @@ class DatePickerTime extends ConsumerWidget {
           );
         });
     if (timeSelection == TimeSelection.to) {
-      ref.read(postCreationProvider.notifier).setTimeTo(
+      ref.read(postCreationAndUpdateProvider.notifier).setTimeTo(
           selectedTimeFromPicker?.timeToString ?? selectedTimeTo.timeToString);
       if (!isSelectedTimeValid(ref)) {
-        ref.read(postCreationProvider.notifier).setTimeFrom(
+        ref.read(postCreationAndUpdateProvider.notifier).setTimeFrom(
             selectedTimeFromPicker?.timeToString ??
                 selectedTimeFrom.timeToString);
       }
     } else {
-      ref.read(postCreationProvider.notifier).setTimeFrom(
+      ref.read(postCreationAndUpdateProvider.notifier).setTimeFrom(
           selectedTimeFromPicker?.timeToString ??
               selectedTimeFrom.timeToString);
 
       if (!isSelectedTimeValid(ref)) {
-        ref.read(postCreationProvider.notifier).setTimeTo(
+        ref.read(postCreationAndUpdateProvider.notifier).setTimeTo(
             selectedTimeFromPicker?.timeToString ??
                 selectedTimeTo.timeToString);
       }
@@ -181,7 +181,9 @@ class DatePickerTime extends ConsumerWidget {
             child: Consumer(
               builder: (context, ref, child) {
                 String timeFrom = ref
-                    .watch(postCreationProvider.select((value) => value.from));
+                    .watch(postCreationAndUpdateProvider
+                        .select((value) => value.from))
+                    .substring(0, 5);
 
                 return Text(
                   timeFrom,
@@ -215,8 +217,10 @@ class DatePickerTime extends ConsumerWidget {
             ),
             child: Consumer(
               builder: (context, ref, child) {
-                String timeTo =
-                    ref.watch(postCreationProvider.select((value) => value.to));
+                String timeTo = ref
+                    .watch(postCreationAndUpdateProvider
+                        .select((value) => value.to))
+                    .substring(0, 5);
                 return Text(
                   timeTo,
                   style: const TextStyle(
