@@ -5,6 +5,7 @@ import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
 import 'package:hippocapp/models/responses/categories_response_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
+import 'package:hippocapp/providers/posts_management/creation_and_update/post_creation_and_update_provider.dart';
 import 'package:hippocapp/providers/state/app_state_provider.dart';
 import 'package:collection/collection.dart';
 import 'package:hippocapp/providers/ui/ui_state_provider.dart';
@@ -14,11 +15,9 @@ import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 class ListCategoriesForPostCreation extends ConsumerWidget {
   final TextEditingController controller;
   final bool selectNewCategory;
-  final bool updateCategoryForPost;
   const ListCategoriesForPostCreation({
     required this.controller,
     required this.selectNewCategory,
-    this.updateCategoryForPost = false,
   });
 
   @override
@@ -90,13 +89,18 @@ class ListCategoriesForPostCreation extends ConsumerWidget {
                     }
                   },
                   onTap: () {
-                    // if is not selecting (long-pressing) a new category, it pushes the post creation page
+                    // If is not selecting (long-pressing) a new category, it pushes the post creation/updated page
 
                     ///TODO: refactor per includere tutto in un unica var?
 
                     if (!(uiState.isLongPressingCategory &&
                         uiState.longPressedCategoryKey ==
                             categoriesForSelectedDomain[i].key)) {
+                      // Sets the current category key in the post creation and update provider
+
+                      ref
+                          .read(postCreationAndUpdateProvider.notifier)
+                          .setCategoryKey(categoriesForSelectedDomain[i].key);
                       context.pushNamed(
                           routeMap[routeNames.postCreationAndUpdate],
                           extra: categoriesForSelectedDomain[i]);

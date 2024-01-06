@@ -93,7 +93,7 @@ class PostEntity {
     );
   }
 
-  static String serializeIds(List<String> items) {
+  static String serializeIds(List<dynamic> items) {
     return items.join(',');
   }
 

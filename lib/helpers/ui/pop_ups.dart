@@ -13,4 +13,15 @@ class PopUps {
       );
     });
   }
+
+  static showFlashSuccessDialog({required context, required text}) {
+    print('showing flash success dialog');
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      FlashCustomDialog.showPopUp(
+        context: context,
+        text: text,
+        isError: false,
+      );
+    });
+  }
 }

@@ -23,7 +23,7 @@ mixin _$PostToBeSentToAPI {
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get categoryKey => throw _privateConstructorUsedError;
-  List<String> get businessPartners => throw _privateConstructorUsedError;
+  List<dynamic> get businessPartners => throw _privateConstructorUsedError;
   String get businessPartnerBranch => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
@@ -61,7 +61,7 @@ abstract class $PostToBeSentToAPICopyWith<$Res> {
       {String title,
       String description,
       String categoryKey,
-      List<String> businessPartners,
+      List<dynamic> businessPartners,
       String businessPartnerBranch,
       double latitude,
       double longitude,
@@ -135,7 +135,7 @@ class _$PostToBeSentToAPICopyWithImpl<$Res, $Val extends PostToBeSentToAPI>
       businessPartners: null == businessPartners
           ? _value.businessPartners
           : businessPartners // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<dynamic>,
       businessPartnerBranch: null == businessPartnerBranch
           ? _value.businessPartnerBranch
           : businessPartnerBranch // ignore: cast_nullable_to_non_nullable
@@ -234,7 +234,7 @@ abstract class _$$PostToBeSentToAPIImplCopyWith<$Res>
       {String title,
       String description,
       String categoryKey,
-      List<String> businessPartners,
+      List<dynamic> businessPartners,
       String businessPartnerBranch,
       double latitude,
       double longitude,
@@ -307,7 +307,7 @@ class __$$PostToBeSentToAPIImplCopyWithImpl<$Res>
       businessPartners: null == businessPartners
           ? _value._businessPartners
           : businessPartners // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<dynamic>,
       businessPartnerBranch: null == businessPartnerBranch
           ? _value.businessPartnerBranch
           : businessPartnerBranch // ignore: cast_nullable_to_non_nullable
@@ -389,7 +389,7 @@ class _$PostToBeSentToAPIImpl
       {this.title = '',
       this.description = '',
       this.categoryKey = '',
-      final List<String> businessPartners = const [],
+      final List<dynamic> businessPartners = const [],
       this.businessPartnerBranch = '',
       this.latitude = 0,
       this.longitude = 0,
@@ -424,10 +424,10 @@ class _$PostToBeSentToAPIImpl
   @override
   @JsonKey()
   final String categoryKey;
-  final List<String> _businessPartners;
+  final List<dynamic> _businessPartners;
   @override
   @JsonKey()
-  List<String> get businessPartners {
+  List<dynamic> get businessPartners {
     if (_businessPartners is EqualUnmodifiableListView)
       return _businessPartners;
     // ignore: implicit_dynamic_type
@@ -624,7 +624,7 @@ abstract class _PostToBeSentToAPI implements PostToBeSentToAPI {
       {final String title,
       final String description,
       final String categoryKey,
-      final List<String> businessPartners,
+      final List<dynamic> businessPartners,
       final String businessPartnerBranch,
       final double latitude,
       final double longitude,
@@ -655,7 +655,7 @@ abstract class _PostToBeSentToAPI implements PostToBeSentToAPI {
   @override
   String get categoryKey;
   @override
-  List<String> get businessPartners;
+  List<dynamic> get businessPartners;
   @override
   String get businessPartnerBranch;
   @override

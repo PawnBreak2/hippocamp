@@ -40,7 +40,7 @@ class _PartnerDialogState extends ConsumerState<PartnerDialog> {
       _loading = false;
   }
 
-  List<PartnerModel> partnersSearching(List<PartnerModel> partners) {
+  List<BusinessPartner> partnersSearching(List<BusinessPartner> partners) {
     final text = _controller.text.toLowerCase();
 
     if (text.isEmpty) return partners;
@@ -59,7 +59,7 @@ class _PartnerDialogState extends ConsumerState<PartnerDialog> {
         .watch(appStateProvider)
         .businessPartners
         .where(
-          (e) => _index == 0 ? e.assigned : true,
+          (e) => _index == 0 ? e.installed : true,
         )
         .toList();
 
@@ -162,8 +162,8 @@ class _PartnerDialogState extends ConsumerState<PartnerDialog> {
 }
 
 class ListPartners extends StatelessWidget {
-  final List<PartnerModel> partners;
-  final void Function(PartnerModel) onTap;
+  final List<BusinessPartner> partners;
+  final void Function(BusinessPartner) onTap;
   const ListPartners({
     required this.partners,
     required this.onTap,

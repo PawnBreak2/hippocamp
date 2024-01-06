@@ -12,10 +12,7 @@ _$PostToBeSentToAPIImpl _$$PostToBeSentToAPIImplFromJson(
       title: json['title'] as String? ?? '',
       description: json['description'] as String? ?? '',
       categoryKey: json['categoryKey'] as String? ?? '',
-      businessPartners: (json['businessPartners'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+      businessPartners: json['businessPartners'] as List<dynamic>? ?? const [],
       businessPartnerBranch: json['businessPartnerBranch'] as String? ?? '',
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0,

@@ -7,17 +7,17 @@ import 'package:hippocapp/styles/icons.dart';
 class TopBarPartnerButton extends StatelessWidget {
   const TopBarPartnerButton({
     super.key,
-    required this.partnerModel,
+    required this.partner,
   });
 
-  final PartnerModel? partnerModel;
+  final BusinessPartner partner;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 40,
       height: 40,
-      child: partnerModel == null
+      child: partner == null
           ? Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -50,7 +50,7 @@ class TopBarPartnerButton extends StatelessWidget {
               ),
             )
           : SvgPicture.network(
-              partnerModel!.iconUrl,
+              partner!.iconUrl,
               fit: BoxFit.contain,
             ),
     );

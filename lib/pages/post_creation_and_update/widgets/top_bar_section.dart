@@ -14,8 +14,8 @@ import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_partner_button.dart';
 import 'package:hippocapp/pages/post_creation_and_update/widgets/top_bar_widgets/top_bar_post_detail_icon.dart';
 import 'package:hippocapp/pages/select_categories/select_category_dialog.dart';
+import 'package:hippocapp/providers/posts_management/creation_and_update/post_creation_and_update_provider.dart';
 import 'package:hippocapp/providers/state/app_state_provider.dart';
-import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
 import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
 import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
@@ -26,20 +26,12 @@ import 'package:hippocapp/widgets/images/generic_cached_icon.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TopBarSectionForCreatePost extends ConsumerWidget {
-  final PostToBeSentToAPI createPost;
-  final PostCategory category;
-  final void Function(PostCategory?) onCategoryTap;
   final void Function()? onPartnerTap;
   final void Function() onSave;
-  final PartnerModel? partnerModel;
 
   const TopBarSectionForCreatePost({
-    required this.createPost,
-    required this.category,
-    required this.onCategoryTap,
     required this.onPartnerTap,
     required this.onSave,
-    required this.partnerModel,
   });
 
   @override
@@ -169,7 +161,7 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                               selectNewCategory: true,
                             ),
                           ).whenComplete(() {
-                            // to reset selected domain after user opens and closes the bottom sheet to select categories
+                            // Resets selected domain after user opens and closes the bottom sheet to select categories
 
                             if (context.mounted) {
                               Future.delayed(const Duration(milliseconds: 500),
@@ -183,13 +175,25 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                               });
                             }
                           });
-
-                          onCategoryTap(category);
                         },
                         child: Stack(
                           children: [
-                            CategoryIcon(category: category),
+                            // Category Icon
+
+                            Consumer(
+                              builder: (context, ref, child) {
+                                PostCategory category = ref.watch(
+                                    postCreationAndUpdateProvider.select(
+                                        (value) => ref
+                                            .read(appStateProvider.notifier)
+                                            .findCategoryByKey(
+                                                value.categoryKey)));
+                                return CategoryIcon(category: category);
+                              },
+                            ),
+
                             // this is the important icon, to be activated only for important posts
+
                             Container(
                               width: 100,
                               height: 100,
@@ -229,8 +233,21 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                                     padding: EdgeInsets.only(left: 8),
                                     child: GestureDetector(
                                       onTap: onPartnerTap,
-                                      child: TopBarPartnerButton(
-                                          partnerModel: partnerModel),
+                                      child: Consumer(
+                                        builder: (context, ref, child) {
+                                          BusinessPartner businessPartner = ref
+                                              .watch(postCreationAndUpdateProvider
+                                                  .select((value) => ref
+                                                      .read(appStateProvider
+                                                          .notifier)
+                                                      .findBusinessPartnersByKeys(
+                                                          value
+                                                              .businessPartners)
+                                                      .first));
+                                          return TopBarPartnerButton(
+                                              partner: businessPartner!);
+                                        },
+                                      ),
                                     ),
                                   ),
                                   SizedBox(width: 12),
@@ -271,13 +288,24 @@ class TopBarSectionForCreatePost extends ConsumerWidget {
                               // Title
                               Row(
                                 children: [
-                                  Text(
-                                    category.name,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromRGBO(51, 51, 51, 1),
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                  Consumer(
+                                    builder: (context, ref, child) {
+                                      PostCategory category = ref.watch(
+                                          postCreationAndUpdateProvider.select(
+                                              (value) => ref
+                                                  .read(
+                                                      appStateProvider.notifier)
+                                                  .findCategoryByKey(
+                                                      value.categoryKey)));
+                                      return Text(
+                                        category.name,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Color.fromRGBO(51, 51, 51, 1),
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      );
+                                    },
                                   ),
                                   SizedBox(width: 0.5.h),
                                   Consumer(

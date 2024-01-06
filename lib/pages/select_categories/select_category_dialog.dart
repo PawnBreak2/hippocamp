@@ -80,7 +80,6 @@ class _PostCreationDialogState extends ConsumerState<SelectCategoriesDialog> {
                   child: ListCategoriesForPostCreation(
                     controller: _textEditingController,
                     selectNewCategory: widget.selectNewCategory,
-                    updateCategoryForPost: widget.updateCategoryForPost,
                   ),
                 ),
                 Expanded(

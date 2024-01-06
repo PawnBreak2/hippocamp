@@ -6,9 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hippocapp/constants/navigation/routeNames.dart';
 import 'package:hippocapp/helpers/extensions/string_extensions.dart';
+import 'package:hippocapp/models/posts-creation/partner_model.dart';
 import 'package:hippocapp/models/responses/posts/post_response_model.dart';
 import 'package:hippocapp/pages/post_creation_and_update/post_creation_and_update_page.dart';
-import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_management/creation_and_update/post_creation_and_update_provider.dart';
+import 'package:hippocapp/providers/state/app_state_provider.dart';
 import 'package:hippocapp/styles/colors.dart';
 import 'package:hippocapp/widgets/components/timeline/partner_box.dart';
 import 'package:hippocapp/widgets/components/timeline/timeline_post_icon.dart';
@@ -59,9 +61,10 @@ class TimeEventItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final listChips = _chipsBoxList;
-    // final isPast = post.dateTimeFromString.isBefore(DateTime.now());
-
+    BusinessPartner? firstBusinessPartner = ref
+        .read(appStateProvider.notifier)
+        .findBusinessPartnersByKeys(post.businessPartners)
+        .firstOrNull;
     return Material(
       color: isSelectedItem ? CustomColors.mediumRed : Colors.white,
       child: InkWell(
@@ -103,14 +106,23 @@ class TimeEventItem extends ConsumerWidget {
 
                         // Image / time
 
-                        post.businessPartners.isNotEmpty
-                            ? PartnerBox(
-                                iconUrl: post.businessPartners.first.iconUrl,
-                                width: 15.w,
-                                height: 15.w,
-                                backgroundColor: Colors.transparent,
-                                borderColor: Colors.black54)
-                            : SizedBox(),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            bool businessPartnersNotEmpty = ref
+                                .read(postCreationAndUpdateProvider)
+                                .businessPartners
+                                .isNotEmpty;
+
+                            return businessPartnersNotEmpty
+                                ? PartnerBox(
+                                    iconUrl: firstBusinessPartner!.iconUrl,
+                                    width: 15.w,
+                                    height: 15.w,
+                                    backgroundColor: Colors.transparent,
+                                    borderColor: Colors.black54)
+                                : SizedBox();
+                          },
+                        )
                       ],
                     ),
                   ),

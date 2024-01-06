@@ -33,7 +33,7 @@ class Post {
   final String holiday;
   final bool allDay;
   final String visualization;
-  final List<String> businessPartners;
+  final List<dynamic> businessPartners;
   final List<SinglePartyTransactionPost> singlePartyTransactions;
   final List<Attachment> attachments;
 

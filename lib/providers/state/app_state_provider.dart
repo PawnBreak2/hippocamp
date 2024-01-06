@@ -231,7 +231,7 @@ class AppStateNotifier extends Notifier<AppState> {
     return state.categories.firstWhere((element) => element.key == key);
   }
 
-  List<BusinessPartner> findBusinessPartnersByKeys(List<String> keys) {
+  List<BusinessPartner> findBusinessPartnersByKeys(List<dynamic> keys) {
     return state.businessPartners
         .where((element) => keys.contains(element.key))
         .toList();

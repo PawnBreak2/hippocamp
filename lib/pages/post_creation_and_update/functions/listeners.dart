@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hippocapp/providers/posts_management/creation/post_creation_provider.dart';
+import 'package:hippocapp/providers/posts_management/creation_and_update/post_creation_and_update_provider.dart';
 import 'package:hippocapp/providers/posts_management/storage/posts_provider.dart';
 import 'package:hippocapp/providers/ui/ui_state_provider.dart';
 

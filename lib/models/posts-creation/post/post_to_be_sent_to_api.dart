@@ -14,7 +14,7 @@ class PostToBeSentToAPI with _$PostToBeSentToAPI {
     @Default('') String title,
     @Default('') String description,
     @Default('') String categoryKey,
-    @Default([]) List<String> businessPartners,
+    @Default([]) List<dynamic> businessPartners,
     @Default('') String businessPartnerBranch,
     @Default(0) double latitude,
     @Default(0) double longitude,
